@@ -20,6 +20,7 @@ public class GestionImp {
     
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
+      dossierClientDto.setNumDossier(generateNumero(String.valueOf(dossierClientRepository.findAll().size())));
       DossierClient dt = mapper.map(dossierClientDto, DossierClient.class);
         dossierClientRepository.save(dt);
          
@@ -39,5 +40,16 @@ public class GestionImp {
      }
 
     
+
+     private static String generateNumero ( String keyList ) {
+            int taille = keyList.length();
+            if(taille==1)
+               return "00"+keyList;
+            if(taille==2)
+               return "0"+keyList;
+            if(taille >= 3)
+               return keyList;
+      return "000";
+      }
 
 }
