@@ -57,6 +57,14 @@ public class ParametrageImp {
          return assureurDto;
      }
 
+     public AssureurDto deleteAssureur(AssureurDto assureurDto){
+      Assureur dt = mapper.map(assureurDto, Assureur.class);
+      dt.setDeleted(true);
+      assureurRepository.save(dt);
+       
+       return assureurDto;
+   }
+
      public List<AssureurDto> findAssureurs() {
 
         return assureurRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, AssureurDto.class)).collect(Collectors.toList());

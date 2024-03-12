@@ -27,6 +27,11 @@ public class ParametrageService {
         return parametrageCLientImp.updateAssureur(assureurDto);
     }
 
+    public AssureurDto deleteAssureur(AssureurDto assureurDto) {
+        return parametrageCLientImp.deleteAssureur(assureurDto);
+    }
+
+
     public List<AssureurDto> finAssureur() {
         return parametrageCLientImp.findAssureurs();
     }

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,12 @@ public class AssureurControlleur {
     @PutMapping("/assureurs")
     public ResponseEntity<AssureurDto> updateAssureur(@RequestBody final AssureurDto assureurDto) {   
         return new ResponseEntity<>(parametrageService.updateAssureur(assureurDto), HttpStatus.CREATED);
+    }
+
+     @PutMapping("/assureurs/delete/{id}")
+    public ResponseEntity<AssureurDto> deleteAssureur(@RequestBody final AssureurDto assureurDto, @PathVariable String id) {
+        System.out.println("gggggggggggggg" + assureurDto); 
+        return new ResponseEntity<>(parametrageService.deleteAssureur(assureurDto), HttpStatus.CREATED);
     }
     
     @GetMapping("assureurs")
