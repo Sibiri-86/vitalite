@@ -6,13 +6,13 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,29 +27,20 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "examen")
+@Table(name = "convention")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Examen  implements Serializable  {
+public class Convention  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-    private String code;
-    private String libelle;
-    private Boolean deleted = Boolean.FALSE;
+    private LocalDate dateEffet;
     @ManyToOne
-    @JsonIgnoreProperties("examens")
-    private Categorie categorie;
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
-    }
+    @JsonIgnoreProperties("conventions")
+    private Assureur  assureur;
+    private Boolean deleted = Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -60,13 +51,7 @@ public class Examen  implements Serializable  {
     }
 
     
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
+    
 
     public Boolean getDeleted() {
         return deleted;
@@ -76,13 +61,23 @@ public class Examen  implements Serializable  {
         this.deleted = deleted;
     }
 
-    public String getCode() {
-        return code;
+    public LocalDate getDateEffet() {
+        return dateEffet;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDateEffet(LocalDate dateEffet) {
+        this.dateEffet = dateEffet;
     }
+
+    public Assureur getAssureur() {
+        return assureur;
+    }
+
+    public void setAssureur(Assureur assureur) {
+        this.assureur = assureur;
+    }
+
+    
 
     
 

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.GestionImp;
+import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 
 
@@ -27,5 +29,20 @@ public class GestionService {
         return gestionImp.findDossierClients();
     }
 
+    public ConventionDto createConvention(ConventionDto conventionDto) {
+        return gestionImp.createConvention(conventionDto);
+    }
+
+    public ConventionDto updateConvention(ConventionDto conventionDto) {
+        return gestionImp.updateConvention(conventionDto);
+    }
+
+    public List<ConventionDto> findConventions() {
+        return gestionImp.findConventions();
+    }
    
+    public List<ActeDto> findByConvention(Long conventionId) {
+        return gestionImp.findByConvention(conventionId);
+    }
+
 }

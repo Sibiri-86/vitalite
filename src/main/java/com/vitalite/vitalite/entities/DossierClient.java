@@ -11,10 +11,13 @@ import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -37,6 +40,8 @@ public class DossierClient  implements Serializable  {
     private String matricule;
     private String numDossier;
     private String target;
+     @ManyToOne
+     @JsonIgnoreProperties("dossier_clients")
     private Assureur assureur;
     private LocalDate dateNaissance;
     private Boolean deleted = Boolean.FALSE;
