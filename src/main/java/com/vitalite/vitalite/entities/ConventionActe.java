@@ -6,13 +6,14 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,29 +28,25 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "examen")
+@Table(name = "convention_acte")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Examen  implements Serializable  {
+public class ConventionActe  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-    private String code;
-    private String libelle;
-    private Boolean deleted = Boolean.FALSE;
+    private LocalDate dateEffet;
+    private LocalDate dateEcheance;
+     @ManyToOne
+     @JsonIgnoreProperties("convention_actes") 
+     private Convention  convention;
     @ManyToOne
-    @JsonIgnoreProperties("examens")
-    private Categorie categorie;
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
-    }
+    @JsonIgnoreProperties("convention_actes")   
+     private Acte acte;
+    private BigDecimal montantConvention;
+    private Boolean deleted = Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -59,13 +56,12 @@ public class Examen  implements Serializable  {
         this.id = id;
     }
 
-    
-    public String getLibelle() {
-        return libelle;
+    public LocalDate getDateEcheance() {
+        return dateEcheance;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setDateEcheance(LocalDate dateEcheance) {
+        this.dateEcheance = dateEcheance;
     }
 
     public Boolean getDeleted() {
@@ -76,13 +72,40 @@ public class Examen  implements Serializable  {
         this.deleted = deleted;
     }
 
-    public String getCode() {
-        return code;
+    public LocalDate getDateEffet() {
+        return dateEffet;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDateEffet(LocalDate dateEffet) {
+        this.dateEffet = dateEffet;
     }
+
+    public Convention getConvention() {
+        return convention;
+    }
+
+    public void setConvention(Convention convention) {
+        this.convention = convention;
+    }
+
+    public Acte getActe() {
+        return acte;
+    }
+
+    public void setActe(Acte acte) {
+        this.acte = acte;
+    }
+
+    public BigDecimal getMontantConvention() {
+        return montantConvention;
+    }
+
+    public void setMontantConvention(BigDecimal montantConvention) {
+        this.montantConvention = montantConvention;
+    }
+
+   
+    
 
     
 

@@ -1,9 +1,14 @@
 package com.vitalite.vitalite.model;
 
+import java.math.BigDecimal;
+
 public class ActeDto {
     private Long id;
     private String code;
     private String libelle;
+    private BigDecimal montantConvention;
+    private Long conventionActeId;
+    
     public Long getId() {
         return id;
     }
@@ -21,6 +26,18 @@ public class ActeDto {
     }
     public void setCode(String code) {
         this.code = code;
+    }
+    public BigDecimal getMontantConvention() {
+        return montantConvention;
+    }
+    public void setMontantConvention(BigDecimal montantConvention) {
+        this.montantConvention = montantConvention;
+    }
+    public Long getConventionActeId() {
+        return conventionActeId;
+    }
+    public void setConventionActeId(Long conventionActeId) {
+        this.conventionActeId = conventionActeId;
     }
     
 

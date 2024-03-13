@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -40,8 +42,9 @@ public class DossierClient  implements Serializable  {
     private String matricule;
     private String numDossier;
     private String target;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assureur_id",referencedColumnName="id",insertable=true,updatable=true)
+
+     @ManyToOne
+     @JsonIgnoreProperties("dossier_clients")
     private Assureur assureur;
     private LocalDate dateNaissance;
     private Boolean deleted = Boolean.FALSE;
