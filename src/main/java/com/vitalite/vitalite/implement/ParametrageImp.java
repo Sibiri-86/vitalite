@@ -13,18 +13,21 @@ import com.vitalite.vitalite.entities.Categorie;
 import com.vitalite.vitalite.entities.Chambre;
 import com.vitalite.vitalite.entities.Examen;
 import com.vitalite.vitalite.entities.Produit;
+import com.vitalite.vitalite.entities.Societe;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.ProduitDto;
+import com.vitalite.vitalite.model.SocieteDto;
 import com.vitalite.vitalite.repository.ActeRepository;
 import com.vitalite.vitalite.repository.AssureurRepository;
 import com.vitalite.vitalite.repository.CategorieRepository;
 import com.vitalite.vitalite.repository.ChambreRepository;
 import com.vitalite.vitalite.repository.ExamenRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
+import com.vitalite.vitalite.repository.SocieteRepository;
 
 @Component
 public class ParametrageImp {
@@ -42,6 +45,9 @@ public class ParametrageImp {
      private ExamenRepository examenRepository;
      @Autowired
      private ProduitRepository produitRepository;
+
+     @Autowired
+     private SocieteRepository  societeRepository;
 
      public AssureurDto createAssureur(AssureurDto assureurDto){
         Assureur dt = mapper.map(assureurDto, Assureur.class);
@@ -168,5 +174,24 @@ public class ParametrageImp {
 
         return produitRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ProduitDto.class)).collect(Collectors.toList());
      }
+
+     public SocieteDto createSociete(SocieteDto acteDto){
+      Societe dt = mapper.map(acteDto, Societe.class);
+      societeRepository.save(dt);
+       
+       return acteDto;
+   }
+   
+   public SocieteDto updateSociete(SocieteDto acteDto){
+      Societe dt = mapper.map(acteDto, Societe.class);
+      societeRepository.save(dt);
+       
+       return acteDto;
+   }
+
+   public List<SocieteDto> findSocietes() {
+
+      return societeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SocieteDto.class)).collect(Collectors.toList());
+   }
 
 }

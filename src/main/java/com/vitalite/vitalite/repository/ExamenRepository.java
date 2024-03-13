@@ -10,7 +10,7 @@ import com.vitalite.vitalite.entities.Examen;
 
 
 @Repository
-public interface ExamenRepository extends JpaRepository<Examen, String> {
+public interface ExamenRepository extends JpaRepository<Examen, Long> {
     List<Examen> findByDeletedFalse();
     List<Examen> findByCategorieIdAndDeletedFalse(Long categorieId);
 }

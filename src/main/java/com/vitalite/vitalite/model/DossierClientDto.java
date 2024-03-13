@@ -10,6 +10,7 @@ public class DossierClientDto {
     private String numDossier;
     private String target;
     private Long assureurId;
+    private String assureur;
     private LocalDate dateNaissance;
     
     public Long getId() {
@@ -60,6 +61,20 @@ public class DossierClientDto {
     public void setDateNaissance(LocalDate dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
+    public String getAssureur() {
+        return assureur;
+    }
+    public void setAssureur(String assureur) {
+        this.assureur = assureur;
+    }
+    @Override
+    public String toString() {
+        return "DossierClientDto [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", matricule=" + matricule
+                + ", numDossier=" + numDossier + ", target=" + target + ", assureurId=" + assureurId + ", assureur="
+                + assureur + ", dateNaissance=" + dateNaissance + "]";
+    }
+    
+    
   
     
     

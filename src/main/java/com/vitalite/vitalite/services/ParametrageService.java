@@ -12,6 +12,7 @@ import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.ProduitDto;
+import com.vitalite.vitalite.model.SocieteDto;
 
 @Service
 public class ParametrageService {
@@ -98,6 +99,18 @@ public class ParametrageService {
 
     public List<ProduitDto> findProduits() {
         return parametrageCLientImp.findProduits();
+    }
+
+    public SocieteDto createSociete(SocieteDto acteDto) {
+        return parametrageCLientImp.createSociete(acteDto);
+    }
+
+    public SocieteDto updateSociete(SocieteDto acteDto) {
+        return parametrageCLientImp.updateSociete(acteDto);
+    }
+
+    public List<SocieteDto> findSocietes() {
+        return parametrageCLientImp.findSocietes();
     }
 
 }

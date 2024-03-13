@@ -12,9 +12,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -37,6 +40,8 @@ public class DossierClient  implements Serializable  {
     private String matricule;
     private String numDossier;
     private String target;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assureur_id",referencedColumnName="id",insertable=true,updatable=true)
     private Assureur assureur;
     private LocalDate dateNaissance;
     private Boolean deleted = Boolean.FALSE;

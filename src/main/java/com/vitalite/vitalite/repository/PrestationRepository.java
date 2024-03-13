@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.vitalite.vitalite.entities.Assureur;
+import com.vitalite.vitalite.entities.Prestation;
 
 @Repository
-public interface AssureurRepository extends JpaRepository<Assureur, Long> {
-    List<Assureur> findByDeletedFalse();
+public interface PrestationRepository extends JpaRepository<Prestation, Long> {
+    List<Prestation> findByDeletedFalse();
 }

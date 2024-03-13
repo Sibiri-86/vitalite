@@ -10,13 +10,10 @@ import java.io.Serializable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -25,9 +22,9 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "examen")
+@Table(name = "societe")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Examen  implements Serializable  {
+public class Societe  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -37,17 +34,6 @@ public class Examen  implements Serializable  {
     private String code;
     private String libelle;
     private Boolean deleted = Boolean.FALSE;
-    @ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName="id",insertable=true,updatable=true)
-    private Categorie categorie;
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
-    }
 
     public Long getId() {
         return id;

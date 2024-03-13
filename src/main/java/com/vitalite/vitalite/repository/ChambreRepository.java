@@ -9,6 +9,6 @@ import com.vitalite.vitalite.entities.Chambre;
 
 
 @Repository
-public interface ChambreRepository extends JpaRepository<Chambre, String> {
+public interface ChambreRepository extends JpaRepository<Chambre, Long> {
     List<Chambre> findByDeletedFalse();
 }

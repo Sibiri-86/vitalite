@@ -6,17 +6,15 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -25,29 +23,19 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "examen")
+@Table(name = "soin")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Examen  implements Serializable  {
+public class Soin  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-    private String code;
-    private String libelle;
+    private String numSoin;
+    private LocalDate dateSaisie;
+    private String patient;
     private Boolean deleted = Boolean.FALSE;
-    @ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName="id",insertable=true,updatable=true)
-    private Categorie categorie;
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
-    }
 
     public Long getId() {
         return id;
@@ -57,13 +45,20 @@ public class Examen  implements Serializable  {
         this.id = id;
     }
 
-    
-    public String getLibelle() {
-        return libelle;
+    public String getNumSoin() {
+        return numSoin;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setNumSoin(String numSoin) {
+        this.numSoin = numSoin;
+    }
+
+    public LocalDate getDateSaisie() {
+        return dateSaisie;
+    }
+
+    public void setDateSaisie(LocalDate dateSaisie) {
+        this.dateSaisie = dateSaisie;
     }
 
     public Boolean getDeleted() {
@@ -74,16 +69,17 @@ public class Examen  implements Serializable  {
         this.deleted = deleted;
     }
 
-    public String getCode() {
-        return code;
+    public String getPatient() {
+        return patient;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setPatient(String patient) {
+        this.patient = patient;
     }
+
 
     
-
+    
     
 }
 
