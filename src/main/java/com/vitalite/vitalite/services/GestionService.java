@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.GestionImp;
 import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
@@ -62,6 +63,15 @@ public class GestionService {
    
     public List<ActeDto> findByConvention(Long conventionId) {
         return gestionImp.findByConvention(conventionId);
+    }
+
+    public List<ConventionActeDto> findMontantConventionByActeIdAndAssureurId(Long acteId, Long assureurId) {
+        System.out.println("dedans 111111"+ acteId+ "   "+assureurId);
+        return gestionImp.findMontantConventionByActeIdAndAssureurId(acteId, assureurId);
+    }
+
+    public List<PrestationDto> findBySoinId(Long soinId) {
+        return gestionImp.findBySoinId(soinId);
     }
 
 }

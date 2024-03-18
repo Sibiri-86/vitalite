@@ -68,6 +68,11 @@ public class Assureur  implements Serializable  {
         this.code = code;
     }
 
+    @Override
+    public String toString() {
+        return "Assureur [id=" + id + ", code=" + code + ", libelle=" + libelle + ", deleted=" + deleted + "]";
+    }
+
     
 
     

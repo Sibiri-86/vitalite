@@ -11,10 +11,13 @@ import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -35,6 +38,9 @@ public class Soin  implements Serializable  {
     private String numSoin;
     private LocalDate dateSaisie;
     private String patient;
+    @ManyToOne
+     @JsonIgnoreProperties("dossier_clients")
+    private DossierClient dossierClient;
     private Boolean deleted = Boolean.FALSE;
 
     public Long getId() {
@@ -75,6 +81,14 @@ public class Soin  implements Serializable  {
 
     public void setPatient(String patient) {
         this.patient = patient;
+    }
+
+    public DossierClient getDossierClient() {
+        return dossierClient;
+    }
+
+    public void setDossierClient(DossierClient dossierClient) {
+        this.dossierClient = dossierClient;
     }
 
 

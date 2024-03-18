@@ -3,6 +3,7 @@ package com.vitalite.vitalite.implement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -14,16 +15,20 @@ import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
-
+import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
+import com.vitalite.vitalite.repository.ActeRepository;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
 import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.DossierClientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
+import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
 
 @Component
@@ -43,7 +48,8 @@ public class GestionImp {
      private ConventionRepository conventionRepository;
      @Autowired
      private ConventionActeRepository conventionActeRepository;
-    
+    @Autowired
+     private ActeRepository acteRepository;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
       System.out.println("dossierClientDto 2 ===>" + dossierClientDto);
@@ -72,8 +78,29 @@ public class GestionImp {
      public SoinDto createSoin(SoinDto soinDto){
       System.out.println("soinDto 2 ===>" + soinDto);
       soinDto.setNumSoin(generateNumero(String.valueOf(soinRepository.findAll().size())));
-      Soin dt = mapper.map(soinDto, Soin.class);
-        soinRepository.save(dt);
+      Soin dt = soinRepository.save(mapper.map(soinDto, Soin.class));
+        if(soinDto.getPrestations() !=null && !soinDto.getPrestations().isEmpty()) {
+
+         for(PrestationDto p: soinDto.getPrestations()) {
+           Prestation prest = new Prestation();
+               prest.setSoin(dt);
+               prest.setDateSaisie(p.getDateSaisie());
+               prest.setDeleted(false);
+               Optional<Acte> a = acteRepository.findById(p.getActeId());
+               if(a.isPresent()) {
+                  prest.setActe(a.get());
+               }
+               prest.setMontant(p.getMontant());
+               prest.setPrixUnitaire(p.getPrixUnitaire());
+               prest.setQuantite(p.getQuantite());
+               Optional<DossierClient> d = dossierClientRepository.findById(p.getDossierClientId());
+               if(d.isPresent()) {
+                  prest.setDossierClient(d.get());
+               }
+               
+               prestationRepository.save(mapper.map(prest, Prestation.class));
+         }
+      }
          
          return soinDto;
      }
@@ -87,8 +114,19 @@ public class GestionImp {
      }
 
      public List<SoinDto> findSoins() {
-
-        return soinRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SoinDto.class)).collect(Collectors.toList());
+      List<SoinDto> soinToReturn = new ArrayList<>();
+      List<SoinDto> s = soinRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SoinDto.class)).collect(Collectors.toList());
+      if(!s.isEmpty()) {
+         for(SoinDto so : s) {
+            Optional <DossierClient> d = dossierClientRepository.findById(Long.valueOf(so.getPatient()));
+            if(d.isPresent()) {
+               so.setPatient(d.get().getNom() +" "+d.get().getPrenom());
+            }
+            soinToReturn.add(so);
+         }
+         
+      }
+        return soinToReturn;
      }
 
     
@@ -165,6 +203,43 @@ public class GestionImp {
             if(taille >= 3)
                return keyList;
       return "000";
+      }
+
+      public List<ConventionActeDto> findMontantConventionByActeIdAndAssureurId(Long acteId, Long assureurId) {
+         System.out.println("dedans 222222"+ acteId+ "   "+assureurId);
+         Optional<DossierClient>doc = dossierClientRepository.findById(assureurId);
+         System.out.println("doccccccccc " + doc.get());
+         List<ConventionActeDto> conv = new ArrayList<>();
+            if(doc.isPresent() && doc.get().getAssureur() != null) {
+               //System.out.println("dedans 333333  " + doc.get().getAssureur().getId());
+               Optional<Convention> c = conventionRepository.findByAssureurIdAndDeletedFalse(doc.get().getAssureur().getId());
+                  if(c.isPresent()) {
+                     System.out.println("dedans 44444"+ acteId+ "   "+assureurId);
+                     Optional<ConventionActe> convention = conventionActeRepository.findByDeletedFalseAndConventionIdAndActeId(c.get().getId(), acteId);
+                     if(convention.isPresent()) {
+                        System.out.println("dedans 5555"+ acteId+ "   "+assureurId);
+                        conv.add(mapper.map(convention.get(), ConventionActeDto.class));
+                     }
+                  }
+            }
+         
+         return conv;
+      }
+
+      public List<PrestationDto> findBySoinId(Long soinId) {
+         List<PrestationDto> prestationDtos = new ArrayList<>();
+         prestationRepository.findBySoinIdAndDeletedFalse(soinId)
+         .stream().peek(convActe-> {
+            PrestationDto  prest = mapper.map(convActe, PrestationDto.class);
+            prest.setActeId(convActe.getActe().getId());
+            prest.setDateSaisie(convActe.getDateSaisie());
+            prest.setMontant(convActe.getMontant());
+            prest.setPrixUnitaire(convActe.getPrixUnitaire());
+            prest.setQuantite(convActe.getQuantite());
+            prest.setSoinId(soinId);
+            prestationDtos.add(prest);
+         }).collect(Collectors.toList());
+      return prestationDtos;
       }
 
 }
