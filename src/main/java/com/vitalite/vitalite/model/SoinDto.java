@@ -1,6 +1,8 @@
 package com.vitalite.vitalite.model;
 
 import java.time.LocalDate;
+import java.util.List;
+
 
 
 public class SoinDto {
@@ -8,6 +10,8 @@ public class SoinDto {
     private String numSoin;
     private LocalDate dateSaisie;
     private String patient;
+    private Long dossierClientId;
+    private List<PrestationDto> prestations;
     private Boolean deleted = Boolean.FALSE;
 
     public Long getId() {
@@ -40,11 +44,31 @@ public class SoinDto {
     public void setPatient(String patient) {
         this.patient = patient;
     }
+    public Long getDossierClientId() {
+        return dossierClientId;
+    }
+    public void setDossierClientId(Long dossierClientId) {
+        this.dossierClientId = dossierClientId;
+    }
+
+
+    public List<PrestationDto> getPrestations() {
+        return prestations;
+    }
+    public void setPrestations(List<PrestationDto> prestations) {
+        this.prestations = prestations;
+    }
     @Override
     public String toString() {
         return "SoinDto [id=" + id + ", numSoin=" + numSoin + ", dateSaisie=" + dateSaisie + ", patient=" + patient
-                + ", deleted=" + deleted + "]";
+                + ", dossierClientId=" + dossierClientId + ", prestations=" + prestations + ", deleted=" + deleted
+                + "]";
     }
+    
+
+    
+
+    
 
     
 }

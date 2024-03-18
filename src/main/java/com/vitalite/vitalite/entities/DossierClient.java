@@ -151,6 +151,13 @@ public class DossierClient  implements Serializable  {
     }
 
     
+    @Override
+    public String toString() {
+        return "DossierClient [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", matricule=" + matricule
+                + ", numDossier=" + numDossier + ", target=" + target + ", assureur=" + assureur + ", dateNaissance="
+                + dateNaissance + ", deleted=" + deleted + "]";
+    }
+
     
        
 

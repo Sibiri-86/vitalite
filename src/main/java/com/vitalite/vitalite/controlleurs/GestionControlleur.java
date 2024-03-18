@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
@@ -88,6 +89,18 @@ public class GestionControlleur {
     public ResponseEntity<List<ActeDto>> findByConvention(@RequestParam Long conventionId) {
            return  new ResponseEntity<>(gestionService.findByConvention(conventionId), HttpStatus.CREATED);
     }
+
+    @GetMapping("conventions/convention-by-acte")
+    public ResponseEntity<List<ConventionActeDto>> findMontantConventionByActeIdAndAssureurId(@RequestParam Long acteId, @RequestParam Long assureurId) {
+           return  new ResponseEntity<>(gestionService.findMontantConventionByActeIdAndAssureurId(acteId, assureurId), HttpStatus.CREATED);
+    }
+
+    @GetMapping("soins/by-soin")
+    public ResponseEntity<List<PrestationDto>> findBySoinId(@RequestParam Long soinId) {
+           return  new ResponseEntity<>(gestionService.findBySoinId(soinId), HttpStatus.CREATED);
+    }
+
+    
    
     @GetMapping("/dossier-clients/by-taux")
     public ResponseEntity<List<TauxDto>> getAllTaux() {
