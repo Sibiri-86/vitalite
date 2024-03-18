@@ -44,7 +44,16 @@ public class DossierClient  implements Serializable  {
      @JsonIgnoreProperties("dossier_clients")
     private Assureur assureur;
     private LocalDate dateNaissance;
+    private LocalDate dateSaissie;
     private Boolean deleted = Boolean.FALSE;
+
+    public LocalDate getDateSaissie() {
+        return dateSaissie;
+    }
+
+    public void setDateSaissie(LocalDate dateSaissie) {
+        this.dateSaissie = dateSaissie;
+    }
 
     public Long getId() {
         return id;

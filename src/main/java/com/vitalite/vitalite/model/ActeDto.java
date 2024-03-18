@@ -8,6 +8,9 @@ public class ActeDto {
     private String libelle;
     private BigDecimal montantConvention;
     private Long conventionActeId;
+    public BigDecimal prixActe;
+    
+
     
     public Long getId() {
         return id;
@@ -38,6 +41,12 @@ public class ActeDto {
     }
     public void setConventionActeId(Long conventionActeId) {
         this.conventionActeId = conventionActeId;
+    }
+    public BigDecimal getPrixActe() {
+        return prixActe;
+    }
+    public void setPrixActe(BigDecimal prixActe) {
+        this.prixActe = prixActe;
     }
     
 

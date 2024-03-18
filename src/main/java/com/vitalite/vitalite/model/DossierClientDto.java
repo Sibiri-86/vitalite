@@ -11,6 +11,7 @@ public class DossierClientDto {
     private String target;
     private Long assureurId;
     private LocalDate dateNaissance;
+    private LocalDate dateSaissie;
     
     public Long getId() {
         return id;
@@ -59,6 +60,12 @@ public class DossierClientDto {
     }
     public void setDateNaissance(LocalDate dateNaissance) {
         this.dateNaissance = dateNaissance;
+    }
+    public LocalDate getDateSaissie() {
+        return dateSaissie;
+    }
+    public void setDateSaissie(LocalDate dateSaissie) {
+        this.dateSaissie = dateSaissie;
     }
   
     
