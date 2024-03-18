@@ -6,6 +6,7 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -34,6 +35,15 @@ public class Acte  implements Serializable  {
     private String code;
     private String libelle;
     private Boolean deleted = Boolean.FALSE;
+    public BigDecimal prixActe;
+
+    public BigDecimal getPrixActe() {
+        return prixActe;
+    }
+
+    public void setPrixActe(BigDecimal prixActe) {
+        this.prixActe = prixActe;
+    }
 
     public Long getId() {
         return id;
