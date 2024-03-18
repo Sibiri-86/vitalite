@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.implement;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,10 @@ import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
 
 import com.vitalite.vitalite.entities.Soin;
+import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.SoinDto;
+import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
@@ -25,6 +28,7 @@ import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.DossierClientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
+import com.vitalite.vitalite.repository.TauxRepository;
 
 @Component
 public class GestionImp {
@@ -43,19 +47,31 @@ public class GestionImp {
      private ConventionRepository conventionRepository;
      @Autowired
      private ConventionActeRepository conventionActeRepository;
+     @Autowired
+     private TauxRepository tauxRepository;
     
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
-      System.out.println("dossierClientDto 2 ===>" + dossierClientDto);
+     
+      
       dossierClientDto.setNumDossier(generateNumero(String.valueOf(dossierClientRepository.findAll().size())));
       DossierClient dt = mapper.map(dossierClientDto, DossierClient.class);
-        dossierClientRepository.save(dt);
+      if(dossierClientDto.getTaux() != null && dossierClientDto.getTaux() != BigDecimal.ZERO) {
+
+         Taux taux = new Taux();
+         taux.setTauxPourcentage(dossierClientDto.getTaux());
+         Taux tauxF = tauxRepository.save(taux);
+        
+         dt.setTaux(tauxF);
+         
+      }
+      dossierClientRepository.save(dt);
          
          return dossierClientDto;
      }
      
      
-     public DossierClientDto updateDossierClient(DossierClientDto dossierClientDto){
+     public DossierClientDto updateDossierClient(DossierClientDto dossierClientDto) {
       System.out.println("dossierClientDto update 2===>" + dossierClientDto);
       DossierClient dt = mapper.map(dossierClientDto, DossierClient.class);
         dossierClientRepository.save(dt);
@@ -64,7 +80,7 @@ public class GestionImp {
      }
 
      public List<DossierClientDto> findDossierClients() {
-
+      System.out.println("soinDto update 2===>" + dossierClientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList()));
         return dossierClientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
      }
 
@@ -90,6 +106,11 @@ public class GestionImp {
 
         return soinRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SoinDto.class)).collect(Collectors.toList());
      }
+
+     public List<TauxDto> findTaux() {
+
+      return tauxRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, TauxDto.class)).collect(Collectors.toList());
+   }
 
     
 

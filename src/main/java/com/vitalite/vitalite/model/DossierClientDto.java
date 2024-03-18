@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class DossierClientDto {
@@ -13,7 +14,17 @@ public class DossierClientDto {
     private String assureur;
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
+    private Long tauxId;
+    private BigDecimal taux;
     
+    
+    
+    public BigDecimal getTaux() {
+        return taux;
+    }
+    public void setTaux(BigDecimal taux) {
+        this.taux = taux;
+    }
     public Long getId() {
         return id;
     }
@@ -74,12 +85,23 @@ public class DossierClientDto {
     public void setAssureur(String assureur) {
         this.assureur = assureur;
     }
+    
+    
+   
     @Override
     public String toString() {
         return "DossierClientDto [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", matricule=" + matricule
                 + ", numDossier=" + numDossier + ", target=" + target + ", assureurId=" + assureurId + ", assureur="
-                + assureur + ", dateNaissance=" + dateNaissance + "]";
+                + assureur + ", dateNaissance=" + dateNaissance + ", dateSaissie=" + dateSaissie + ", taux=" + taux + "]";
     }
+    
+    public Long getTauxId() {
+        return tauxId;
+    }
+    public void setTauxId(Long tauxId) {
+        this.tauxId = tauxId;
+    }
+    
     
     
   

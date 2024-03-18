@@ -46,9 +46,17 @@ public class DossierClient  implements Serializable  {
      @ManyToOne
      @JsonIgnoreProperties("dossier_clients")
     private Assureur assureur;
+   
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
     private Boolean deleted = Boolean.FALSE;
+    @ManyToOne
+    @JsonIgnoreProperties("dossier_clients")
+    private Taux taux;
+
+    
+
+    
 
     public LocalDate getDateSaissie() {
         return dateSaissie;
@@ -134,6 +142,15 @@ public class DossierClient  implements Serializable  {
         this.assureur = assureur;
     }
 
+    public Taux getTaux() {
+        return taux;
+    }
+
+    public void setTaux(Taux taux) {
+        this.taux = taux;
+    }
+
+    
     
        
 

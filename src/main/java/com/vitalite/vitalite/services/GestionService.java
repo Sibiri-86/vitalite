@@ -11,6 +11,7 @@ import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
+import com.vitalite.vitalite.model.TauxDto;
 
 
 @Service
@@ -46,6 +47,9 @@ public class GestionService {
 
     public List<SoinDto> findSoins() {
         return gestionImp.findSoins();
+    }
+    public List<TauxDto> findTaux() {
+        return gestionImp.findTaux();
     }
 
     public ConventionDto createConvention(ConventionDto conventionDto) {

@@ -19,6 +19,7 @@ import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
+import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.services.GestionService;
 
 
@@ -43,7 +44,7 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.updateDossierClient(dossierClientDto), HttpStatus.CREATED);
     }
     
-    @GetMapping("dossier-clients")
+    @GetMapping("/dossier-clients")
     public ResponseEntity<List<DossierClientDto>> getAllDossierClient() {
            return  new ResponseEntity<>(gestionService.findDossierClients(), HttpStatus.CREATED);
     }
@@ -62,7 +63,7 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.updateSoin(soinDto), HttpStatus.CREATED);
     }
     
-    @GetMapping("soins")
+    @GetMapping("/soins")
     public ResponseEntity<List<SoinDto>> getAllSoin() {
            return  new ResponseEntity<>(gestionService.findSoins(), HttpStatus.CREATED);
     }
@@ -79,13 +80,17 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.updateConvention(conventionDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("conventions")
+    @GetMapping("/conventions")
     public ResponseEntity<List<ConventionDto>> getAllConventions() {
            return  new ResponseEntity<>(gestionService.findConventions(), HttpStatus.CREATED);
     }
-    @GetMapping("conventions/by-convention")
+    @GetMapping("/conventions/by-convention")
     public ResponseEntity<List<ActeDto>> findByConvention(@RequestParam Long conventionId) {
            return  new ResponseEntity<>(gestionService.findByConvention(conventionId), HttpStatus.CREATED);
     }
    
+    @GetMapping("/dossier-clients/by-taux")
+    public ResponseEntity<List<TauxDto>> getAllTaux() {
+           return  new ResponseEntity<>(gestionService.findTaux(), HttpStatus.CREATED);
+    }
 }

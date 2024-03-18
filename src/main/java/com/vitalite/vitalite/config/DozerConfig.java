@@ -32,7 +32,9 @@ public class DozerConfig {
 
                 mapping(DossierClientDto.class, DossierClient.class, TypeMappingOptions.mapNull(false))
                 .fields("assureurId","assureur.id")
-                .fields("assureur","assureur.libelle");
+                .fields("assureur","assureur.libelle")
+                .fields("tauxId","taux.id")
+                .fields("taux","taux.tauxPourcentage");
 
                 mapping(PrestationDto.class, Prestation.class, TypeMappingOptions.mapNull(false))
                 .fields("dossierClientId","dossierClient.id")
