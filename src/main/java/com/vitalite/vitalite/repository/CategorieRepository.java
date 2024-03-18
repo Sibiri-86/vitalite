@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.vitalite.vitalite.entities.Categorie;
 
 @Repository
-public interface CategorieRepository extends JpaRepository<Categorie, String> {
+public interface CategorieRepository extends JpaRepository<Categorie, Long> {
     List<Categorie> findByDeletedFalse();
 }

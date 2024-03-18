@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.vitalite.vitalite.entities.Acte;
 
 @Repository
-public interface ActeRepository extends JpaRepository<Acte, String> {
+public interface ActeRepository extends JpaRepository<Acte, Long> {
     List<Acte> findByDeletedFalse();
 }

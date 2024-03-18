@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.ProduitDto;
+import com.vitalite.vitalite.model.SocieteDto;
 import com.vitalite.vitalite.services.ParametrageService;
 
 
@@ -41,6 +43,12 @@ public class AssureurControlleur {
     @PutMapping("/assureurs")
     public ResponseEntity<AssureurDto> updateAssureur(@RequestBody final AssureurDto assureurDto) {   
         return new ResponseEntity<>(parametrageService.updateAssureur(assureurDto), HttpStatus.CREATED);
+    }
+
+     @PutMapping("/assureurs/delete/{id}")
+    public ResponseEntity<AssureurDto> deleteAssureur(@RequestBody final AssureurDto assureurDto, @PathVariable String id) {
+        System.out.println("gggggggggggggg" + assureurDto); 
+        return new ResponseEntity<>(parametrageService.deleteAssureur(assureurDto), HttpStatus.CREATED);
     }
     
     @GetMapping("assureurs")
@@ -132,5 +140,22 @@ public class AssureurControlleur {
     @GetMapping("produits")
     public ResponseEntity<List<ProduitDto>> getAllProduit() {
            return  new ResponseEntity<>(parametrageService.findProduits(), HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/societes")
+    public ResponseEntity<SocieteDto> createSociete(@RequestBody final SocieteDto acteDto) { 
+
+        return new ResponseEntity<>(parametrageService.createSociete(acteDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/societes")
+    public ResponseEntity<SocieteDto> updateSociete(@RequestBody final SocieteDto acteDto) {   
+        return new ResponseEntity<>(parametrageService.updateSociete(acteDto), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("societes")
+    public ResponseEntity<List<SocieteDto>> getAllSociete() {
+           return  new ResponseEntity<>(parametrageService.findSocietes(), HttpStatus.CREATED);
     }
 }

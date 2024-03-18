@@ -13,10 +13,12 @@ import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Examen;
+import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.PrestationDto;
 
 @Configuration
 public class DozerConfig {
@@ -29,7 +31,14 @@ public class DozerConfig {
                 .fields("categorie","categorie.libelle");
 
                 mapping(DossierClientDto.class, DossierClient.class, TypeMappingOptions.mapNull(false))
-                .fields("assureurId","assureur.id");
+                .fields("assureurId","assureur.id")
+                .fields("assureur","assureur.libelle");
+
+                mapping(PrestationDto.class, Prestation.class, TypeMappingOptions.mapNull(false))
+                .fields("dossierClientId","dossierClient.id")
+                .fields("acteId","acte.id")
+                .fields("soinId","soin.id");                
+
                 mapping(ConventionDto.class, Convention.class, TypeMappingOptions.mapNull(false))
                 .fields("assureurId","assureur.id")
                 .fields("assureur","assureur.libelle");
