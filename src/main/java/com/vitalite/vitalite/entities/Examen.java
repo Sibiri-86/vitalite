@@ -38,10 +38,20 @@ public class Examen  implements Serializable  {
     private Long id;
     private String code;
     private String libelle;
+    private String unite;
     private Boolean deleted = Boolean.FALSE;
     @ManyToOne
     @JsonIgnoreProperties("examens")
     private Categorie categorie;
+
+    
+    public String getUnite() {
+        return unite;
+    }
+
+    public void setUnite(String unite) {
+        this.unite = unite;
+    }
 
     public Categorie getCategorie() {
         return categorie;

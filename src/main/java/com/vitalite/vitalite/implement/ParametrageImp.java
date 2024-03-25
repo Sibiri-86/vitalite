@@ -12,13 +12,17 @@ import com.vitalite.vitalite.entities.Assureur;
 import com.vitalite.vitalite.entities.Categorie;
 import com.vitalite.vitalite.entities.Chambre;
 import com.vitalite.vitalite.entities.Examen;
+import com.vitalite.vitalite.entities.FamilleActe;
 import com.vitalite.vitalite.entities.Produit;
 import com.vitalite.vitalite.entities.Societe;
+import com.vitalite.vitalite.entities.SousActe;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.FamilleActeDto;
 import com.vitalite.vitalite.model.ProduitDto;
 import com.vitalite.vitalite.model.SocieteDto;
 import com.vitalite.vitalite.repository.ActeRepository;
@@ -26,8 +30,10 @@ import com.vitalite.vitalite.repository.AssureurRepository;
 import com.vitalite.vitalite.repository.CategorieRepository;
 import com.vitalite.vitalite.repository.ChambreRepository;
 import com.vitalite.vitalite.repository.ExamenRepository;
+import com.vitalite.vitalite.repository.FamilleActeRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SocieteRepository;
+import com.vitalite.vitalite.repository.SousActeRepository;
 
 @Component
 public class ParametrageImp {
@@ -45,6 +51,10 @@ public class ParametrageImp {
      private ExamenRepository examenRepository;
      @Autowired
      private ProduitRepository produitRepository;
+     @Autowired
+     private FamilleActeRepository familleActeRepository;
+     @Autowired
+     private SousActeRepository sousActeRepository;
 
      @Autowired
      private SocieteRepository  societeRepository;
@@ -63,17 +73,44 @@ public class ParametrageImp {
          return assureurDto;
      }
 
-     public AssureurDto deleteAssureur(AssureurDto assureurDto){
+     public AssureurDto deleteAssureur(AssureurDto assureurDto) {
       Assureur dt = mapper.map(assureurDto, Assureur.class);
       dt.setDeleted(true);
       assureurRepository.save(dt);
        
        return assureurDto;
-   }
+     }
 
      public List<AssureurDto> findAssureurs() {
 
-        return assureurRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, AssureurDto.class)).collect(Collectors.toList());
+      return assureurRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, AssureurDto.class)).collect(Collectors.toList());
+   }
+
+     public FamilleActeDto createFamilleActe(FamilleActeDto familleActeDto){
+      FamilleActe dt = mapper.map(familleActeDto, FamilleActe.class);
+      familleActeRepository.save(dt);
+       
+       return familleActeDto;
+   }
+   
+   public FamilleActeDto updateFamilleActe(FamilleActeDto familleActeDto){
+      FamilleActe dt = mapper.map(familleActeDto, FamilleActe.class);
+      familleActeRepository.save(dt);
+       
+       return familleActeDto;
+   }
+
+   public FamilleActeDto deleteFamilleActe(FamilleActeDto familleActeDto){
+    FamilleActe dt = mapper.map(familleActeDto, FamilleActe.class);
+    dt.setDeleted(true);
+    familleActeRepository.save(dt);
+     
+     return familleActeDto;
+ }
+
+     public List<FamilleActeDto> findFamilleActes() {
+
+        return familleActeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, FamilleActeDto.class)).collect(Collectors.toList());
      }
 
      public ActeDto createActe(ActeDto acteDto){
@@ -94,6 +131,25 @@ public class ParametrageImp {
 
         return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
      }
+
+     public SousActeDto createSousActe(SousActeDto acteDto){
+      SousActe dt = mapper.map(acteDto, SousActe.class);
+      sousActeRepository.save(dt);
+       
+       return acteDto;
+   }
+   
+   public SousActeDto updateSousActe(SousActeDto acteDto){
+      SousActe dt = mapper.map(acteDto, SousActe.class);
+      sousActeRepository.save(dt);
+       
+       return acteDto;
+   }
+
+   public List<SousActeDto> findSousActes() {
+
+      return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+   }
 
      public CategorieDto createCategorie(CategorieDto categorieDto){
         Categorie dt = mapper.map(categorieDto, Categorie.class);

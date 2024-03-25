@@ -16,6 +16,7 @@ public class DossierClientDto {
     private LocalDate dateSaissie;
     private Long tauxId;
     private BigDecimal taux;
+    private Long acteId;
     
     
     
@@ -101,6 +102,13 @@ public class DossierClientDto {
     public void setTauxId(Long tauxId) {
         this.tauxId = tauxId;
     }
+    public Long getActeId() {
+        return acteId;
+    }
+    public void setActeId(Long acteId) {
+        this.acteId = acteId;
+    }
+   
     
     
     

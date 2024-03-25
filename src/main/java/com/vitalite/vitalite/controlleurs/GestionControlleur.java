@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
+import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.services.GestionService;
@@ -48,6 +49,14 @@ public class GestionControlleur {
     @GetMapping("/dossier-clients")
     public ResponseEntity<List<DossierClientDto>> getAllDossierClient() {
            return  new ResponseEntity<>(gestionService.findDossierClients(), HttpStatus.CREATED);
+    }
+
+   
+
+    @PutMapping("/dossier-clients/by-periode")
+    public ResponseEntity<List<DossierClientDto>> findDossierClientsByPeriode(@RequestBody final SearchDto searchDto) {
+        System.out.println(searchDto);
+           return  new ResponseEntity<>(gestionService.findDossierClientsByPeriode(searchDto.getDatD(),searchDto.getDatF()), HttpStatus.CREATED);
     }
 
 
@@ -86,7 +95,7 @@ public class GestionControlleur {
            return  new ResponseEntity<>(gestionService.findConventions(), HttpStatus.CREATED);
     }
     @GetMapping("/conventions/by-convention")
-    public ResponseEntity<List<ActeDto>> findByConvention(@RequestParam Long conventionId) {
+    public ResponseEntity<List<SousActeDto>> findByConvention(@RequestParam Long conventionId) {
            return  new ResponseEntity<>(gestionService.findByConvention(conventionId), HttpStatus.CREATED);
     }
 

@@ -1,11 +1,10 @@
 package com.vitalite.vitalite.model;
 
 
-public class ActeDto {
+public class FamilleActeDto {
     private Long id;
     private String code;
     private String libelle;
-    private Long familleActeId;
     
     
 
@@ -27,12 +26,6 @@ public class ActeDto {
     }
     public void setCode(String code) {
         this.code = code;
-    }
-    public Long getFamilleActeId() {
-        return familleActeId;
-    }
-    public void setFamilleActeId(Long familleActeId) {
-        this.familleActeId = familleActeId;
     }
     
     

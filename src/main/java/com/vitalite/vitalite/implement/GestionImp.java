@@ -23,7 +23,7 @@ import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
-import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.repository.ActeRepository;
@@ -89,6 +89,10 @@ public class GestionImp {
      public List<DossierClientDto> findDossierClients() {
         return dossierClientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
      }
+     public List<DossierClientDto> findDossierClientsByPeriode(LocalDate dateD, LocalDate dateF) {
+    System.out.println("=============================="+dateD+"==========="+dateF);
+      return dossierClientRepository.findByAndDateSaissieBetweenAndDeletedFalse(dateD.plusDays(-1L), dateF.plusDays(1L)).stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
+   }
 
 
      public SoinDto createSoin(SoinDto soinDto){
@@ -152,11 +156,11 @@ public class GestionImp {
 
     
 
-     public List<ActeDto> findByConvention(Long conventionId) {
-      List<ActeDto> acteDtos = new ArrayList<>();
+     public List<SousActeDto> findByConvention(Long conventionId) {
+      List<SousActeDto> acteDtos = new ArrayList<>();
       conventionActeRepository.findByConventionIdAndDeletedFalse(conventionId)
       .stream().peek(convActe-> {
-         ActeDto  acte = mapper.map(convActe.getActe(), ActeDto.class);
+         SousActeDto  acte = mapper.map(convActe.getActe(), SousActeDto.class);
           acte.setMontantConvention(convActe.getMontantConvention());
           acte.setConventionActeId(convActe.getId());
           acteDtos.add(acte);
@@ -170,7 +174,7 @@ public class GestionImp {
       Convention convention =  conventionRepository.save(dt);
          if(conventionDto.getActes() !=null && !conventionDto.getActes().isEmpty()) {
 
-            for(ActeDto acte: conventionDto.getActes()) {
+            for(SousActeDto acte: conventionDto.getActes()) {
                ConventionActe conventionActe = new ConventionActe();
                if(acte.getMontantConvention() !=null) {
                   conventionActe.setActe(mapper.map(acte, Acte.class));
@@ -191,7 +195,7 @@ public class GestionImp {
       Convention convention =  conventionRepository.save(dt);
          if(conventionDto.getActes() !=null && !conventionDto.getActes().isEmpty()) {
 
-            for(ActeDto acte: conventionDto.getActes()) {
+            for(SousActeDto acte: conventionDto.getActes()) {
                ConventionActe conventionActe = new ConventionActe();
                if(acte.getMontantConvention() !=null) {
                   if(acte.getConventionActeId() !=null) {

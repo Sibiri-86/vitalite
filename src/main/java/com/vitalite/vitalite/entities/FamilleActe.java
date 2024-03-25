@@ -11,13 +11,10 @@ import java.math.BigDecimal;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -26,9 +23,9 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "acte")
+@Table(name = "familleActe")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Acte  implements Serializable  {
+public class FamilleActe  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -38,20 +35,8 @@ public class Acte  implements Serializable  {
     private String code;
     private String libelle;
     private Boolean deleted = Boolean.FALSE;
-    @ManyToOne
-    @JsonIgnoreProperties("actes")
-    private FamilleActe familleActe;
-    
 
     
-    public FamilleActe getFamilleActe() {
-        return familleActe;
-    }
-
-    public void setFamilleActe(FamilleActe familleActe) {
-        this.familleActe = familleActe;
-    }
-
     public Long getId() {
         return id;
     }

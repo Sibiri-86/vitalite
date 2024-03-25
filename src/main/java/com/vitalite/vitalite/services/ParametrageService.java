@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.ParametrageImp;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.FamilleActeDto;
 import com.vitalite.vitalite.model.ProduitDto;
 import com.vitalite.vitalite.model.SocieteDto;
 
@@ -37,6 +39,18 @@ public class ParametrageService {
         return parametrageCLientImp.findAssureurs();
     }
 
+    public FamilleActeDto createFamilleActe(FamilleActeDto familleActeDto) {
+        return parametrageCLientImp.createFamilleActe(familleActeDto);
+    }
+
+    public FamilleActeDto updateFamilleActe(FamilleActeDto acteDto) {
+        return parametrageCLientImp.updateFamilleActe(acteDto);
+    }
+
+    public List<FamilleActeDto> finFamilleActes() {
+        return parametrageCLientImp.findFamilleActes();
+    }
+
     public ActeDto createActe(ActeDto acteDto) {
         return parametrageCLientImp.createActe(acteDto);
     }
@@ -48,6 +62,19 @@ public class ParametrageService {
     public List<ActeDto> finActes() {
         return parametrageCLientImp.findActes();
     }
+
+    public SousActeDto createSousActe(SousActeDto acteDto) {
+        return parametrageCLientImp.createSousActe(acteDto);
+    }
+
+    public SousActeDto updateSousActe(SousActeDto acteDto) {
+        return parametrageCLientImp.updateSousActe(acteDto);
+    }
+
+    public List<SousActeDto> finASousctes() {
+        return parametrageCLientImp.findSousActes();
+    }
+
 
     public CategorieDto createCategorie(CategorieDto categorieDto) {
         return parametrageCLientImp.createCategorie(categorieDto);

@@ -26,9 +26,9 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "acte")
+@Table(name = "sousActe")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Acte  implements Serializable  {
+public class SousActe  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -38,18 +38,25 @@ public class Acte  implements Serializable  {
     private String code;
     private String libelle;
     private Boolean deleted = Boolean.FALSE;
+    public BigDecimal prixActe;
     @ManyToOne
-    @JsonIgnoreProperties("actes")
-    private FamilleActe familleActe;
-    
+    @JsonIgnoreProperties("sousActes")
+    private Acte acte;
 
-    
-    public FamilleActe getFamilleActe() {
-        return familleActe;
+    public Acte getActe() {
+        return acte;
     }
 
-    public void setFamilleActe(FamilleActe familleActe) {
-        this.familleActe = familleActe;
+    public void setActe(Acte acte) {
+        this.acte = acte;
+    }
+
+    public BigDecimal getPrixActe() {
+        return prixActe;
+    }
+
+    public void setPrixActe(BigDecimal prixActe) {
+        this.prixActe = prixActe;
     }
 
     public Long getId() {

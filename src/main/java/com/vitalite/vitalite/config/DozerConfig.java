@@ -16,7 +16,7 @@ import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Examen;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
-import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
@@ -38,7 +38,8 @@ public class DozerConfig {
                 .fields("assureurId","assureur.id")
                 .fields("assureur","assureur.libelle")
                 .fields("tauxId","taux.id")
-                .fields("taux","taux.tauxPourcentage");
+                .fields("taux","taux.tauxPourcentage")
+                .fields("acteId","acte.id");
 
                 mapping(PrestationDto.class, Prestation.class, TypeMappingOptions.mapNull(false))
                 .fields("dossierClientId","dossierClient.id")

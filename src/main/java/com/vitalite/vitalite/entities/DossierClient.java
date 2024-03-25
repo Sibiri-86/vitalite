@@ -53,10 +53,21 @@ public class DossierClient  implements Serializable  {
     @ManyToOne
     @JsonIgnoreProperties("dossier_clients")
     private Taux taux;
+    @ManyToOne
+    @JsonIgnoreProperties("dossier_clients")
+    private Acte acte;
 
     
 
     
+
+    public Acte getActe() {
+        return acte;
+    }
+
+    public void setActe(Acte acte) {
+        this.acte = acte;
+    }
 
     public LocalDate getDateSaissie() {
         return dateSaissie;

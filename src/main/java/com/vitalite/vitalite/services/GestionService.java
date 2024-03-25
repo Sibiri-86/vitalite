@@ -1,12 +1,14 @@
 package com.vitalite.vitalite.services;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.GestionImp;
-import com.vitalite.vitalite.model.ActeDto;
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
@@ -65,7 +67,7 @@ public class GestionService {
         return gestionImp.findConventions();
     }
    
-    public List<ActeDto> findByConvention(Long conventionId) {
+    public List<SousActeDto> findByConvention(Long conventionId) {
         return gestionImp.findByConvention(conventionId);
     }
 
@@ -78,4 +80,8 @@ public class GestionService {
         return gestionImp.findBySoinId(soinId);
     }
 
+
+    public List<DossierClientDto> findDossierClientsByPeriode(LocalDate dateD, LocalDate dateF) {
+      return gestionImp.findDossierClientsByPeriode(dateD, dateF);
+   }
 }

@@ -7,7 +7,7 @@ public class ExamenDto {
     private String libelle;
     private String categorie;
     private Long categorieId;
-
+    private String unite; 
     
     public Long getId() {
         return id;
@@ -38,6 +38,12 @@ public class ExamenDto {
     }
     public void setCategorieId(Long categorieId) {
         this.categorieId = categorieId;
+    }
+    public String getUnite() {
+        return unite;
+    }
+    public void setUnite(String unite) {
+        this.unite = unite;
     }
     
     

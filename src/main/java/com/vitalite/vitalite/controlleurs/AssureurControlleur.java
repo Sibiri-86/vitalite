@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.FamilleActeDto;
 import com.vitalite.vitalite.model.ProduitDto;
 import com.vitalite.vitalite.model.SocieteDto;
 import com.vitalite.vitalite.services.ParametrageService;
@@ -56,6 +58,22 @@ public class AssureurControlleur {
            return  new ResponseEntity<>(parametrageService.finAssureur(), HttpStatus.CREATED);
     }
 
+    @PostMapping("/familleActes")
+    public ResponseEntity<FamilleActeDto> createFamilleActe(@RequestBody final FamilleActeDto acteDto) { 
+
+        return new ResponseEntity<>(parametrageService.createFamilleActe(acteDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/familleActes")
+    public ResponseEntity<FamilleActeDto> updateFamilleActe(@RequestBody final FamilleActeDto acteDto) {   
+        return new ResponseEntity<>(parametrageService.updateFamilleActe(acteDto), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("familleActes")
+    public ResponseEntity<List<FamilleActeDto>> getAllFamilleActe() {
+           return  new ResponseEntity<>(parametrageService.finFamilleActes(), HttpStatus.CREATED);
+    }
+
     @PostMapping("/actes")
     public ResponseEntity<ActeDto> createActe(@RequestBody final ActeDto acteDto) { 
 
@@ -70,6 +88,23 @@ public class AssureurControlleur {
     @GetMapping("actes")
     public ResponseEntity<List<ActeDto>> getAllActe() {
            return  new ResponseEntity<>(parametrageService.finActes(), HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/sousActes")
+    public ResponseEntity<SousActeDto> createSousActe(@RequestBody final SousActeDto dto) { 
+
+        return new ResponseEntity<>(parametrageService.createSousActe(dto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/sousActes")
+    public ResponseEntity<SousActeDto> updateSousActe(@RequestBody final SousActeDto dto) {   
+        return new ResponseEntity<>(parametrageService.updateSousActe(dto), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("sousActes")
+    public ResponseEntity<List<SousActeDto>> getAllSousActe() {
+           return  new ResponseEntity<>(parametrageService.finASousctes(), HttpStatus.CREATED);
     }
 
     
