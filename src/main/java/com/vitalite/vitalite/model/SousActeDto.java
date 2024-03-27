@@ -10,6 +10,7 @@ public class SousActeDto {
     private Long conventionActeId;
     public BigDecimal prixActe;
     private Long acteId;
+    private String libelleActe;
 
     
     public Long getId() {
@@ -53,6 +54,12 @@ public class SousActeDto {
     }
     public void setActeId(Long acteId) {
         this.acteId = acteId;
+    }
+    public String getLibelleActe() {
+        return libelleActe;
+    }
+    public void setLibelleActe(String libelleActe) {
+        this.libelleActe = libelleActe;
     }
     
 

@@ -18,6 +18,7 @@ import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
+import com.vitalite.vitalite.entities.SousActe;
 import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.PrestationDto;
@@ -160,7 +161,7 @@ public class GestionImp {
       List<SousActeDto> acteDtos = new ArrayList<>();
       conventionActeRepository.findByConventionIdAndDeletedFalse(conventionId)
       .stream().peek(convActe-> {
-         SousActeDto  acte = mapper.map(convActe.getActe(), SousActeDto.class);
+         SousActeDto  acte = mapper.map(convActe.getSousActe(), SousActeDto.class);
           acte.setMontantConvention(convActe.getMontantConvention());
           acte.setConventionActeId(convActe.getId());
           acteDtos.add(acte);
@@ -172,12 +173,14 @@ public class GestionImp {
       Convention dt = mapper.map(conventionDto, Convention.class);
       
       Convention convention =  conventionRepository.save(dt);
-         if(conventionDto.getActes() !=null && !conventionDto.getActes().isEmpty()) {
+      
+         if(conventionDto.getSousActes() !=null && !conventionDto.getSousActes().isEmpty()) {
 
-            for(SousActeDto acte: conventionDto.getActes()) {
+            for(SousActeDto acte: conventionDto.getSousActes()) {
                ConventionActe conventionActe = new ConventionActe();
+               System.out.println("=============getSousActes==getMontantConvention===="+acte.getMontantConvention());
                if(acte.getMontantConvention() !=null) {
-                  conventionActe.setActe(mapper.map(acte, Acte.class));
+                  conventionActe.setSousActe(mapper.map(acte, SousActe.class));
                   conventionActe.setConvention(convention);
                   conventionActe.setMontantConvention(acte.getMontantConvention());
                   conventionActe.setDateEffet(convention.getDateEffet());
@@ -193,15 +196,15 @@ public class GestionImp {
       Convention dt = mapper.map(conventionDto, Convention.class);
       
       Convention convention =  conventionRepository.save(dt);
-         if(conventionDto.getActes() !=null && !conventionDto.getActes().isEmpty()) {
+         if(conventionDto.getSousActes() !=null && !conventionDto.getSousActes().isEmpty()) {
 
-            for(SousActeDto acte: conventionDto.getActes()) {
+            for(SousActeDto acte: conventionDto.getSousActes()) {
                ConventionActe conventionActe = new ConventionActe();
                if(acte.getMontantConvention() !=null) {
                   if(acte.getConventionActeId() !=null) {
                      conventionActe.setId(acte.getConventionActeId());
                   }
-                  conventionActe.setActe(mapper.map(acte, Acte.class));
+                  conventionActe.setSousActe(mapper.map(acte, SousActe.class));
                   conventionActe.setConvention(convention);
                   conventionActe.setMontantConvention(acte.getMontantConvention());
                   conventionActe.setDateEffet(convention.getDateEffet());
@@ -240,7 +243,7 @@ public class GestionImp {
                Optional<Convention> c = conventionRepository.findByAssureurIdAndDeletedFalse(doc.get().getAssureur().getId());
                   if(c.isPresent()) {
                      System.out.println("dedans 44444"+ acteId+ "   "+assureurId);
-                     Optional<ConventionActe> convention = conventionActeRepository.findByDeletedFalseAndConventionIdAndActeId(c.get().getId(), acteId);
+                     Optional<ConventionActe> convention = conventionActeRepository.findByDeletedFalseAndConventionIdAndSousActeId(c.get().getId(), acteId);
                      if(convention.isPresent()) {
                         System.out.println("dedans 5555"+ acteId+ "   "+assureurId);
                         conv.add(mapper.map(convention.get(), ConventionActeDto.class));

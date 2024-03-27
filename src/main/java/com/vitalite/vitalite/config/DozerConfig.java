@@ -57,11 +57,13 @@ public class DozerConfig {
                 
                 mapping(ConventionActeDto.class, ConventionActe.class, TypeMappingOptions.mapNull(false))
                 .fields("conventionId","convention.id")
-                .fields("acteId","acte.id");
+                .fields("sousActeId","sousActe.id");
                 mapping(ActeDto.class, Acte.class, TypeMappingOptions.mapNull(false))
-                .fields("familleActeId","familleActe.id");
+                .fields("familleActeId","familleActe.id")
+                .fields("libelleFamilleActe","familleActe.libelle");
                 mapping(SousActeDto.class, SousActe.class, TypeMappingOptions.mapNull(false))
-                .fields("acteId","acte.id");
+                .fields("acteId","acte.id")
+                .fields("libelleActe","acte.libelle");
                 
                
             

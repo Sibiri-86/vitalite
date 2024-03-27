@@ -7,7 +7,7 @@ public class ConventionDto {
     private Long id;
     private LocalDate dateEffet;
     private Long assureurId;
-    private List<SousActeDto> actes;
+    private List<SousActeDto> sousActes;
     private String assureur;
 
     
@@ -29,17 +29,18 @@ public class ConventionDto {
     public void setAssureurId(Long assureurId) {
         this.assureurId = assureurId;
     }
-    public List<SousActeDto> getActes() {
-        return actes;
-    }
-    public void setActes(List<SousActeDto> actes) {
-        this.actes = actes;
-    }
+    
     public String getAssureur() {
         return assureur;
     }
     public void setAssureur(String assureur) {
         this.assureur = assureur;
+    }
+    public List<SousActeDto> getSousActes() {
+        return sousActes;
+    }
+    public void setSousActes(List<SousActeDto> sousActes) {
+        this.sousActes = sousActes;
     }
         
 }

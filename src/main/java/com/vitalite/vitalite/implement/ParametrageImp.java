@@ -148,7 +148,7 @@ public class ParametrageImp {
 
    public List<SousActeDto> findSousActes() {
 
-      return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+      return sousActeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
    }
 
      public CategorieDto createCategorie(CategorieDto categorieDto){

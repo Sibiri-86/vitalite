@@ -12,5 +12,5 @@ import com.vitalite.vitalite.entities.ConventionActe;
 public interface ConventionActeRepository extends JpaRepository<ConventionActe, String> {
     List<ConventionActe> findByDeletedFalse();
     List<ConventionActe> findByConventionIdAndDeletedFalse(Long conventId);
-    Optional<ConventionActe> findByDeletedFalseAndConventionIdAndActeId(Long conventId, Long acteId);
+    Optional<ConventionActe> findByDeletedFalseAndConventionIdAndSousActeId(Long conventId, Long acteId);
 }

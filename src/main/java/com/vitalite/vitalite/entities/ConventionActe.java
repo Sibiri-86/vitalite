@@ -44,7 +44,7 @@ public class ConventionActe  implements Serializable  {
      private Convention  convention;
     @ManyToOne
     @JsonIgnoreProperties("convention_actes")   
-     private Acte acte;
+     private SousActe sousActe;
     private BigDecimal montantConvention;
     private Boolean deleted = Boolean.FALSE;
 
@@ -88,12 +88,14 @@ public class ConventionActe  implements Serializable  {
         this.convention = convention;
     }
 
-    public Acte getActe() {
-        return acte;
+   
+
+    public SousActe getSousActe() {
+        return sousActe;
     }
 
-    public void setActe(Acte acte) {
-        this.acte = acte;
+    public void setSousActe(SousActe sousActe) {
+        this.sousActe = sousActe;
     }
 
     public BigDecimal getMontantConvention() {

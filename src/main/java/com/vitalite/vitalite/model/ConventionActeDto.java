@@ -8,7 +8,7 @@ public class ConventionActeDto {
     private LocalDate dateEffet;
     private LocalDate dateEcheance;
     private Long conventionId; 
-    private Long acteId;
+    private Long sousActeId;
     private BigDecimal montantConvention;
     private Boolean deleted = Boolean.FALSE;
 
@@ -37,12 +37,7 @@ public class ConventionActeDto {
     public void setConventionId(Long conventionId) {
         this.conventionId = conventionId;
     }
-    public Long getActeId() {
-        return acteId;
-    }
-    public void setActeId(Long acteId) {
-        this.acteId = acteId;
-    }
+    
     public BigDecimal getMontantConvention() {
         return montantConvention;
     }
@@ -54,6 +49,12 @@ public class ConventionActeDto {
     }
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+    public Long getSousActeId() {
+        return sousActeId;
+    }
+    public void setSousActeId(Long sousActeId) {
+        this.sousActeId = sousActeId;
     }
     
         

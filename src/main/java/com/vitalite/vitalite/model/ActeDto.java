@@ -6,6 +6,7 @@ public class ActeDto {
     private String code;
     private String libelle;
     private Long familleActeId;
+    private String libelleFamilleActe;
     
     
 
@@ -33,6 +34,12 @@ public class ActeDto {
     }
     public void setFamilleActeId(Long familleActeId) {
         this.familleActeId = familleActeId;
+    }
+    public String getLibelleFamilleActe() {
+        return libelleFamilleActe;
+    }
+    public void setLibelleFamilleActe(String libelleFamilleActe) {
+        this.libelleFamilleActe = libelleFamilleActe;
     }
     
     
