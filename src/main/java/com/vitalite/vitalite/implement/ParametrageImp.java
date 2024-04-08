@@ -1,7 +1,11 @@
 package com.vitalite.vitalite.implement;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.swing.text.html.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +15,7 @@ import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Assureur;
 import com.vitalite.vitalite.entities.Categorie;
 import com.vitalite.vitalite.entities.Chambre;
+import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.Examen;
 import com.vitalite.vitalite.entities.FamilleActe;
 import com.vitalite.vitalite.entities.Produit;
@@ -29,6 +34,8 @@ import com.vitalite.vitalite.repository.ActeRepository;
 import com.vitalite.vitalite.repository.AssureurRepository;
 import com.vitalite.vitalite.repository.CategorieRepository;
 import com.vitalite.vitalite.repository.ChambreRepository;
+import com.vitalite.vitalite.repository.ConventionActeRepository;
+import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.ExamenRepository;
 import com.vitalite.vitalite.repository.FamilleActeRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
@@ -58,6 +65,8 @@ public class ParametrageImp {
 
      @Autowired
      private SocieteRepository  societeRepository;
+     @Autowired
+     private ConventionActeRepository conventionActeRepository;
 
      public AssureurDto createAssureur(AssureurDto assureurDto){
         Assureur dt = mapper.map(assureurDto, Assureur.class);
@@ -132,6 +141,11 @@ public class ParametrageImp {
         return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
      }
 
+     public List<ActeDto> findActeByFamilleId(Long familleId) {
+
+      return acteRepository.findByFamilleActeIdAndDeletedFalse(familleId).stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
+   }
+
      public SousActeDto createSousActe(SousActeDto acteDto){
       SousActe dt = mapper.map(acteDto, SousActe.class);
       sousActeRepository.save(dt);
@@ -149,6 +163,32 @@ public class ParametrageImp {
    public List<SousActeDto> findSousActes() {
 
       return sousActeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+   }
+
+   public List<SousActeDto> findSousActesByActId(Long acteId) {
+
+      return sousActeRepository.findByActeIdAndDeletedFalse(acteId).stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+   }
+
+   public BigDecimal findMontantPrefinancement(Long sousActeId) {
+
+      BigDecimal montant = new BigDecimal(0);
+      Optional<SousActe> sousActe = sousActeRepository.findById(sousActeId);
+      if(sousActe.isPresent()) {
+         montant = sousActe.get().getPrixActe();
+      }
+      return montant;
+   }
+
+
+   public BigDecimal findMontantConvention(Long assureurId,Long sousActeId) {
+
+      BigDecimal montantConvention = new BigDecimal(0);
+      Optional<ConventionActe> conv = conventionActeRepository.findByDeletedFalseAndConvention_Assureur_IdAndSousActeId(assureurId, sousActeId);
+      if(conv.isPresent()) {
+         montantConvention = conv.get().getMontantConvention();
+      }
+      return montantConvention;
    }
 
      public CategorieDto createCategorie(CategorieDto categorieDto){

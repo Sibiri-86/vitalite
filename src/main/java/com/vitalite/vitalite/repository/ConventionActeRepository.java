@@ -13,4 +13,6 @@ public interface ConventionActeRepository extends JpaRepository<ConventionActe, 
     List<ConventionActe> findByDeletedFalse();
     List<ConventionActe> findByConventionIdAndDeletedFalse(Long conventId);
     Optional<ConventionActe> findByDeletedFalseAndConventionIdAndSousActeId(Long conventId, Long acteId);
+    Optional<ConventionActe> findByDeletedFalseAndConvention_Assureur_IdAndSousActeId(Long assureurId, Long acteId);
+
 }

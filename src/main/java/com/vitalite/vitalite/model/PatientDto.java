@@ -1,9 +1,12 @@
 package com.vitalite.vitalite.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-public class DossierClientDto {
+
+
+
+public class PatientDto {
     private Long id;
     private String nom;
     private String prenom;
@@ -12,22 +15,13 @@ public class DossierClientDto {
     private String target;
     private Long assureurId;
     private String assureur;
+    private List<PrestationDto> prestations;
+   
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
-    private Long tauxId;
-    private BigDecimal taux;
-    private Long acteId;
-    private Long sousActeId;
-    
-    
-    
-    
-    public BigDecimal getTaux() {
-        return taux;
-    }
-    public void setTaux(BigDecimal taux) {
-        this.taux = taux;
-    }
+    private String police;
+
+
     public Long getId() {
         return id;
     }
@@ -64,11 +58,18 @@ public class DossierClientDto {
     public void setTarget(String target) {
         this.target = target;
     }
+    
     public Long getAssureurId() {
         return assureurId;
     }
     public void setAssureurId(Long assureurId) {
         this.assureurId = assureurId;
+    }
+    public String getAssureur() {
+        return assureur;
+    }
+    public void setAssureur(String assureur) {
+        this.assureur = assureur;
     }
     public LocalDate getDateNaissance() {
         return dateNaissance;
@@ -82,45 +83,18 @@ public class DossierClientDto {
     public void setDateSaissie(LocalDate dateSaissie) {
         this.dateSaissie = dateSaissie;
     }
-    public String getAssureur() {
-        return assureur;
+    public List<PrestationDto> getPrestations() {
+        return prestations;
     }
-    public void setAssureur(String assureur) {
-        this.assureur = assureur;
+    public void setPrestations(List<PrestationDto> prestations) {
+        this.prestations = prestations;
     }
-    
-    
-   
-    @Override
-    public String toString() {
-        return "DossierClientDto [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", matricule=" + matricule
-                + ", numDossier=" + numDossier + ", target=" + target + ", assureurId=" + assureurId + ", assureur="
-                + assureur + ", dateNaissance=" + dateNaissance + ", dateSaissie=" + dateSaissie + ", taux=" + taux + "]";
+    public String getPolice() {
+        return police;
+    }
+    public void setPolice(String police) {
+        this.police = police;
     }
     
-    public Long getTauxId() {
-        return tauxId;
+
     }
-    public void setTauxId(Long tauxId) {
-        this.tauxId = tauxId;
-    }
-    public Long getActeId() {
-        return acteId;
-    }
-    public void setActeId(Long acteId) {
-        this.acteId = acteId;
-    }
-    public Long getSousActeId() {
-        return sousActeId;
-    }
-    public void setSousActeId(Long sousActeId) {
-        this.sousActeId = sousActeId;
-    }
-   
-    
-    
-    
-  
-    
-    
-}

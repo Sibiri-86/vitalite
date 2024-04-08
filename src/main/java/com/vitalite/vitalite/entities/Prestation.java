@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,8 +40,8 @@ public class Prestation  implements Serializable  {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dossierClient_id",referencedColumnName="id",insertable=true,updatable=true)
-    private DossierClient dossierClient;
+    @JoinColumn(name = "patient_id",referencedColumnName="id",insertable=true,updatable=true)
+    private Patient patient;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acte_id",referencedColumnName="id",insertable=true,updatable=true)
@@ -48,12 +50,74 @@ public class Prestation  implements Serializable  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "soin_id",referencedColumnName="id",insertable=true,updatable=true)
     private Soin soin;
+    @ManyToOne
+    @JsonIgnoreProperties("produits")
+    private Taux taux;
+    
+    @ManyToOne
+    @JsonIgnoreProperties("produits")
+    private SousActe sousActe;
+    @ManyToOne
+    @JsonIgnoreProperties("produits")
+    private FamilleActe familleActe;
+    
 
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
     private BigDecimal montant;
+    private BigDecimal montantAssureur;
+    private BigDecimal montantPaye;
     private LocalDate dateSaisie;
     private Boolean deleted = Boolean.FALSE;
+
+    
+    public FamilleActe getFamilleActe() {
+        return familleActe;
+    }
+
+    public void setFamilleActe(FamilleActe familleActe) {
+        this.familleActe = familleActe;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Taux getTaux() {
+        return taux;
+    }
+
+    public void setTaux(Taux taux) {
+        this.taux = taux;
+    }
+
+    public SousActe getSousActe() {
+        return sousActe;
+    }
+
+    public void setSousActe(SousActe sousActe) {
+        this.sousActe = sousActe;
+    }
+
+    public BigDecimal getMontantAssureur() {
+        return montantAssureur;
+    }
+
+    public void setMontantAssureur(BigDecimal montantAssureur) {
+        this.montantAssureur = montantAssureur;
+    }
+
+    public BigDecimal getMontantPaye() {
+        return montantPaye;
+    }
+
+    public void setMontantPaye(BigDecimal montantPaye) {
+        this.montantPaye = montantPaye;
+    }
 
     public Long getId() {
         return id;
@@ -63,13 +127,7 @@ public class Prestation  implements Serializable  {
         this.id = id;
     }
 
-    public DossierClient getDossierClient() {
-        return dossierClient;
-    }
-
-    public void setDossierClient(DossierClient dossierClient) {
-        this.dossierClient = dossierClient;
-    }
+    
 
     public Acte getActe() {
         return acte;

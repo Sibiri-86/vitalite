@@ -14,9 +14,30 @@ public class PrestationDto {
     private BigDecimal montant;
     private LocalDate dateSaisie;
     private Long soinId;
+    private BigDecimal montantAssureur;
+    private BigDecimal montantPaye;
+    private Long tauxId;
+    private BigDecimal tauxNew;
+    private Long familleActeId;
+    private Long sousActeId;
+    private String libelleSousActe;
+    private Long patientId;
 
-    private Boolean deleted = Boolean.FALSE;
+    
 
+    
+    public BigDecimal getMontantAssureur() {
+        return montantAssureur;
+    }
+    public void setMontantAssureur(BigDecimal montantAssureur) {
+        this.montantAssureur = montantAssureur;
+    }
+    public BigDecimal getMontantPaye() {
+        return montantPaye;
+    }
+    public void setMontantPaye(BigDecimal montantPaye) {
+        this.montantPaye = montantPaye;
+    }
     public Long getId() {
         return id;
     }
@@ -53,12 +74,7 @@ public class PrestationDto {
     public void setMontant(BigDecimal montant) {
         this.montant = montant;
     }
-    public Boolean getDeleted() {
-        return deleted;
-    }
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
+   
     
     public LocalDate getDateSaisie() {
         return dateSaisie;
@@ -72,11 +88,43 @@ public class PrestationDto {
     public void setSoinId(Long soinId) {
         this.soinId = soinId;
     }
-    @Override
-    public String toString() {
-        return "PrestationDto [id=" + id + ", dossierClientId=" + dossierClientId + ", acteId=" + acteId + ", quantite="
-                + quantite + ", prixUnitaire=" + prixUnitaire + ", montant=" + montant + ", dateSaisie=" + dateSaisie
-                + ", soinId=" + soinId + ", deleted=" + deleted + "]";
+   
+    public Long getTauxId() {
+        return tauxId;
+    }
+    public void setTauxId(Long tauxId) {
+        this.tauxId = tauxId;
+    }
+    
+    public Long getFamilleActeId() {
+        return familleActeId;
+    }
+    public void setFamilleActeId(Long familleActeId) {
+        this.familleActeId = familleActeId;
+    }
+    public Long getSousActeId() {
+        return sousActeId;
+    }
+    public void setSousActeId(Long sousActeId) {
+        this.sousActeId = sousActeId;
+    }
+    public String getLibelleSousActe() {
+        return libelleSousActe;
+    }
+    public void setLibelleSousActe(String libelleSousActe) {
+        this.libelleSousActe = libelleSousActe;
+    }
+    public Long getPatientId() {
+        return patientId;
+    }
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+    public BigDecimal getTauxNew() {
+        return tauxNew;
+    }
+    public void setTauxNew(BigDecimal tauxNew) {
+        this.tauxNew = tauxNew;
     }
     
     

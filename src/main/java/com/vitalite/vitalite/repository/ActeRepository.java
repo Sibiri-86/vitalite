@@ -10,4 +10,5 @@ import com.vitalite.vitalite.entities.Acte;
 @Repository
 public interface ActeRepository extends JpaRepository<Acte, Long> {
     List<Acte> findByDeletedFalse();
+    List<Acte> findByFamilleActeIdAndDeletedFalse(Long familleId);
 }

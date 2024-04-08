@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -39,6 +42,29 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.createDossierClient(dossierClientDto), HttpStatus.CREATED);
     }
 
+    @PostMapping("/patients")
+    public ResponseEntity<PatientDto> createPatient(@RequestBody final PatientDto patientDto) { 
+        return new ResponseEntity<>(gestionService.createPatient(patientDto), HttpStatus.CREATED);
+    }
+    @PutMapping("/patients")
+    public ResponseEntity<PatientDto> updatePatient(@RequestBody final PatientDto patientDto) { 
+        return new ResponseEntity<>(gestionService.updatePatient(patientDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<List<PatientDto>> findPatients() { 
+        return new ResponseEntity<>(gestionService.findPatients(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/patients/prestation")
+    public ResponseEntity<List<PrestationDto>> findPrestationByPatient(@RequestParam Long patientId) { 
+        return new ResponseEntity<>(gestionService.findPrestationByPatient(patientId), HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/patients/prestation")
+    public void deletePrestation(@RequestBody final PrestationDto prestationDto){
+        gestionService.deletePrestation(prestationDto);
+    }
     
     @PutMapping("/dossier-clients")
     public ResponseEntity<DossierClientDto> updateDossierClient(@RequestBody final DossierClientDto dossierClientDto) {

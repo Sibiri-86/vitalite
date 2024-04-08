@@ -14,6 +14,7 @@ import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Examen;
+import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
@@ -23,6 +24,7 @@ import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 
@@ -41,11 +43,16 @@ public class DozerConfig {
                 .fields("assureur","assureur.libelle")
                 .fields("tauxId","taux.id")
                 .fields("taux","taux.tauxPourcentage")
-                .fields("acteId","acte.id");
+                .fields("acteId","acte.id")
+                .fields("sousActeId","sousActe.id");
 
                 mapping(PrestationDto.class, Prestation.class, TypeMappingOptions.mapNull(false))
-                .fields("dossierClientId","dossierClient.id")
+                .fields("sousActeId","sousActe.id")
+                .fields("familleActeId","familleActe.id")
                 .fields("acteId","acte.id")
+                .fields("libelleSousActe","sousActe.libelle")
+                .fields("patientId","patient.id")
+                .fields("tauxId","taux.id")
                 .fields("soinId","soin.id");                
 
                 mapping(ConventionDto.class, Convention.class, TypeMappingOptions.mapNull(false))
@@ -64,6 +71,11 @@ public class DozerConfig {
                 mapping(SousActeDto.class, SousActe.class, TypeMappingOptions.mapNull(false))
                 .fields("acteId","acte.id")
                 .fields("libelleActe","acte.libelle");
+
+                mapping(PatientDto.class, Patient.class, TypeMappingOptions.mapNull(false))
+                .fields("assureurId","assureur.id")
+                .fields("assureur","assureur.libelle")
+               ;
                 
                
             

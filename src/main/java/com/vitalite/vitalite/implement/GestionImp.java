@@ -16,11 +16,13 @@ import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
+import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
 import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
@@ -31,6 +33,7 @@ import com.vitalite.vitalite.repository.ActeRepository;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
 import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.DossierClientRepository;
+import com.vitalite.vitalite.repository.PatientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
@@ -58,6 +61,8 @@ public class GestionImp {
     
     @Autowired
      private ActeRepository acteRepository;
+     @Autowired
+     private PatientRepository patientRepository;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -77,7 +82,98 @@ public class GestionImp {
          
          return dossierClientDto;
      }
+
+
+     public PatientDto createPatient(PatientDto patientDto){
      
+     /*  if(patientDto.getAssureurId() == 0L) {
+         patientDto.setAssureurId(null);
+      } */
+      patientDto.setNumDossier(generateNumero(String.valueOf(patientRepository.findAll().size())));
+      Patient dt = mapper.map(patientDto, Patient.class);
+
+      Patient patient=  patientRepository.save(dt);
+      if(!patientDto.getPrestations().isEmpty()) {
+         for(PrestationDto prestationDto: patientDto.getPrestations()) {
+            if(prestationDto.getTauxId() == 0) {
+               prestationDto.setTauxId(null);
+            }
+            Prestation prestation = mapper.map(prestationDto, Prestation.class);
+            prestation.setPatient(patient);
+            if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
+
+               Taux taux = new Taux();
+               taux.setTauxPourcentage(prestationDto.getTauxNew());
+               Taux tauxF = tauxRepository.save(taux);
+              
+               prestation.setTaux(tauxF);
+               
+            }
+
+            prestationRepository.save(prestation);
+         }
+      }
+      
+      
+         
+         return patientDto;
+     }
+     
+
+     public PatientDto updatePatient(PatientDto patientDto){
+     
+      if(patientDto.getAssureurId() == 0L) {
+         patientDto.setAssureurId(null);
+      }
+      
+      Patient dt = mapper.map(patientDto, Patient.class);
+
+      Patient patient=  patientRepository.save(dt);
+      if(!patientDto.getPrestations().isEmpty()) {
+         for(PrestationDto prestationDto: patientDto.getPrestations()) {
+            if(prestationDto.getTauxId() == 0) {
+               prestationDto.setTauxId(null);
+            }
+            Prestation prestation = mapper.map(prestationDto, Prestation.class);
+            prestation.setPatient(patient);
+           
+            if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
+
+               Taux taux = new Taux();
+               taux.setTauxPourcentage(prestationDto.getTauxNew());
+               Taux tauxF = tauxRepository.save(taux);
+              
+               prestation.setTaux(tauxF);
+               
+            }
+
+            prestationRepository.save(prestation);
+         }
+      }
+      
+      
+         
+         return patientDto;
+     }
+     
+
+     public List<PatientDto> findPatients() {
+      return patientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, PatientDto.class)).collect(Collectors.toList());
+   }
+
+   public List<PrestationDto> findByPatients(Long patientId) {
+      return prestationRepository.findByPatientIdAndDeletedFalse(patientId).stream().map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+   }
+
+
+   public void deletePrestation(PrestationDto prestation) {
+      Prestation dt = mapper.map(prestation, Prestation.class);
+      dt.setDeleted(true);
+      prestationRepository.save(dt);
+
+   }
+   
+
      
      public DossierClientDto updateDossierClient(DossierClientDto dossierClientDto) {
       System.out.println("dossierClientDto update 2===>" + dossierClientDto);
@@ -116,7 +212,7 @@ public class GestionImp {
                prest.setQuantite(p.getQuantite());
                Optional<DossierClient> d = dossierClientRepository.findById(p.getDossierClientId());
                if(d.isPresent()) {
-                  prest.setDossierClient(d.get());
+               //   prest.setDossierClient(d.get());
                }
                
                prestationRepository.save(mapper.map(prest, Prestation.class));

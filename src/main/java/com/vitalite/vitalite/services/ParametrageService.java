@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,14 @@ public class ParametrageService {
         return parametrageCLientImp.findSousActes();
     }
 
+    public List<SousActeDto> finASousctesByActe(Long acteId) {
+        return parametrageCLientImp.findSousActesByActId(acteId);
+    }
+
+    public List<ActeDto> findActesByFamilleActe(Long familleActeId) {
+        return parametrageCLientImp.findActeByFamilleId(familleActeId);
+    }
+
 
     public CategorieDto createCategorie(CategorieDto categorieDto) {
         return parametrageCLientImp.createCategorie(categorieDto);
@@ -138,6 +147,14 @@ public class ParametrageService {
 
     public List<SocieteDto> findSocietes() {
         return parametrageCLientImp.findSocietes();
+    }
+
+    public BigDecimal findMontantPrefinancement(Long sousActeId) {
+        return parametrageCLientImp.findMontantPrefinancement(sousActeId);
+    }
+ 
+    public BigDecimal findMontantConvention(Long assureurId,Long sousActeId) {
+        return parametrageCLientImp.findMontantConvention(assureurId, sousActeId);
     }
 
 }

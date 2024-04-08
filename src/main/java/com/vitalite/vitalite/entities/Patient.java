@@ -13,6 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,9 +27,9 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "dossier_client")
+@Table(name = "patient")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class DossierClient  implements Serializable  {
+public class Patient  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -41,41 +42,25 @@ public class DossierClient  implements Serializable  {
     private String numDossier;
     private String target;
 
-     @ManyToOne
-     @JsonIgnoreProperties("dossier_clients")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("patients")
     private Assureur assureur;
    
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
+    private String police;
     private Boolean deleted = Boolean.FALSE;
-    @ManyToOne
-    @JsonIgnoreProperties("dossier_clients")
-    private Taux taux;
-    @ManyToOne
-    @JsonIgnoreProperties("dossier_clients")
-    private Acte acte;
-
-    @ManyToOne
-    @JsonIgnoreProperties("dossier_clients")
-    private SousActe sousActe;
     
 
     
 
-    public SousActe getSousActe() {
-        return sousActe;
+   
+    public String getPolice() {
+        return police;
     }
 
-    public void setSousActe(SousActe sousActe) {
-        this.sousActe = sousActe;
-    }
-
-    public Acte getActe() {
-        return acte;
-    }
-
-    public void setActe(Acte acte) {
-        this.acte = acte;
+    public void setPolice(String police) {
+        this.police = police;
     }
 
     public LocalDate getDateSaissie() {
@@ -162,14 +147,7 @@ public class DossierClient  implements Serializable  {
         this.assureur = assureur;
     }
 
-    public Taux getTaux() {
-        return taux;
-    }
-
-    public void setTaux(Taux taux) {
-        this.taux = taux;
-    }
-
+    
     
     @Override
     public String toString() {

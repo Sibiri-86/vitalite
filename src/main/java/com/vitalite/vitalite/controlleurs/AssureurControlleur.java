@@ -1,6 +1,7 @@
 package com.vitalite.vitalite.controlleurs;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,10 @@ public class AssureurControlleur {
            return  new ResponseEntity<>(parametrageService.finActes(), HttpStatus.CREATED);
     }
 
+    @GetMapping("actes/by-famille-acte")
+    public ResponseEntity<List<ActeDto>> findActesByFamilleActe(@RequestParam Long famillleActeId) {
+           return  new ResponseEntity<>(parametrageService.findActesByFamilleActe(famillleActeId), HttpStatus.CREATED);
+    }
 
     @PostMapping("/sousActes")
     public ResponseEntity<SousActeDto> createSousActe(@RequestBody final SousActeDto dto) { 
@@ -105,6 +110,12 @@ public class AssureurControlleur {
     @GetMapping("sousActes")
     public ResponseEntity<List<SousActeDto>> getAllSousActe() {
            return  new ResponseEntity<>(parametrageService.finASousctes(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("sousActes/by-acte")
+    public ResponseEntity<List<SousActeDto>> finASousctesByActe(@RequestParam Long acteId) {
+        System.out.println("====================oui====="+acteId);
+           return  new ResponseEntity<>(parametrageService.finASousctesByActe(acteId), HttpStatus.CREATED);
     }
 
     
@@ -192,5 +203,15 @@ public class AssureurControlleur {
     @GetMapping("societes")
     public ResponseEntity<List<SocieteDto>> getAllSociete() {
            return  new ResponseEntity<>(parametrageService.findSocietes(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("sousActes/by-montantPrefinancement")
+    public ResponseEntity<BigDecimal> findMontantPrefinancement(@RequestParam Long sousActeId) {
+        return new ResponseEntity<>(parametrageService.findMontantPrefinancement(sousActeId),  HttpStatus.CREATED);
+    }
+ 
+    @GetMapping("sousActes/by-montantConvention")
+    public ResponseEntity<BigDecimal> findMontantConvention(@RequestParam Long assureurId, @RequestParam Long sousActeId) {
+        return new ResponseEntity<>(parametrageService.findMontantConvention(assureurId, sousActeId),  HttpStatus.CREATED);
     }
 }
