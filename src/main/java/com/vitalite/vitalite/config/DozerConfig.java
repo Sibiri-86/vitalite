@@ -14,6 +14,7 @@ import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Examen;
+import com.vitalite.vitalite.entities.Laboratoire;
 import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
@@ -24,6 +25,7 @@ import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.ExamenDto;
+import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -70,12 +72,15 @@ public class DozerConfig {
                 .fields("libelleFamilleActe","familleActe.libelle");
                 mapping(SousActeDto.class, SousActe.class, TypeMappingOptions.mapNull(false))
                 .fields("acteId","acte.id")
-                .fields("libelleActe","acte.libelle");
+                .fields("libelleActe","acte.libelle")
+                .fields("familleActeId","familleActe.id");
 
                 mapping(PatientDto.class, Patient.class, TypeMappingOptions.mapNull(false))
                 .fields("assureurId","assureur.id")
-                .fields("assureur","assureur.libelle")
-               ;
+                .fields("assureur","assureur.libelle");
+
+                mapping(LaboratoireDto.class, Laboratoire.class, TypeMappingOptions.mapNull(false))
+                .fields("patientId","patient.id");
                 
                
             

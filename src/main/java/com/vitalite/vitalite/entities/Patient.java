@@ -51,11 +51,16 @@ public class Patient  implements Serializable  {
     private LocalDate dateSaissie;
     private String police;
     private Boolean deleted = Boolean.FALSE;
-    
-
-    
-
+    private Boolean isLabo;
    
+    public Boolean getIsLabo() {
+        return isLabo;
+    }
+
+    public void setIsLabo(Boolean isLabo) {
+        this.isLabo = isLabo;
+    }
+
     public String getPolice() {
         return police;
     }

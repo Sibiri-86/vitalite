@@ -12,4 +12,5 @@ public interface PrestationRepository extends JpaRepository<Prestation, Long> {
     List<Prestation> findByDeletedFalse();
     List<Prestation> findBySoinIdAndDeletedFalse(Long soinId);
     List<Prestation> findByPatientIdAndDeletedFalse(Long patientId);
+    List<Prestation> findByPatientIdAndActeIsExamenTrueAndDeletedFalse(Long patientId);
 }

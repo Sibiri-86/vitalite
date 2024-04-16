@@ -60,7 +60,16 @@ public class Prestation  implements Serializable  {
     @ManyToOne
     @JsonIgnoreProperties("produits")
     private FamilleActe familleActe;
+    private String valeur;
     
+
+    public String getValeur() {
+        return valeur;
+    }
+
+    public void setValeur(String valeur) {
+        this.valeur = valeur;
+    }
 
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;

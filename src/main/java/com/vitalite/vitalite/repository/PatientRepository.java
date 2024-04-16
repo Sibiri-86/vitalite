@@ -10,4 +10,5 @@ import com.vitalite.vitalite.entities.Patient;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findByDeletedFalse();
+    List<Patient> findByIsLaboFalseAndDeletedFalse();
 }
