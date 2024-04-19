@@ -13,6 +13,7 @@ import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -26,6 +27,17 @@ public class GestionService {
   
      @Autowired
     private GestionImp gestionImp;
+
+    public LaboratoireDto createLabo(LaboratoireDto laboratoireDto) {
+        return gestionImp.createLabo(laboratoireDto);
+    }
+    public LaboratoireDto updateLabo(LaboratoireDto laboratoireDto) {
+        return gestionImp.updateLabo(laboratoireDto);
+    }
+
+    public List<LaboratoireDto> findLaborations() {
+        return gestionImp.findLaborations();
+    }
 
     public PatientDto createPatient(PatientDto patientDto) {
         return gestionImp.createPatient(patientDto);
@@ -52,8 +64,16 @@ public class GestionService {
         return gestionImp.findPatients();
     }
 
+    public List<PatientDto> findPatientsByLabo() {
+        return gestionImp.findPatientsByLabo();
+    }
+
     public List<PrestationDto> findPrestationByPatient(Long patientId) {
         return gestionImp.findByPatients(patientId);
+    }
+
+    public List<PrestationDto> findByPatientsAndLabo(Long patientId) {
+        return gestionImp.findByPatientsAndLabo(patientId);
     }
     
 

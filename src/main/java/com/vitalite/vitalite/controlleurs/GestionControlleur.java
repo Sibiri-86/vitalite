@@ -21,6 +21,7 @@ import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SearchDto;
@@ -45,6 +46,20 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.createDossierClient(dossierClientDto), HttpStatus.CREATED);
     }
 
+    @PostMapping("/laboratoires")
+    public ResponseEntity<LaboratoireDto> createLabo(@RequestBody final LaboratoireDto dto) { 
+        return new ResponseEntity<>(gestionService.createLabo(dto), HttpStatus.CREATED);
+    }
+    @PutMapping("/laboratoires")
+    public ResponseEntity<LaboratoireDto> updatePatient(@RequestBody final LaboratoireDto dto) { 
+        return new ResponseEntity<>(gestionService.updateLabo(dto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/laboratoires")
+    public ResponseEntity<List<LaboratoireDto>> findLaborations() { 
+        return new ResponseEntity<>(gestionService.findLaborations(), HttpStatus.CREATED);
+    }
+
     @PostMapping("/patients")
     public ResponseEntity<PatientDto> createPatient(@RequestBody final PatientDto patientDto) { 
         return new ResponseEntity<>(gestionService.createPatient(patientDto), HttpStatus.CREATED);
@@ -59,9 +74,18 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.findPatients(), HttpStatus.CREATED);
     }
 
+    @GetMapping("/patients/for-labo")
+    public ResponseEntity<List<PatientDto>> findPatientsByLabo() { 
+        return new ResponseEntity<>(gestionService.findPatientsByLabo(), HttpStatus.CREATED);
+    }
+
     @GetMapping("/patients/prestation")
     public ResponseEntity<List<PrestationDto>> findPrestationByPatient(@RequestParam Long patientId) { 
         return new ResponseEntity<>(gestionService.findPrestationByPatient(patientId), HttpStatus.CREATED);
+    }
+    @GetMapping("/patients/prestation/labo")
+    public ResponseEntity<List<PrestationDto>> findByPatientsAndLabo(@RequestParam Long patientId) { 
+        return new ResponseEntity<>(gestionService.findByPatientsAndLabo(patientId), HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/patients/prestation")

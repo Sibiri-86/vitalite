@@ -7,6 +7,9 @@ public class ActeDto {
     private String libelle;
     private Long familleActeId;
     private String libelleFamilleActe;
+    private Boolean isExamen;
+
+    
     
     
 
@@ -40,6 +43,12 @@ public class ActeDto {
     }
     public void setLibelleFamilleActe(String libelleFamilleActe) {
         this.libelleFamilleActe = libelleFamilleActe;
+    }
+    public Boolean getIsExamen() {
+        return isExamen;
+    }
+    public void setIsExamen(Boolean isExamen) {
+        this.isExamen = isExamen;
     }
     
     

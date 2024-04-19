@@ -11,6 +11,8 @@ public class SousActeDto {
     public BigDecimal prixActe;
     private Long acteId;
     private String libelleActe;
+    private String valeurNormal;
+    private Long familleActeId;
 
     
     public Long getId() {
@@ -60,6 +62,18 @@ public class SousActeDto {
     }
     public void setLibelleActe(String libelleActe) {
         this.libelleActe = libelleActe;
+    }
+    public String getValeurNormal() {
+        return valeurNormal;
+    }
+    public void setValeurNormal(String valeurNormal) {
+        this.valeurNormal = valeurNormal;
+    }
+    public Long getFamilleActeId() {
+        return familleActeId;
+    }
+    public void setFamilleActeId(Long familleActeId) {
+        this.familleActeId = familleActeId;
     }
     
 

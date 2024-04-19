@@ -39,9 +39,30 @@ public class SousActe  implements Serializable  {
     private String libelle;
     private Boolean deleted = Boolean.FALSE;
     public BigDecimal prixActe;
+    private String valeurNormal;
     @ManyToOne
     @JsonIgnoreProperties("sousActes")
     private Acte acte;
+    @ManyToOne
+    @JsonIgnoreProperties("sousActes")
+    private FamilleActe familleActe;
+
+    
+    public FamilleActe getFamilleActe() {
+        return familleActe;
+    }
+
+    public void setFamilleActe(FamilleActe familleActe) {
+        this.familleActe = familleActe;
+    }
+
+    public String getValeurNormal() {
+        return valeurNormal;
+    }
+
+    public void setValeurNormal(String valeurNormal) {
+        this.valeurNormal = valeurNormal;
+    }
 
     public Acte getActe() {
         return acte;

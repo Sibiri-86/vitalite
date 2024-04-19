@@ -20,6 +20,7 @@ public class PatientDto {
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
     private String police;
+    private Boolean isLabo;
 
 
     public Long getId() {
@@ -94,6 +95,12 @@ public class PatientDto {
     }
     public void setPolice(String police) {
         this.police = police;
+    }
+    public Boolean getIsLabo() {
+        return isLabo;
+    }
+    public void setIsLabo(Boolean isLabo) {
+        this.isLabo = isLabo;
     }
     
 

@@ -22,6 +22,8 @@ public class PrestationDto {
     private Long sousActeId;
     private String libelleSousActe;
     private Long patientId;
+    private SousActeDto sousActe;
+    private String valeur;
 
     
 
@@ -125,6 +127,18 @@ public class PrestationDto {
     }
     public void setTauxNew(BigDecimal tauxNew) {
         this.tauxNew = tauxNew;
+    }
+    public SousActeDto getSousActe() {
+        return sousActe;
+    }
+    public void setSousActe(SousActeDto sousActe) {
+        this.sousActe = sousActe;
+    }
+    public String getValeur() {
+        return valeur;
+    }
+    public void setValeur(String valeur) {
+        this.valeur = valeur;
     }
     
     

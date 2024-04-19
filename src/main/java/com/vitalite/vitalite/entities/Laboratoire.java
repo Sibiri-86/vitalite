@@ -6,14 +6,16 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,39 +28,33 @@ import jakarta.persistence.Table;
  * @author HP
  */
 @Entity
-@Table(name = "acte")
+@Table(name = "laboratoire")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Acte  implements Serializable  {
+public class Laboratoire  implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-    private String code;
-    private String libelle;
+  
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("patients")
+    private Patient patient;
+    private LocalDate dateSaissie;
     private Boolean deleted = Boolean.FALSE;
-    @ManyToOne
-    @JsonIgnoreProperties("actes")
-    private FamilleActe familleActe;
-    private Boolean isExamen;
     
 
     
-    public Boolean getIsExamen() {
-        return isExamen;
+
+   
+   
+    public LocalDate getDateSaissie() {
+        return dateSaissie;
     }
 
-    public void setIsExamen(Boolean isExamen) {
-        this.isExamen = isExamen;
-    }
-
-    public FamilleActe getFamilleActe() {
-        return familleActe;
-    }
-
-    public void setFamilleActe(FamilleActe familleActe) {
-        this.familleActe = familleActe;
+    public void setDateSaissie(LocalDate dateSaissie) {
+        this.dateSaissie = dateSaissie;
     }
 
     public Long getId() {
@@ -69,14 +65,9 @@ public class Acte  implements Serializable  {
         this.id = id;
     }
 
-    
-    public String getLibelle() {
-        return libelle;
-    }
+   
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
+   
 
     public Boolean getDeleted() {
         return deleted;
@@ -86,15 +77,18 @@ public class Acte  implements Serializable  {
         this.deleted = deleted;
     }
 
-    public String getCode() {
-        return code;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     
+    
+   
+       
 
     
 }

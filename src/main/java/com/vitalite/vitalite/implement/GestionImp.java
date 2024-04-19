@@ -25,12 +25,14 @@ import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
+import com.vitalite.vitalite.entities.Laboratoire;
 import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
 import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -44,6 +46,7 @@ import com.vitalite.vitalite.repository.ActeRepository;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
 import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.DossierClientRepository;
+import com.vitalite.vitalite.repository.LaboratoireRepository;
 import com.vitalite.vitalite.repository.PatientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
@@ -78,8 +81,13 @@ public class GestionImp {
      private ActeRepository acteRepository;
      @Autowired
      private PatientRepository patientRepository;
+<<<<<<< HEAD
     @Autowired
     ReportGeneratorService generatorService;
+=======
+     @Autowired
+     private LaboratoireRepository laboratoireRepository;
+>>>>>>> f8fd5deb7ede609e998bba088d97ab9ce937229a
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -101,6 +109,49 @@ public class GestionImp {
      }
 
 
+     public LaboratoireDto createLabo(LaboratoireDto laboratoireDto) {
+      Laboratoire dt = mapper.map(laboratoireDto, Laboratoire.class);
+      dt.setDateSaissie( LocalDate.now());
+      laboratoireRepository.save(dt);
+      Optional<Patient> patient =patientRepository.findById(laboratoireDto.getPatientId());
+      if(patient.isPresent()) {
+         patient.get().setIsLabo(true);
+         patientRepository.save(patient.get());
+      }
+      if(!laboratoireDto.getPrestations().isEmpty()) {
+         for(PrestationDto prestationDto: laboratoireDto.getPrestations()) {
+            prestationRepository.save(mapper.map(prestationDto, Prestation.class));
+
+
+         }
+      }
+      return laboratoireDto;
+     }
+
+
+     public LaboratoireDto updateLabo(LaboratoireDto laboratoireDto) {
+      Laboratoire dt = mapper.map(laboratoireDto, Laboratoire.class);
+      dt.setDateSaissie( LocalDate.now());
+      laboratoireRepository.save(dt);
+     /*   Optional<Patient> patient = patientRepository.findById(laboratoireDto.getPatientId());
+      if(patient.isPresent()) {
+         patient.get().setIsLabo(true);
+         patientRepository.save(patient.get());
+      }*/
+      if(!laboratoireDto.getPrestations().isEmpty()) {
+         for(PrestationDto prestationDto: laboratoireDto.getPrestations()) {
+            prestationRepository.save(mapper.map(prestationDto, Prestation.class));
+
+
+         }
+      }
+      return laboratoireDto;
+     }
+
+
+     public List<LaboratoireDto> findLaborations() {
+      return laboratoireRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, LaboratoireDto.class)).collect(Collectors.toList());
+   }
      public PatientDto createPatient(PatientDto patientDto){
      
      /*  if(patientDto.getAssureurId() == 0L) {
@@ -111,12 +162,18 @@ public class GestionImp {
 
       Patient patient=  patientRepository.save(dt);
       if(!patientDto.getPrestations().isEmpty()) {
+         int  i = 0;
          for(PrestationDto prestationDto: patientDto.getPrestations()) {
+
             if(prestationDto.getTauxId() == 0) {
                prestationDto.setTauxId(null);
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
             prestation.setPatient(patient);
+            if(prestation.getActe().getIsExamen() && i == 0 ) {
+               patient.setIsLabo(false);
+               i = 1;
+            }
             if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
 
                Taux taux = new Taux();
@@ -145,14 +202,22 @@ public class GestionImp {
       
       Patient dt = mapper.map(patientDto, Patient.class);
 
-      Patient patient=  patientRepository.save(dt);
+      Patient patient =  patientRepository.save(dt);
       if(!patientDto.getPrestations().isEmpty()) {
+         int  i = 0;
          for(PrestationDto prestationDto: patientDto.getPrestations()) {
             if(prestationDto.getTauxId() == 0) {
                prestationDto.setTauxId(null);
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
+            if(patient.getIsLabo() == null) {
+               if(prestation.getActe().getIsExamen() && i == 0) {
+                  patient.setIsLabo(false);
+               }
+            }
+            
             prestation.setPatient(patient);
+
            
             if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
 
@@ -163,6 +228,7 @@ public class GestionImp {
                prestation.setTaux(tauxF);
                
             }
+
 
             prestationRepository.save(prestation);
          }
@@ -178,8 +244,16 @@ public class GestionImp {
       return patientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, PatientDto.class)).collect(Collectors.toList());
    }
 
+   public List<PatientDto> findPatientsByLabo() {
+      return patientRepository.findByIsLaboFalseAndDeletedFalse().stream().map(ass->mapper.map(ass, PatientDto.class)).collect(Collectors.toList());
+   }
+
    public List<PrestationDto> findByPatients(Long patientId) {
       return prestationRepository.findByPatientIdAndDeletedFalse(patientId).stream().map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+   }
+
+   public List<PrestationDto> findByPatientsAndLabo(Long patientId) {
+      return prestationRepository.findByPatientIdAndActeIsExamenTrueAndDeletedFalse(patientId).stream().map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
    }
 
 
