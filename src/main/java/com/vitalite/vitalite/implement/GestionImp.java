@@ -1,8 +1,15 @@
 package com.vitalite.vitalite.implement;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -11,7 +18,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.Mapper;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.vitalite.vitalite.entities.Acte;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
@@ -26,6 +35,8 @@ import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
+import com.vitalite.vitalite.model.report.Caisse;
+import com.vitalite.vitalite.model.report.CaisseList;
 import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
@@ -38,6 +49,10 @@ import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
 import com.vitalite.vitalite.repository.TauxRepository;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JsonDataSource;
 
 @Component
 public class GestionImp {
@@ -63,6 +78,8 @@ public class GestionImp {
      private ActeRepository acteRepository;
      @Autowired
      private PatientRepository patientRepository;
+    @Autowired
+    ReportGeneratorService generatorService;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -366,4 +383,85 @@ public class GestionImp {
       return prestationDtos;
       }
 
+      private byte[] buildReport(
+           final Object dto,
+            final HashMap<String, ? super Object> parameterMap, Boolean source) throws IOException, JRException {
+
+
+        
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/recu_vitalite.jrxml");
+        //convert DTO into the JsonDatasource
+        InputStream jsonFile = this.convertDtoToInputStream(dto);
+        System.out.println("le jsonFile"+jsonFile);
+        JRDataSource jsonDataSource = new JsonDataSource(jsonFile);
+         System.out.println("le fileInputStream"+fileInputStream);
+             byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
+        return reportFile;
+    }
+     
+     private InputStream convertDtoToInputStream(final Object dto) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        // Java object to JSON string
+        String jsonString = mapper.writeValueAsString(dto);
+        //log.info("Json String: " + jsonString);
+        //use ByteArrayInputStream to get the bytes of the String and convert them to InputStream.
+        InputStream inputStream = new ByteArrayInputStream(jsonString.getBytes(StandardCharsets.UTF_8));
+        return inputStream;
+    }
+
+    public CaisseList findCaisseToPrint(Long patientId) {
+      List<Caisse> caisses = new ArrayList<>();
+      List<PrestationDto> p = prestationRepository.findByPatientIdAndDeletedFalse(patientId).stream()
+      .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+      if(!p.isEmpty()) {
+         for(PrestationDto prest: p) {
+            Caisse c = new Caisse();
+            c.setSousActe(prest.getLibelleSousActe());
+            c.setMontant(prest.getMontantPaye());
+            c.setMontantAssurer(prest.getMontantAssureur());
+            c.setPrixUnitaire(prest.getPrixUnitaire());
+            c.setQuantite(prest.getQuantite());
+            
+            c.setMontantTotal(prest.getMontantPaye().add(prest.getMontantPaye()));
+            System.out.println("MontantTotal ==> "+c.getMontantTotal());
+            c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            caisses.add(c);
+         }
+      }
+
+      return new CaisseList(caisses);
+    }
+    public String convertMontantChiffreToLettre(BigDecimal bd) { 
+ 
+		//BigDecimal num = new BigDecimal(2718.28);
+		RuleBasedNumberFormat formatter = 
+		    new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+		String result = formatter.format(bd);
+		System.out.println("jqsklhbkldfhbkdlfhklefjbhlefjh "+result);
+               return result;
+	}
+
+    public byte[] generateReport(Long patientId) throws IOException, JRException {
+      System.out.println("le bon id ==>"+patientId);
+        HashMap<String, ? super Object> parameterMap = new HashMap<>();
+        //CaisseList prestation = new CaisseList(findCaisseToPrint(patientId));
+        CaisseList prestation = findCaisseToPrint(patientId);
+        System.out.println("le taille des données ==>"+prestation.getCaisses().size());
+                 parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
+                 prestation.getCaisses().size();
+                 parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                 parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
+                 parameterMap.put("numero_recu", "0001/2024");
+                 parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
+                 Optional<Patient> p = patientRepository.findById(patientId);
+                 if (p.isPresent()) {
+                  parameterMap.put("patient", p.get().getNom()+" "+p.get().getPrenom());
+                 } else {
+                  parameterMap.put("patient", "Non renseigné");
+                 }
+                return buildReport( prestation, parameterMap,true);
+            
+        
+    }
 }

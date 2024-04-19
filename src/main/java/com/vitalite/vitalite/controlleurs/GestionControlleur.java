@@ -1,6 +1,7 @@
 package com.vitalite.vitalite.controlleurs;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.services.GestionService;
+
+import net.sf.jasperreports.engine.JRException;
 
 
 @RestController
@@ -140,5 +143,10 @@ public class GestionControlleur {
     @GetMapping("/dossier-clients/by-taux")
     public ResponseEntity<List<TauxDto>> getAllTaux() {
            return  new ResponseEntity<>(gestionService.findTaux(), HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/patients/report_caisse")
+    public ResponseEntity<byte[]> generateReportCaisse(@RequestBody final PatientDto patient) throws IOException, JRException {
+        return new ResponseEntity<>(gestionService.generateReportCaisse(patient.getId()), HttpStatus.CREATED);
     }
 }

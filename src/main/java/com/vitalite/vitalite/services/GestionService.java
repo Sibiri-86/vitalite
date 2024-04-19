@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.services;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
+
+import net.sf.jasperreports.engine.JRException;
 
 
 @Service
@@ -103,4 +106,8 @@ public class GestionService {
     public List<DossierClientDto> findDossierClientsByPeriode(LocalDate dateD, LocalDate dateF) {
       return gestionImp.findDossierClientsByPeriode(dateD, dateF);
    }
+
+   public byte[] generateReportCaisse(Long patientId) throws IOException, JRException{
+    return gestionImp.generateReport(patientId);
+}
 }
