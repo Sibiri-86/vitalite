@@ -81,13 +81,11 @@ public class GestionImp {
      private ActeRepository acteRepository;
      @Autowired
      private PatientRepository patientRepository;
-<<<<<<< HEAD
+
     @Autowired
     ReportGeneratorService generatorService;
-=======
      @Autowired
      private LaboratoireRepository laboratoireRepository;
->>>>>>> f8fd5deb7ede609e998bba088d97ab9ce937229a
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -472,6 +470,22 @@ public class GestionImp {
              byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
         return reportFile;
     }
+
+    private byte[] buildReportResultatExamen(
+           final Object dto,
+            final HashMap<String, ? super Object> parameterMap, Boolean source) throws IOException, JRException {
+
+
+        
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite.jrxml");
+        //convert DTO into the JsonDatasource
+        InputStream jsonFile = this.convertDtoToInputStream(dto);
+        System.out.println("le jsonFile"+jsonFile);
+        JRDataSource jsonDataSource = new JsonDataSource(jsonFile);
+         System.out.println("le fileInputStream"+fileInputStream);
+             byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
+        return reportFile;
+    }
      
      private InputStream convertDtoToInputStream(final Object dto) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -486,6 +500,30 @@ public class GestionImp {
     public CaisseList findCaisseToPrint(Long patientId) {
       List<Caisse> caisses = new ArrayList<>();
       List<PrestationDto> p = prestationRepository.findByPatientIdAndDeletedFalse(patientId).stream()
+      .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+      if(!p.isEmpty()) {
+         for(PrestationDto prest: p) {
+            Caisse c = new Caisse();
+            c.setSousActe(prest.getLibelleSousActe());
+            c.setMontant(prest.getMontantPaye());
+            c.setMontantAssurer(prest.getMontantAssureur());
+            c.setPrixUnitaire(prest.getPrixUnitaire());
+            c.setQuantite(prest.getQuantite());
+            
+            c.setMontantTotal(prest.getMontantPaye().add(prest.getMontantPaye()));
+            System.out.println("MontantTotal ==> "+c.getMontantTotal());
+            c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            caisses.add(c);
+         }
+      }
+
+      return new CaisseList(caisses);
+    }
+
+    public CaisseList findResultatExamenToPrint(Long patientId) {
+      List<Caisse> caisses = new ArrayList<>();
+      List<PrestationDto> p = prestationRepository.findByPatientIdAndActeIsExamenTrueAndDeletedFalse(patientId).stream()
       .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
       if(!p.isEmpty()) {
          for(PrestationDto prest: p) {
@@ -526,16 +564,18 @@ public class GestionImp {
                  prestation.getCaisses().size();
                  parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
                  parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
-                 parameterMap.put("numero_recu", "0001/2024");
                  parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
                  Optional<Patient> p = patientRepository.findById(patientId);
                  if (p.isPresent()) {
                   parameterMap.put("patient", p.get().getNom()+" "+p.get().getPrenom());
+                  parameterMap.put("numero_recu", p.get().getNumDossier());
                  } else {
                   parameterMap.put("patient", "Non renseigné");
+                  parameterMap.put("numero_recu", "-");
                  }
                 return buildReport( prestation, parameterMap,true);
             
         
     }
 }
+ 

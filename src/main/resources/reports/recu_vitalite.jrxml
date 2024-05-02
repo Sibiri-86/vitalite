@@ -72,7 +72,7 @@
 				<textFieldExpression><![CDATA[$P{jourDelivre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="43" y="39" width="300" height="15" backcolor="#F7F2F2" uuid="75572506-97fa-43be-9a6b-9ad7878bb7ec">
+				<reportElement mode="Opaque" x="43" y="39" width="300" height="15" backcolor="#E8E8E8" uuid="75572506-97fa-43be-9a6b-9ad7878bb7ec">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -100,7 +100,7 @@
 	<columnHeader>
 		<band height="56" splitType="Stretch">
 			<staticText>
-				<reportElement x="3" y="26" width="190" height="15" uuid="b700972b-1ee0-4a14-ad64-f8f4ce482e98">
+				<reportElement mode="Opaque" x="3" y="26" width="190" height="15" backcolor="#E8E8E8" uuid="b700972b-1ee0-4a14-ad64-f8f4ce482e98">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -110,11 +110,13 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Descriptions]]></text>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="193" y="26" width="50" height="15" uuid="617a3aca-af69-455d-a297-7be5bc2eb1fa">
+				<reportElement mode="Opaque" x="193" y="26" width="50" height="15" backcolor="#E8E8E8" uuid="617a3aca-af69-455d-a297-7be5bc2eb1fa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -123,11 +125,13 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
 				<text><![CDATA[Quantité]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="243" y="26" width="60" height="15" uuid="9005184d-d214-4401-8520-6e405e9e8896">
+				<reportElement mode="Opaque" x="243" y="26" width="60" height="15" backcolor="#E8E8E8" uuid="9005184d-d214-4401-8520-6e405e9e8896">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -137,11 +141,13 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
 				<text><![CDATA[Prix Unitaire]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="303" y="26" width="70" height="15" uuid="ef89173a-bdee-4044-8e72-8f475fbc361e">
+				<reportElement mode="Opaque" x="303" y="26" width="70" height="15" backcolor="#E8E8E8" uuid="ef89173a-bdee-4044-8e72-8f475fbc361e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -151,7 +157,9 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
 				<text><![CDATA[Montant]]></text>
 			</staticText>
 			<staticText>
@@ -175,7 +183,7 @@
 		<band height="15" splitType="Stretch">
 			<componentElement>
 				<reportElement x="3" y="0" width="370" height="15" uuid="bb88c2ef-c46b-4d13-a5ad-bde8af2be3ac"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="caisses" uuid="12421d47-da28-4c7e-b7d5-4369f5b9fc8e">
 						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("caisses")]]></dataSourceExpression>
 					</datasetRun>
@@ -389,7 +397,7 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="284" y="110" width="50" height="15" uuid="4dc5ad4c-bc28-46a2-bc64-b4bd2d48c013">
+				<reportElement mode="Opaque" x="284" y="110" width="50" height="15" backcolor="#E8E8E8" uuid="4dc5ad4c-bc28-46a2-bc64-b4bd2d48c013">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
