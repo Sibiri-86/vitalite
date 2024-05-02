@@ -81,13 +81,10 @@ public class GestionImp {
      private ActeRepository acteRepository;
      @Autowired
      private PatientRepository patientRepository;
-<<<<<<< HEAD
     @Autowired
     ReportGeneratorService generatorService;
-=======
      @Autowired
      private LaboratoireRepository laboratoireRepository;
->>>>>>> f8fd5deb7ede609e998bba088d97ab9ce937229a
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
