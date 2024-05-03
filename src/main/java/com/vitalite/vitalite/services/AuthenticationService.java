@@ -60,6 +60,8 @@ public class AuthenticationService {
        .orElseThrow();
        var jwtToken = jwtService.generateToken(user);
        authenticationFinal = authentication;
+       SecurityContextHolder.getContext().setAuthentication(authenticationFinal);
+      
        return AuthenticationResponse.builder().token(jwtToken)
         .build();
     }
@@ -88,7 +90,8 @@ public class AuthenticationService {
     
     public Optional<User> getUserWithAuthorities() {
 
-        SecurityContextHolder.getContext().setAuthentication(authenticationFinal);
+        System.out.println("============authenticationFinal============="+SecurityContextHolder.getContext().getAuthentication());
+       /* SecurityContextHolder.getContext().setAuthentication(authenticationFinal);*/
         return ApplicationConfig.getCurrentUserLogin().flatMap(repository::findByEmail);
     }
 

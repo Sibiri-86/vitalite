@@ -20,8 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
-import com.vitalite.vitalite.security.UserRepository;
+import com.vitalite.vitalite.security.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,24 +31,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final UserRepository repository;
 	private final JwtAuthentificationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    
 
     @Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return	http
-        .csrf()
-        .disable()
-        .authorizeRequests()
-        .requestMatchers("/api/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/api/register").permitAll()
+            .requestMatchers("/api/activate").permitAll()
+            .requestMatchers("/api/authenticate").permitAll()
+            .requestMatchers("/api/account/reset-password/init").permitAll()
+            .requestMatchers("/api/account/reset-password/finish").permitAll()
+            .requestMatchers("/api/**").permitAll()
+            .requestMatchers("/management/health").permitAll()
+            .requestMatchers("/management/info").permitAll()
+            .requestMatchers("/management/**").hasAuthority(Role.ADMIN.name())
+            .anyRequest().authenticated()
+            )
+        
+        .sessionManagement(httpSecuritySessionManagementConfig ->
+        httpSecuritySessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS) 
+        )
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
@@ -56,7 +63,6 @@ public class SecurityConfiguration {
         
 		
 	}
-
 
    
 }
