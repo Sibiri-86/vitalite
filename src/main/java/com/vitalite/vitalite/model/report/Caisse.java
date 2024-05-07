@@ -11,6 +11,9 @@ public class Caisse {
     private BigDecimal montantTotal;
     private BigDecimal montantTotalAssurer;
     private BigDecimal montantTotalAssureur;
+    private Long famille_acte_id;
+    private String valeur;
+    private String valeurNormales;
 
     
     public String getSousActe() {
@@ -70,6 +73,8 @@ public class Caisse {
         this.montantAssurer = montantAssurer;
     }
 
+    
+
     public Caisse() {
     }
     public Caisse(String sousActe, BigDecimal quantite, BigDecimal prixUnitaire, BigDecimal montant,
@@ -83,6 +88,24 @@ public class Caisse {
         this.montantTotal = montantTotal;
         this.montantTotalAssurer = montantTotalAssurer;
         this.montantTotalAssureur = montantTotalAssureur;
+    }
+    public Long getFamille_acte_id() {
+        return famille_acte_id;
+    }
+    public void setFamille_acte_id(Long famille_acte_id) {
+        this.famille_acte_id = famille_acte_id;
+    }
+    public String getValeur() {
+        return valeur;
+    }
+    public void setValeur(String valeur) {
+        this.valeur = valeur;
+    }
+    public String getValeurNormales() {
+        return valeurNormales;
+    }
+    public void setValeurNormales(String valeurNormales) {
+        this.valeurNormales = valeurNormales;
     }
 
 

@@ -194,6 +194,15 @@ public class Prestation  implements Serializable  {
         this.soin = soin;
     }
 
+    @Override
+    public String toString() {
+        return "Prestation [id=" + id + ", patient=" + patient + ", acte=" + acte + ", soin=" + soin + ", taux=" + taux
+                + ", sousActe=" + sousActe + ", familleActe=" + familleActe + ", valeur=" + valeur + ", quantite="
+                + quantite + ", prixUnitaire=" + prixUnitaire + ", montant=" + montant + ", montantAssureur="
+                + montantAssureur + ", montantPaye=" + montantPaye + ", dateSaisie=" + dateSaisie + ", deleted="
+                + deleted + "]";
+    }
+
     
 
    

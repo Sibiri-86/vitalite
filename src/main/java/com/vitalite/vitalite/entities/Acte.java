@@ -94,6 +94,12 @@ public class Acte  implements Serializable  {
         this.code = code;
     }
 
+    @Override
+    public String toString() {
+        return "Acte [id=" + id + ", code=" + code + ", libelle=" + libelle + ", deleted=" + deleted + ", familleActe="
+                + familleActe + ", isExamen=" + isExamen + "]";
+    }
+
     
 
     
