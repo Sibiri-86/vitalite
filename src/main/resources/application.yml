@@ -16,6 +16,10 @@
 # Access-Control-Request-Headers: X-PINGOTHER, Content-Type,Authorization, X-Requested-With
 
 spring:
+  profiles:
+        active: dev
+        include:
+            - swagger
   datasource:
     url: jdbc:postgresql://localhost:5432/vital
     username: vital
