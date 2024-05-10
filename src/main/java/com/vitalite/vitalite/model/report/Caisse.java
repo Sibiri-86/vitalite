@@ -14,6 +14,7 @@ public class Caisse {
     private Long famille_acte_id;
     private String valeur;
     private String valeurNormales;
+    private String nomActe;
 
     
     public String getSousActe() {
@@ -106,6 +107,12 @@ public class Caisse {
     }
     public void setValeurNormales(String valeurNormales) {
         this.valeurNormales = valeurNormales;
+    }
+    public String getNomActe() {
+        return nomActe;
+    }
+    public void setNomActe(String nomActe) {
+        this.nomActe = nomActe;
     }
 
 

@@ -483,7 +483,7 @@ public class GestionImp {
 
 
         
-         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite.jrxml");
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite_with_subreport.jasper");
         //convert DTO into the JsonDatasource
         InputStream jsonFile = this.convertDtoToInputStream(dto);
         System.out.println("le jsonFile"+jsonFile);
@@ -505,8 +505,9 @@ public class GestionImp {
 
     public CaisseList findCaisseToPrint(Long patientId) {
       List<Caisse> caisses = new ArrayList<>();
-      List<PrestationDto> p = prestationRepository.findByPatientIdAndDeletedFalse(patientId).stream()
+      List<PrestationDto> p = prestationRepository.findByPatientIdAndActeIsExamenFalseAndDeletedFalse(patientId).stream()
       .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+      System.out.println("this ppppppppppp ==>"+ p.size());
       if(!p.isEmpty()) {
          for(PrestationDto prest: p) {
             Caisse c = new Caisse();
@@ -516,7 +517,7 @@ public class GestionImp {
             c.setPrixUnitaire(prest.getPrixUnitaire());
             c.setQuantite(prest.getQuantite());
             
-            c.setMontantTotal(prest.getMontantPaye().add(prest.getMontantPaye()));
+            c.setMontantTotal(prest.getMontantPaye());
             System.out.println("MontantTotal ==> "+c.getMontantTotal());
             c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
             //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));
@@ -539,6 +540,12 @@ public class GestionImp {
             c.setMontantAssurer(prest.getMontantAssureur());
             System.out.println("prest.getActeId ==> "+ prest.getActeId());
             c.setFamille_acte_id(prest.getActeId());
+            if(prest.getActeId() != null) {
+               Optional<Acte> acte = acteRepository.findById(prest.getActeId());
+               if(acte.isPresent()) {
+                  c.setNomActe(acte.get().getLibelle().toUpperCase());
+               }
+            } 
             c.setValeur(prest.getValeur());
             if(prest.getSousActeId() != null ) {
                Optional<SousActe> s = sousActeRepository.findById(prest.getSousActeId());
@@ -601,6 +608,8 @@ public class GestionImp {
         System.out.println("le taille des données 1111111111111==>"+prestation.getCaisses().size());
                  //parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
                  prestation.getCaisses().size();
+                 // parameterMap.put("lienSecondaire", "src\\main\\resources\\reports\\resultat_examen_vitalite.jrxml");
+                 parameterMap.put("lienSecondaire", "reports/resultat_subreport.jasper");
                  parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
                  parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
                  //parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
@@ -612,7 +621,7 @@ public class GestionImp {
                   parameterMap.put("patient", "Non renseigné");
                   parameterMap.put("numero_recu", "-");
                  }
-                return buildReportResultatExamen( prestation, parameterMap,true);
+                return buildReportResultatExamen( prestation, parameterMap,false);
             
         
     }

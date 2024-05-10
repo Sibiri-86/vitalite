@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recu_vitalite" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="1ce45327-d009-4480-b2d8-1ff3f468a3fe">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="caisses"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<subDataset name="caisses" uuid="18c4839d-08a6-49df-875b-214a3b77883e">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="caisses"/>
 		<queryString language="json">
@@ -32,6 +32,7 @@
 	<parameter name="nom" class="java.lang.String"/>
 	<parameter name="prenom" class="java.lang.String"/>
 	<parameter name="acte" class="java.lang.String"/>
+	<parameter name="lienSecondaire" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -42,27 +43,6 @@
 	<field name="famille_acte_id" class="java.lang.Long"/>
 	<field name="valeur" class="java.lang.String"/>
 	<field name="valeurNormales" class="java.lang.String"/>
-	<sortField name="famille_acte_id"/>
-	<group name="Type_Act_GRP" isStartNewColumn="true">
-		<groupHeader>
-			<band height="14">
-				<textField>
-					<reportElement mode="Opaque" x="3" y="-1" width="547" height="15" backcolor="#E8E8E8" uuid="41d15181-7a32-41ab-adc7-44ca5469474e">
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					</reportElement>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$F{famille_acte_id}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupHeader>
-	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -223,59 +203,12 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
-			<componentElement>
-				<reportElement x="3" y="0" width="547" height="15" uuid="839dbaba-b96d-4ace-bf21-27ea6c0251c6"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
-					<datasetRun subDataset="caisses" uuid="6220a91f-fb3e-4819-a0a4-4a7c2d49e6da">
-						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("caisses")]]></dataSourceExpression>
-					</datasetRun>
-					<jr:listContents height="15" width="547">
-						<textField>
-							<reportElement x="0" y="0" width="353" height="15" uuid="69b59066-e426-43b0-afd7-c14d4a641d2f">
-								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							</reportElement>
-							<box>
-								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textElement textAlignment="Left" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[" "+$F{sousActe}]]></textFieldExpression>
-						</textField>
-						<textField>
-							<reportElement x="353" y="0" width="80" height="15" uuid="8762b9eb-e37c-46b2-ba79-37aff1007038">
-								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							</reportElement>
-							<box>
-								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$F{valeur}]]></textFieldExpression>
-						</textField>
-						<textField>
-							<reportElement stretchType="ContainerHeight" x="433" y="0" width="114" height="15" uuid="830c56fa-f66c-4e42-b93c-b165842850b6">
-								<property name="com.jaspersoft.studio.unit.height" value="px"/>
-								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							</reportElement>
-							<box>
-								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$F{valeurNormales}]]></textFieldExpression>
-						</textField>
-					</jr:listContents>
-				</jr:list>
-			</componentElement>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement x="3" y="0" width="547" height="20" uuid="fc907536-8df2-4645-9881-c8676cffa8c8"/>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("caisses")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{lienSecondaire}]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>
