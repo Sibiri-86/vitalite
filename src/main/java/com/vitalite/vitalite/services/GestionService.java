@@ -130,4 +130,8 @@ public class GestionService {
    public byte[] generateReportCaisse(Long patientId) throws IOException, JRException{
     return gestionImp.generateReport(patientId);
 }
+
+public byte[] generateReportExamen(Long patientId) throws IOException, JRException{
+    return gestionImp.generateReportExamen(patientId);
+}
 }

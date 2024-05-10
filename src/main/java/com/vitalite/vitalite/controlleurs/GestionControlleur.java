@@ -173,4 +173,9 @@ public class GestionControlleur {
     public ResponseEntity<byte[]> generateReportCaisse(@RequestBody final PatientDto patient) throws IOException, JRException {
         return new ResponseEntity<>(gestionService.generateReportCaisse(patient.getId()), HttpStatus.CREATED);
     }
+
+    @PutMapping(path = "/patients/report_examen")
+    public ResponseEntity<byte[]> generateReportExamen(@RequestBody final PatientDto patient) throws IOException, JRException {
+        return new ResponseEntity<>(gestionService.generateReportExamen(patient.getId()), HttpStatus.CREATED);
+    }
 }

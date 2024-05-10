@@ -51,6 +51,7 @@ import com.vitalite.vitalite.repository.PatientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
+import com.vitalite.vitalite.repository.SousActeRepository;
 import com.vitalite.vitalite.repository.TauxRepository;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -85,6 +86,9 @@ public class GestionImp {
     ReportGeneratorService generatorService;
      @Autowired
      private LaboratoireRepository laboratoireRepository;
+
+     @Autowired
+     private SousActeRepository sousActeRepository;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -167,7 +171,9 @@ public class GestionImp {
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
             prestation.setPatient(patient);
-            if(prestation.getActe().getIsExamen() && i == 0 ) {
+            System.out.println("Prestation ==> "+ prestation);
+            Optional<Acte>  acte = acteRepository.findById(prestation.getActe().getId());
+            if(acte.isPresent() && acte.get().getIsExamen() && i == 0 ) {
                patient.setIsLabo(false);
                i = 1;
             }
@@ -207,6 +213,7 @@ public class GestionImp {
                prestationDto.setTauxId(null);
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
+            prestation.getActe().setIsExamen(true);
             if(patient.getIsLabo() == null) {
                if(prestation.getActe().getIsExamen() && i == 0) {
                   patient.setIsLabo(false);
@@ -469,6 +476,22 @@ public class GestionImp {
              byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
         return reportFile;
     }
+
+    private byte[] buildReportResultatExamen(
+           final Object dto,
+            final HashMap<String, ? super Object> parameterMap, Boolean source) throws IOException, JRException {
+
+
+        
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite.jrxml");
+        //convert DTO into the JsonDatasource
+        InputStream jsonFile = this.convertDtoToInputStream(dto);
+        System.out.println("le jsonFile"+jsonFile);
+        JRDataSource jsonDataSource = new JsonDataSource(jsonFile);
+         System.out.println("le fileInputStream"+fileInputStream);
+             byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
+        return reportFile;
+    }
      
      private InputStream convertDtoToInputStream(final Object dto) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -503,6 +526,39 @@ public class GestionImp {
 
       return new CaisseList(caisses);
     }
+
+    public CaisseList findResultatExamenToPrint(Long patientId) {
+      List<Caisse> caisses = new ArrayList<>();
+      List<PrestationDto> p = prestationRepository.findByPatientIdAndActeIsExamenTrueAndDeletedFalse(patientId).stream()
+      .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+      if(!p.isEmpty()) {
+         for(PrestationDto prest: p) {
+            Caisse c = new Caisse();
+            c.setSousActe(prest.getLibelleSousActe());
+            c.setMontant(prest.getMontantPaye());
+            c.setMontantAssurer(prest.getMontantAssureur());
+            System.out.println("prest.getActeId ==> "+ prest.getActeId());
+            c.setFamille_acte_id(prest.getActeId());
+            c.setValeur(prest.getValeur());
+            if(prest.getSousActeId() != null ) {
+               Optional<SousActe> s = sousActeRepository.findById(prest.getSousActeId());
+               if(s.isPresent()) {
+                  c.setValeurNormales(s.get().getValeurNormal());
+               }
+            } else {
+               c.setValeurNormales("Non renseigné");
+            }
+            
+            c.setMontantTotal(prest.getMontantPaye().add(prest.getMontantPaye()));
+            System.out.println("MontantTotal ==> "+c.getMontantTotal());
+            c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            caisses.add(c);
+         }
+      }
+
+      return new CaisseList(caisses);
+    }
     public String convertMontantChiffreToLettre(BigDecimal bd) { 
  
 		//BigDecimal num = new BigDecimal(2718.28);
@@ -523,16 +579,42 @@ public class GestionImp {
                  prestation.getCaisses().size();
                  parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
                  parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
-                 parameterMap.put("numero_recu", "0001/2024");
                  parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
                  Optional<Patient> p = patientRepository.findById(patientId);
                  if (p.isPresent()) {
                   parameterMap.put("patient", p.get().getNom()+" "+p.get().getPrenom());
+                  parameterMap.put("numero_recu", p.get().getNumDossier());
                  } else {
                   parameterMap.put("patient", "Non renseigné");
+                  parameterMap.put("numero_recu", "-");
                  }
                 return buildReport( prestation, parameterMap,true);
             
         
     }
+
+    public byte[] generateReportExamen(Long patientId) throws IOException, JRException {
+      System.out.println("le bon id ==>"+patientId);
+        HashMap<String, ? super Object> parameterMap = new HashMap<>();
+        //CaisseList prestation = new CaisseList(findCaisseToPrint(patientId));
+        CaisseList prestation = findResultatExamenToPrint(patientId);
+        System.out.println("le taille des données 1111111111111==>"+prestation.getCaisses().size());
+                 //parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
+                 prestation.getCaisses().size();
+                 parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                 parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
+                 //parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
+                 Optional<Patient> p = patientRepository.findById(patientId);
+                 if (p.isPresent()) {
+                  parameterMap.put("patient", p.get().getNom()+" "+p.get().getPrenom());
+                  parameterMap.put("numero_recu", p.get().getNumDossier());
+                 } else {
+                  parameterMap.put("patient", "Non renseigné");
+                  parameterMap.put("numero_recu", "-");
+                 }
+                return buildReportResultatExamen( prestation, parameterMap,true);
+            
+        
+    }
 }
+ 
