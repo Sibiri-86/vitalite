@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
-    @PostMapping("/register")
+    @PostMapping("/register1")
     public ResponseEntity<AuthenticationResponse> register(
         @RequestBody RegisterRequest request
     ) {
@@ -31,28 +31,28 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.register(request));
     }
 
-    @PostMapping("/authenticate")
+     @PostMapping("/authenticate1")
     public ResponseEntity<AuthenticationResponse> authenticate(
         @RequestBody AuthenticationRequest request
     ) {
 
-    // System.out.println("============================oui============="+request.getEmail()+ ""+request.getPassword());
+        
         return ResponseEntity.ok(service.authenticate(request));
     }
-
+ 
      /**
      * GET  /authenticate : check if the user is authenticated, and return its login.
      *
      * @param request the HTTP request
      * @return the login if the user is authenticated
      */
-    @GetMapping("/authenticate")
+    @GetMapping("/authenticate1")
     public String isAuthenticated(HttpServletRequest request) {
         return request.getRemoteUser();
     }
 
 
-    @GetMapping("/account")
+    @GetMapping("/account1")
     public ResponseEntity<User> getAccount() {
         return ResponseEntity.ok(service.getUserWithAuthorities().get());
     }

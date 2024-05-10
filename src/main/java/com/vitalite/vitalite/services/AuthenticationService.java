@@ -17,6 +17,7 @@ import com.vitalite.vitalite.controlleurs.RegisterRequest;
 import com.vitalite.vitalite.security.Role;
 import com.vitalite.vitalite.security.User;
 import com.vitalite.vitalite.security.UserRepository;
+import org.springframework.http.HttpHeaders;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private Authentication authenticationFinal;
     
     
 
@@ -38,7 +38,9 @@ public class AuthenticationService {
        .email(request.getEmail())
        .password(passwordEncoder.encode(request.getPassword()))
        .role(Role.USER)
+    
        .build();
+       
        repository.save(user); 
        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
@@ -59,8 +61,11 @@ public class AuthenticationService {
        var user = repository.findByEmail(request.getEmail())
        .orElseThrow();
        var jwtToken = jwtService.generateToken(user);
-       authenticationFinal = authentication;
-       SecurityContextHolder.getContext().setAuthentication(authenticationFinal);
+       // String token = "Bearer ";
+       // token = token.concat(jwtToken);
+      // authenticationFinal = authentication;
+       SecurityContextHolder.getContext().setAuthentication(authentication);
+      // System.out.println("============================oui============="+SecurityContextHolder.getContext().getAuthentication());
       
        return AuthenticationResponse.builder().token(jwtToken)
         .build();

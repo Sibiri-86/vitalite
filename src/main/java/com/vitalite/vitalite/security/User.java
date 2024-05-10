@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.security;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,6 +36,12 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+   
+    private String activationKey;
+    private String resetKey;
+    private Instant resetDate = null;
+    private boolean activated = false;
+    private String langKey;
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -6,7 +6,6 @@
 package com.vitalite.vitalite.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
