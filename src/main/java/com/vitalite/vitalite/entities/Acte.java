@@ -27,7 +27,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "acte")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Acte  implements Serializable  {
+public class Acte extends AbstractAuditingEntity implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id

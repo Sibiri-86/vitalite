@@ -122,7 +122,6 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
        // newUser.(authorities);
         
-        
         userRepository.save(newUser);
        // this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
