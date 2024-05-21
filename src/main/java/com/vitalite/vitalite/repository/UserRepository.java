@@ -1,4 +1,4 @@
-package com.vitalite.vitalite.security;
+package com.vitalite.vitalite.repository;
 
 import java.time.Instant;
 import java.util.List;
@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.vitalite.vitalite.security.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     

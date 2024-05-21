@@ -37,7 +37,7 @@ public class JwtService {
     private long tokenValidityInMilliseconds;
 
     private long tokenValidityInMillisecondsForRememberMe;
-    private static final String SECRET_KEY ="MWZjOWI2ZTE4MWZmZjNhNzEyMjdhZjFkODg4YzhkZTk1ZDJmM2M4NTJjZTVmNWE0YzAxNmE0NjdlZTE3ZjVjZjI0MmNlZDg4YzFmNDljYzBiYTlkNjI0M2U0NTM1YmRmMzUzYzA4ODhiYTdlYmMyMWM4YzlkMDYzYzc1NjM2ZDc=";
+    private static final String SECRET_KEY ="ZDAwYzc4Nzc3NjBhMDllMDYyZWNkZGI3MGExOWM2OWIxYzY5NjhmNTJhOGQ2MDIzNWI3OWE0YTg1YzY5NzVhNDQ4ZWI0NDJmNTk0OTE2NmRkMjZjN2EyY2ZiODVjYjU5OGUyMzA3YTVkOWFlOGQ3YmY1YzFlNDYyNmEyZjYzM2Y=";
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -122,7 +122,7 @@ public class JwtService {
     public boolean validateToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(getSignInbKey()).build().parseClaimsJws(authToken);
-            System.out.println("Invalid JWT signature. 12222");
+           // System.out.println("Invalid JWT signature. 12222");
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             System.out.println("Invalid JWT signature.");

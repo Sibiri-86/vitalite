@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.vitalite.vitalite.model.PasswordChangeDTO;
 import com.vitalite.vitalite.model.UserDTO;
+import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.SecurityUtils;
 import com.vitalite.vitalite.security.User;
-import com.vitalite.vitalite.security.UserRepository;
 import com.vitalite.vitalite.services.UserService;
 import com.vitalite.vitalite.services.vm.KeyAndPasswordVM;
 import com.vitalite.vitalite.services.vm.ManagedUserVM;

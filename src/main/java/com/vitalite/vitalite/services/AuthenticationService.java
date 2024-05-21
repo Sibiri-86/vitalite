@@ -14,9 +14,10 @@ import com.vitalite.vitalite.config.JwtService;
 import com.vitalite.vitalite.controlleurs.AuthenticationRequest;
 import com.vitalite.vitalite.controlleurs.AuthenticationResponse;
 import com.vitalite.vitalite.controlleurs.RegisterRequest;
+import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.Role;
 import com.vitalite.vitalite.security.User;
-import com.vitalite.vitalite.security.UserRepository;
+
 import org.springframework.http.HttpHeaders;
 
 import lombok.RequiredArgsConstructor;

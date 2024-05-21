@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vitalite.vitalite.config.JwtAuthentificationFilter;
 import com.vitalite.vitalite.config.JwtService;
-import com.vitalite.vitalite.security.UserRepository;
+import com.vitalite.vitalite.repository.UserRepository;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

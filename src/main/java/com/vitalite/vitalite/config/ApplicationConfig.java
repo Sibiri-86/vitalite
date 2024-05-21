@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vitalite.vitalite.security.UserRepository;
+import com.vitalite.vitalite.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

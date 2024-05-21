@@ -16,10 +16,10 @@ import com.github.dozermapper.core.MapperAware;
 import com.vitalite.vitalite.entities.Authority;
 import com.vitalite.vitalite.model.UserDTO;
 import com.vitalite.vitalite.repository.AuthorityRepository;
+import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.AuthoritiesConstants;
 import com.vitalite.vitalite.security.SecurityUtils;
 import com.vitalite.vitalite.security.User;
-import com.vitalite.vitalite.security.UserRepository;
 import com.vitalite.vitalite.services.util.Constants;
 import com.vitalite.vitalite.services.util.RandomUtil;
 
