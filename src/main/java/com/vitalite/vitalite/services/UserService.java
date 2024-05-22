@@ -44,15 +44,15 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    // private final CacheManager cacheManager;
+     private final CacheManager cacheManager;
     
 
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,CacheManager cacheManager,  AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
-      //  this.cacheManager = cacheManager;
+        this.cacheManager = cacheManager;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -62,7 +62,7 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
-                //this.clearUserCaches(user);
+                this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
             });
@@ -76,7 +76,7 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
-               // this.clearUserCaches(user);
+                this.clearUserCaches(user);
                 return user;
             });
     }
@@ -87,7 +87,7 @@ public class UserService {
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
-                //this.clearUserCaches(user);
+                this.clearUserCaches(user);
                 return user;
             });
     }
@@ -120,10 +120,10 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-       // newUser.(authorities);
+       newUser.setAuthorities(authorities);
         
         userRepository.save(newUser);
-       // this.clearUserCaches(newUser);
+        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -134,7 +134,7 @@ public class UserService {
         }
         userRepository.delete(existingUser);
         userRepository.flush();
-        //this.clearUserCaches(existingUser);
+        this.clearUserCaches(existingUser);
         return true;
     }
 
@@ -159,11 +159,11 @@ public class UserService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-          //  user.setAuthorities(authorities);
+           user.setAuthorities(authorities);
         }
        
         userRepository.save(user);
-       // this.clearUserCaches(user);
+        this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -185,7 +185,7 @@ public class UserService {
                 user.setLastname(lastName);
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
-               // this.clearUserCaches(user);
+                this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -204,7 +204,7 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByEmail(login).ifPresent(user -> {
             userRepository.delete(user);
-            //this.clearUserCaches(user);
+            this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
         });
     }
@@ -219,15 +219,15 @@ public class UserService {
                 }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
-               // this.clearUserCaches(user);
+                this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
     }
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return null;
-        // return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+       // return null;
+         return userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> new UserDTO());
     }
 
     @Transactional(readOnly = true)
@@ -268,8 +268,8 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
-    /* private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getEmail());
+     private void clearUserCaches(User user) {
+       // Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getEmail());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
-    } */
+    } 
 }
