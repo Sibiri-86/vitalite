@@ -4,7 +4,6 @@ package com.vitalite.vitalite.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,6 +17,7 @@ import com.vitalite.vitalite.model.UserDTO;
 import com.vitalite.vitalite.repository.AuthorityRepository;
 import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.AuthoritiesConstants;
+import com.vitalite.vitalite.security.Role;
 import com.vitalite.vitalite.security.SecurityUtils;
 import com.vitalite.vitalite.security.User;
 import com.vitalite.vitalite.services.util.Constants;
@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 
 /**
@@ -116,6 +117,7 @@ public class UserService {
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
+        newUser.setRole(Role.USER);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
