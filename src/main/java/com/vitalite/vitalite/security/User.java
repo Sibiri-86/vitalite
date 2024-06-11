@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vitalite.vitalite.entities.AbstractAuditingEntity;
 import com.vitalite.vitalite.entities.Authority;
-
+import com.vitalite.vitalite.entities.Profil;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,8 @@ public class User  implements UserDetails {
     private Instant resetDate = null;
     private boolean activated = false;
     private String langKey;
+    @Column(name = "pass_change")
+    private Boolean passChange;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -56,6 +60,16 @@ public class User  implements UserDetails {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "jhi_user_profil",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "profil_id", referencedColumnName = "id")})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<Profil> profils = new HashSet<>();
+
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,6 +80,9 @@ public class User  implements UserDetails {
 
         
         return email;
+    }
+    public Set<Authority> getAuthoritiesList() {
+        return authorities;
     }
     @Override
     public boolean isAccountNonExpired() {

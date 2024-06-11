@@ -167,7 +167,16 @@ public class GestionImp {
          for(PrestationDto prestationDto: patientDto.getPrestations()) {
 
             if(prestationDto.getTauxId() == 0) {
-               prestationDto.setTauxId(null);
+               if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
+
+                  Taux taux = new Taux();
+                  taux.setTauxPourcentage(prestationDto.getTauxNew());
+                  Taux tauxF = tauxRepository.save(taux);
+                 
+                  prestationDto.setTauxId(tauxF.getId());;
+                  
+               }
+               
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
             prestation.setPatient(patient);
@@ -177,15 +186,7 @@ public class GestionImp {
                patient.setIsLabo(false);
                i = 1;
             }
-            if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
-
-               Taux taux = new Taux();
-               taux.setTauxPourcentage(prestationDto.getTauxNew());
-               Taux tauxF = tauxRepository.save(taux);
-              
-               prestation.setTaux(tauxF);
-               
-            }
+            
 
             prestationRepository.save(prestation);
          }

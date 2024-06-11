@@ -1,9 +1,8 @@
 package com.vitalite.vitalite.model;
 
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
+import com.vitalite.vitalite.entities.Profil;
+import com.vitalite.vitalite.security.Role;
 import com.vitalite.vitalite.security.User;
 
 import lombok.AllArgsConstructor;
@@ -59,8 +58,11 @@ public class UserDTO {
     private Instant lastModifiedDate;
 
     private Set<String> authorities;
-    private Long agentId;
+
     private Long profileId;
+
+    private Boolean passChange;
+    private Role role; 
 
    
 }

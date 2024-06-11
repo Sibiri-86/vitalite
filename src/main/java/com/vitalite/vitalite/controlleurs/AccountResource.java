@@ -103,6 +103,12 @@ public class AccountResource {
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
     }
 
+
+    @GetMapping("/account/autorities")
+    public List<String> getAuthoriteis() {
+        return userService.getAuthorities();
+    }
+
     /**
      * POST  /account : update the current user information.
      *

@@ -17,7 +17,7 @@
 
 spring:
   profiles:
-        active: dev
+        active: local
         include:
             - swagger
   datasource:
@@ -34,6 +34,10 @@ spring:
         format_sql: true
     database: postgresql
     database-plaform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    # Remove 'faker' if you do not want the sample data to be loaded automatically
+    contexts: dev
+    default_schema: vital
   cors:
     allowed-origins: '*'
     allowed-methods: '*'

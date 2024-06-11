@@ -33,11 +33,14 @@ Optional<User> findOneByActivationKey(String activationKey);
     Optional<User> findOneWithAuthoritiesById(Long id);
 
    
-    /* @EntityGraph(attributePaths = "authorities")
+    @EntityGraph(attributePaths = "authorities")
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     Optional<User> findOneWithAuthoritiesByEmail(String email);
- */
+ 
     Page<User> findAllByEmailNot(Pageable pageable, String login);
+    @EntityGraph(attributePaths = "authorities")
+    List<User> findAllWithProfilsByEmailNot(String login);
+
 
 
 }

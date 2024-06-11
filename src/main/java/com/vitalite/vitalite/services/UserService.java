@@ -11,10 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.MapperAware;
 import com.vitalite.vitalite.entities.Authority;
+import com.vitalite.vitalite.entities.Profil;
 import com.vitalite.vitalite.model.UserDTO;
 import com.vitalite.vitalite.repository.AuthorityRepository;
+import com.vitalite.vitalite.repository.ProfilRepository;
 import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.AuthoritiesConstants;
 import com.vitalite.vitalite.security.Role;
@@ -44,16 +47,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final  ProfilRepository profilRepository;
 
+    private final Mapper mapper;
      private final CacheManager cacheManager;
     
 
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,CacheManager cacheManager,  AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,CacheManager cacheManager,Mapper mapper,
+      AuthorityRepository authorityRepository, ProfilRepository profilRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.profilRepository = profilRepository;
+        this.mapper = mapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -117,13 +125,24 @@ public class UserService {
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
+        newUser.setPassChange(false);
+        System.out.println("=================userDTO========="+userDTO.getRole());
         newUser.setRole(Role.USER);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-       newUser.setAuthorities(authorities);
-        
+        Optional<Profil> profil = profilRepository.findById(userDTO.getProfileId());
+        if(profil.isPresent()) {
+            Set<Profil> profils = new HashSet<>();
+            profils.add(profil.get());
+            newUser.setProfils(new HashSet<>(profils));
+
+        }
+       
+       /*  Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(userDTO.getRole().toString()).ifPresent(authorities::add);
+       newUser.setAuthorities(authorities);*/
+       System.out.println("=================newUser========="+newUser.getRole());
+
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -243,10 +262,29 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findByEmail);
-    }
+    public Optional<UserDTO> getUserWithAuthorities() {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByEmail);
+        user.ifPresent(user1 -> user1.setAuthorities(new HashSet<>(findUserProfilWithAuthorities(user1.getEmail()))));
+       
+        UserDTO userDTO = mapper.map(user.get(), UserDTO.class);
+        if(!userDTO.getAuthorities().isEmpty()) {
+            userDTO.getAuthorities().addAll(user.get().getAuthoritiesList().stream().map(Authority::getName).collect(Collectors.toList()));
+          //  System.out.println("===========user1=========1=================="+ userDTO.getAuthorities());
 
+        }
+        return Optional.of(userDTO);
+        }
+
+         /**
+     * Les rôles par profil d'un utilisateur.
+     * @param email
+     * @return List<Authority>
+     */
+    private List<Authority> findUserProfilWithAuthorities(String email) {
+        Optional<User> user = userRepository.findOneByEmail(email);
+         return user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
+             .getAuthorities())).orElse(null);
+     }
     /**
      * Not activated users should be automatically deleted after 3 days.
      * <p>

@@ -36,6 +36,9 @@ public class SecurityConfiguration {
             .requestMatchers("/api/activate").permitAll()
             .requestMatchers("/api/authenticate").permitAll()
             .requestMatchers("/api/account/reset-password/init").permitAll()
+            .requestMatchers("/api/account/autorities").permitAll()
+            /* .requestMatchers("/api/profils").permitAll()
+            .requestMatchers("/api/profils/by-authorities").permitAll()*/
             .requestMatchers("/api/account/reset-password/finish").permitAll()
             //.requestMatchers("/api/**").authenticated()
             .requestMatchers("/management/health").permitAll()
