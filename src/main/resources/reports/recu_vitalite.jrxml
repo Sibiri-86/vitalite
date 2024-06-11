@@ -58,7 +58,7 @@
 		<band height="79" splitType="Stretch">
 			<image hAlign="Left">
 				<reportElement x="10" y="0" width="359" height="79" uuid="c73b26d3-0152-46a4-8f0f-b6d2c8594046"/>
-				<imageExpression><![CDATA["C:/Users/HP/Desktop/vitalite.png"]]></imageExpression>
+				<imageExpression><![CDATA["src/main/java/com/vitalite/vitalite/images/vitalite.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
