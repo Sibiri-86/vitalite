@@ -505,18 +505,20 @@ public class GestionImp {
 
     public CaisseList findCaisseToPrint(Long patientId) {
       List<Caisse> caisses = new ArrayList<>();
-      List<PrestationDto> p = prestationRepository.findByPatientIdAndActeIsExamenFalseAndDeletedFalse(patientId).stream()
-      .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+      List<Prestation> p = prestationRepository.findByPatientIdAndActeIsExamenFalseAndDeletedFalse(patientId)
+      .stream().collect(Collectors.toList());
       System.out.println("this ppppppppppp ==>"+ p.size());
       if(!p.isEmpty()) {
-         for(PrestationDto prest: p) {
+         for(Prestation prest: p) {
+            System.out.println("this ppppppppppp 111111==> "+ p.size());
+            System.out.println("this ppppppppppp 222222==> "+ prest.getMontantPaye());
             Caisse c = new Caisse();
-            c.setSousActe(prest.getLibelleSousActe());
+            c.setSousActe(prest.getSousActe().getLibelle());
             c.setMontant(prest.getMontantPaye());
             c.setMontantAssurer(prest.getMontantAssureur());
             c.setPrixUnitaire(prest.getPrixUnitaire());
             c.setQuantite(prest.getQuantite());
-            
+            //c.setMontantTotalAssurer(prest.getMontant().subtract(prest.getMontantPaye()));
             c.setMontantTotal(prest.getMontantPaye());
             System.out.println("MontantTotal ==> "+c.getMontantTotal());
             c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
@@ -582,7 +584,9 @@ public class GestionImp {
         //CaisseList prestation = new CaisseList(findCaisseToPrint(patientId));
         CaisseList prestation = findCaisseToPrint(patientId);
         System.out.println("le taille des données ==>"+prestation.getCaisses().size());
+                 parameterMap.put("donneeCaisse", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
                  parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
+                 parameterMap.put("montantAssureur", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantAssurer());
                  prestation.getCaisses().size();
                  parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
                  parameterMap.put("copyright", "Print by Vitalité, All rights reserved");

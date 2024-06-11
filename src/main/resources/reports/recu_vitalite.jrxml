@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recu_vitalite" pageWidth="420" pageHeight="595" columnWidth="380" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="1ce45327-d009-4480-b2d8-1ff3f468a3fe">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="caisses"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -35,6 +35,7 @@
 	<parameter name="somme" class="java.math.BigDecimal"/>
 	<parameter name="montantLettre" class="java.lang.String"/>
 	<parameter name="copyright" class="java.lang.String"/>
+	<parameter name="montantAssureur" class="java.math.BigDecimal"/>
 	<queryString language="jsonql">
 		<![CDATA[caisses]]>
 	</queryString>
@@ -202,7 +203,7 @@
 							<textElement textAlignment="Left" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[" "+$F{sousActe}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField pattern="#,##0.###">
 							<reportElement x="190" y="0" width="50" height="15" uuid="d04ae7a7-6929-48fb-976a-cf9edd46071e">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -216,7 +217,7 @@
 							<textElement textAlignment="Center" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$F{quantite}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField pattern="#,##0.###">
 							<reportElement x="240" y="0" width="60" height="15" uuid="86c4bb62-d7ee-4b4d-8261-bedb95cddfcc">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -230,7 +231,7 @@
 							<textElement textAlignment="Center" verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$F{prixUnitaire}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField pattern="#,##0.###">
 							<reportElement x="300" y="0" width="70" height="15" uuid="a0cea0d0-8153-4cad-aee4-5eed3734bfef">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -278,7 +279,7 @@
 				</textElement>
 				<text><![CDATA[ Somme]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
 				<reportElement mode="Transparent" x="303" y="15" width="70" height="15" uuid="e2316411-cd07-4ad4-a5ac-b6710b69672e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -290,9 +291,9 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[ABS($P{somme})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{somme}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
 				<reportElement mode="Transparent" x="303" y="45" width="70" height="15" uuid="47086c0a-c5e8-41f6-ae1c-90ff2c36a990">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -303,9 +304,9 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[ABS($P{somme})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{montantAssureur}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
 				<reportElement mode="Transparent" x="303" y="0" width="70" height="15" uuid="33e0e1a4-fbac-4919-819c-96063c637580">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -317,9 +318,9 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[ABS($P{somme})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{somme}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
 				<reportElement mode="Transparent" x="303" y="30" width="70" height="15" uuid="f092ddcb-ff6f-497d-8508-43da8ab8e0fa">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -330,7 +331,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[ABS($P{somme})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{somme}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="3" y="15" width="300" height="15" uuid="1eb79b36-1a5f-41f0-911e-3bd973d35bc7">
@@ -388,7 +389,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Arrêtée la présente facture à la somme de "+$P{montantLettre}+" francs ("+ABS($P{somme})+") CFA."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Arrêtée la présente facture à la somme de "+$P{montantLettre}+" francs CFA."]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="284" y="125" width="50" height="1" uuid="23e268b3-0318-42a8-b514-8978db458613">
