@@ -15,6 +15,7 @@ public class Caisse {
     private String valeur;
     private String valeurNormales;
     private String nomActe;
+    private String donneeCaisse;
 
     
     public String getSousActe() {
@@ -41,11 +42,6 @@ public class Caisse {
     public void setMontant(BigDecimal montant) {
         this.montant = montant;
     }
-
-    
-
-    
-
 
     public BigDecimal getMontantTotal() {
         return montantTotal;
@@ -74,6 +70,7 @@ public class Caisse {
         this.montantAssurer = montantAssurer;
     }
 
+    
     
 
     public Caisse() {
@@ -113,6 +110,12 @@ public class Caisse {
     }
     public void setNomActe(String nomActe) {
         this.nomActe = nomActe;
+    }
+    public String getDonneeCaisse() {
+        return donneeCaisse;
+    }
+    public void setDonneeCaisse(String donneeCaisse) {
+        this.donneeCaisse = donneeCaisse;
     }
 
 
