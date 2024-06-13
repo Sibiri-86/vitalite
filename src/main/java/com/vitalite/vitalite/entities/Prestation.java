@@ -14,6 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -50,15 +51,15 @@ public class Prestation  implements Serializable  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "soin_id",referencedColumnName="id",insertable=true,updatable=true)
     private Soin soin;
-    @ManyToOne
-    @JsonIgnoreProperties("produits")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("prestations")
     private Taux taux;
     
     @ManyToOne
-    @JsonIgnoreProperties("produits")
+    @JoinColumn(name = "sous_acte_id",referencedColumnName="id",insertable=true,updatable=true)
     private SousActe sousActe;
     @ManyToOne
-    @JsonIgnoreProperties("produits")
+    @JoinColumn(name = "famille_acte_id",referencedColumnName="id",insertable=true,updatable=true)
     private FamilleActe familleActe;
     private String valeur;
     

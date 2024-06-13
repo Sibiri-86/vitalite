@@ -39,7 +39,7 @@ public class Laboratoire  implements Serializable  {
     private Long id;
   
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("patients")
+    @JsonIgnoreProperties("laboratoire")
     private Patient patient;
     private LocalDate dateSaissie;
     private Boolean deleted = Boolean.FALSE;

@@ -155,9 +155,7 @@ public class GestionImp {
    }
      public PatientDto createPatient(PatientDto patientDto){
      
-     /*  if(patientDto.getAssureurId() == 0L) {
-         patientDto.setAssureurId(null);
-      } */
+      
       patientDto.setNumDossier(generateNumero(String.valueOf(patientRepository.findAll().size())));
       Patient dt = mapper.map(patientDto, Patient.class);
 
@@ -166,17 +164,22 @@ public class GestionImp {
          int  i = 0;
          for(PrestationDto prestationDto: patientDto.getPrestations()) {
 
-            if(prestationDto.getTauxId() == 0) {
-               if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
-
-                  Taux taux = new Taux();
-                  taux.setTauxPourcentage(prestationDto.getTauxNew());
-                  Taux tauxF = tauxRepository.save(taux);
-                 
-                  prestationDto.setTauxId(tauxF.getId());;
+            if(patient.getAssureur() !=null) {
+               if(prestationDto.getTauxId() == 0) {
+                  if(prestationDto.getTauxNew() != null && prestationDto.getTauxNew() != BigDecimal.ZERO) {
+   
+                     Taux taux = new Taux();
+                     taux.setTauxPourcentage(prestationDto.getTauxNew());
+                     Taux tauxF = tauxRepository.save(taux);
+                    
+                     prestationDto.setTauxId(tauxF.getId());;
+                     
+                  }
                   
                }
-               
+            } 
+            if(prestationDto.getTauxId() == 0) {
+               prestationDto.setTauxId(null);
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
             prestation.setPatient(patient);
@@ -287,6 +290,21 @@ public class GestionImp {
       return dossierClientRepository.findByAndDateSaissieBetweenAndDeletedFalse(dateD.plusDays(-1L), dateF.plusDays(1L)).stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
    }
 
+   public void deletePatient(Long idPatient) {
+      Optional<Patient> dt = patientRepository.findById(idPatient);
+      if(dt.isPresent()) {
+         dt.get().setDeleted(Boolean.TRUE);
+         patientRepository.save(dt.get());
+         prestationRepository.findByPatientIdAndDeletedFalse(idPatient).stream()
+         .peek(prestation->{
+            prestation.setDeleted(Boolean.TRUE);
+            prestationRepository.save(prestation);
+         }).collect(Collectors.toList());
+      }
+     
+
+   }
+
 
      public SoinDto createSoin(SoinDto soinDto){
       System.out.println("soinDto 2 ===>" + soinDto);
@@ -348,6 +366,20 @@ public class GestionImp {
    }
 
     
+   public void deleteConvention(Long conventionId) {
+      Optional<Convention> convention = conventionRepository.findById(conventionId);
+      if(convention.isPresent()) {
+         convention.get().setDeleted(Boolean.TRUE);
+         conventionRepository.save(convention.get());
+         conventionActeRepository.findByConventionIdAndDeletedFalse(conventionId)
+      .stream().peek(convActe-> {
+         convActe.setDeleted(Boolean.TRUE);
+         conventionActeRepository.save(convActe);
+      }).collect(Collectors.toList());
+
+      }
+
+   }
 
      public List<SousActeDto> findByConvention(Long conventionId) {
       List<SousActeDto> acteDtos = new ArrayList<>();

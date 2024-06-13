@@ -88,6 +88,11 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.findByPatientsAndLabo(patientId), HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/patients/delete")
+    public void deletePatient(@RequestParam Long idPatient){
+        gestionService.deletePatient(idPatient);
+    }
+
     @PutMapping(path = "/patients/prestation")
     public void deletePrestation(@RequestBody final PrestationDto prestationDto){
         gestionService.deletePrestation(prestationDto);
@@ -143,6 +148,11 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.updateConvention(conventionDto), HttpStatus.CREATED);
     }
 
+    @GetMapping("/conventions/delete")
+    public void deleteConvention(@RequestParam Long conventionId) { 
+
+        gestionService.deleteConventionId(conventionId);
+    }
     @GetMapping("/conventions")
     public ResponseEntity<List<ConventionDto>> getAllConventions() {
            return  new ResponseEntity<>(gestionService.findConventions(), HttpStatus.CREATED);

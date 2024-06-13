@@ -134,6 +134,14 @@ public class ParametrageImp {
          return acteDto;
      }
 
+
+     public ActeDto deleteActe(ActeDto familleActeDto){
+      Acte dt = mapper.map(familleActeDto, Acte.class);
+      dt.setDeleted(true);
+      acteRepository.save(dt);
+       
+       return familleActeDto;
+   }
      public List<ActeDto> findActes() {
 
         return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
@@ -156,6 +164,14 @@ public class ParametrageImp {
       sousActeRepository.save(dt);
        
        return acteDto;
+   }
+
+   public SousActeDto deleteSousActe(SousActeDto dto){
+      SousActe dt = mapper.map(dto, SousActe.class);
+      dt.setDeleted(true);
+      sousActeRepository.save(dt);
+       
+       return dto;
    }
 
    public List<SousActeDto> findSousActes() {

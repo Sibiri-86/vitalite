@@ -46,6 +46,11 @@ public class GestionService {
         return gestionImp.updatePatient(patientDto);
     }
 
+    public void deletePatient(Long idPatient) {
+        gestionImp.deletePatient(idPatient);
+    }
+
+    
     public DossierClientDto createDossierClient(DossierClientDto dossierClientDto) {
         System.out.println("dossierClientDto 1 ===>" + dossierClientDto);
         return gestionImp.createDossierClient(dossierClientDto);
@@ -111,6 +116,10 @@ public class GestionService {
    
     public List<SousActeDto> findByConvention(Long conventionId) {
         return gestionImp.findByConvention(conventionId);
+    }
+
+    public void deleteConventionId(Long conventionId) {
+         gestionImp.deleteConvention(conventionId);
     }
 
     public List<ConventionActeDto> findMontantConventionByActeIdAndAssureurId(Long acteId, Long assureurId) {

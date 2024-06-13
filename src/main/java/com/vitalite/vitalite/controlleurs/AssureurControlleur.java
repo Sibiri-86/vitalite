@@ -68,8 +68,12 @@ public class AssureurControlleur {
 
     @PutMapping("/familleActes")
     public ResponseEntity<FamilleActeDto> updateFamilleActe(@RequestBody final FamilleActeDto acteDto) { 
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();  
         return new ResponseEntity<>(parametrageService.updateFamilleActe(acteDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/familleActes/delete")
+    public ResponseEntity<FamilleActeDto> deleteFamilleActe(@RequestBody final FamilleActeDto acteDto) { 
+        return new ResponseEntity<>(parametrageService.deleteFamilleActe(acteDto), HttpStatus.CREATED);
     }
     
     @GetMapping("familleActes")
@@ -114,6 +118,11 @@ public class AssureurControlleur {
            return  new ResponseEntity<>(parametrageService.finASousctes(), HttpStatus.CREATED);
     }
 
+    @PutMapping("/sousActes/delete")
+    public ResponseEntity<SousActeDto> deleteSousActe(@RequestBody final SousActeDto dto) { 
+
+        return new ResponseEntity<>(parametrageService.deleteSousActe(dto), HttpStatus.CREATED);
+    }
     @GetMapping("sousActes/by-acte")
     public ResponseEntity<List<SousActeDto>> finASousctesByActe(@RequestParam Long acteId) {
         System.out.println("====================oui====="+acteId);

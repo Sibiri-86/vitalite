@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.vitalite.vitalite.entities.Convention;
 
 @Repository
-public interface ConventionRepository extends JpaRepository<Convention, String> {
+public interface ConventionRepository extends JpaRepository<Convention, Long> {
     List<Convention> findByDeletedFalse();
     Optional<Convention> findByAssureurIdAndDeletedFalse(Long assureurId);
 }

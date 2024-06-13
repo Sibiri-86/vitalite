@@ -48,6 +48,10 @@ public class ParametrageService {
         return parametrageCLientImp.updateFamilleActe(acteDto);
     }
 
+    public FamilleActeDto deleteFamilleActe(FamilleActeDto acteDto) {
+        return parametrageCLientImp.deleteFamilleActe(acteDto);
+    }
+
     public List<FamilleActeDto> finFamilleActes() {
         return parametrageCLientImp.findFamilleActes();
     }
@@ -58,6 +62,9 @@ public class ParametrageService {
 
     public ActeDto updateActe(ActeDto acteDto) {
         return parametrageCLientImp.updateActe(acteDto);
+    }
+    public ActeDto deleteActe(ActeDto dto) {
+        return parametrageCLientImp.deleteActe(dto);
     }
 
     public List<ActeDto> finActes() {
@@ -70,6 +77,10 @@ public class ParametrageService {
 
     public SousActeDto updateSousActe(SousActeDto acteDto) {
         return parametrageCLientImp.updateSousActe(acteDto);
+    }
+
+    public SousActeDto deleteSousActe(SousActeDto dto) {
+        return parametrageCLientImp.deleteSousActe(dto);
     }
 
     public List<SousActeDto> finASousctes() {
