@@ -30,7 +30,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "laboratoire")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Laboratoire  implements Serializable  {
+public class Laboratoire   implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.GestionImp;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
@@ -50,6 +51,18 @@ public class GestionService {
         gestionImp.deletePatient(idPatient);
     }
 
+    public void validerPaiement(Long idPatient) {
+        gestionImp.validerPaiement(idPatient);
+    }
+
+    public void devaliderPaiement(Long idPatient) {
+        gestionImp.devaliderPaiement(idPatient);
+    }
+
+    public void validerAllPaiement(List<PatientDto> patientDtos) {
+        gestionImp.validerAllPaiement(patientDtos);
+    }
+
     
     public DossierClientDto createDossierClient(DossierClientDto dossierClientDto) {
         System.out.println("dossierClientDto 1 ===>" + dossierClientDto);
@@ -69,6 +82,22 @@ public class GestionService {
         return gestionImp.findPatients();
     }
 
+
+    public List<PatientDto> findPatientsByAssureurAndPeriode(Long assureurId, LocalDate dateD, LocalDate dateF) {
+        return gestionImp.findPatientsByAssureurAndPeriode(assureurId, dateD, dateF);
+    }
+
+    public List<PatientDto> findPatientsByPeriode( LocalDate dateD, LocalDate dateF) {
+        return gestionImp.findPatientsByPeriode(dateD, dateF);
+    }
+
+    public ArreteDto findArreteByPeriode( LocalDate dateD, LocalDate dateF) {
+        return gestionImp.findArreteByPeriode(dateD, dateF);
+    }
+
+    public ArreteDto findFactureByPeriode(Long assureurId, LocalDate dateD, LocalDate dateF) {
+        return gestionImp.findFactureByPeriode(assureurId,dateD, dateF);
+    }
     public List<PatientDto> findPatientsByLabo() {
         return gestionImp.findPatientsByLabo();
     }

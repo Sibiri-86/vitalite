@@ -21,6 +21,7 @@ public class PatientDto {
     private LocalDate dateSaissie;
     private String police;
     private Boolean isLabo;
+    private Boolean isValide;
 
 
     public Long getId() {
@@ -101,6 +102,12 @@ public class PatientDto {
     }
     public void setIsLabo(Boolean isLabo) {
         this.isLabo = isLabo;
+    }
+    public Boolean getIsValide() {
+        return isValide;
+    }
+    public void setIsValide(Boolean isValide) {
+        this.isValide = isValide;
     }
     
 

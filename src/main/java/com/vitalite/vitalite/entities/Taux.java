@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "taux")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Taux  implements Serializable  {
+public class Taux   implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id

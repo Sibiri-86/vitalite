@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
@@ -69,6 +70,25 @@ public class GestionControlleur {
         return new ResponseEntity<>(gestionService.updatePatient(patientDto), HttpStatus.CREATED);
     }
 
+    @PutMapping("/patients/assureur-periode")
+    public ResponseEntity<List<PatientDto>> findPatientsByAssureurAndPeriode(@RequestBody final SearchDto dto) { 
+        return new ResponseEntity<>(gestionService.findPatientsByAssureurAndPeriode(dto.getAssureurId(),dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/patients/periode")
+    public ResponseEntity<List<PatientDto>> findPatientsByPeriode(@RequestBody final SearchDto dto) { 
+        return new ResponseEntity<>(gestionService.findPatientsByPeriode(dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/patients/arrete")
+    public ResponseEntity<ArreteDto> findArreteByPeriode(@RequestBody final SearchDto dto) { 
+        return new ResponseEntity<>(gestionService.findArreteByPeriode(dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/patients/facture")
+    public ResponseEntity<ArreteDto> findFactureByPeriode(@RequestBody final SearchDto dto) { 
+        return new ResponseEntity<>(gestionService.findFactureByPeriode(dto.getAssureurId(), dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
+    }
     @GetMapping("/patients")
     public ResponseEntity<List<PatientDto>> findPatients() { 
         return new ResponseEntity<>(gestionService.findPatients(), HttpStatus.CREATED);
@@ -93,6 +113,21 @@ public class GestionControlleur {
         gestionService.deletePatient(idPatient);
     }
 
+    @GetMapping(path = "/patients/valider")
+    public void validerPaiement(@RequestParam Long idPatient){
+        gestionService.validerPaiement(idPatient);
+    }
+
+    @GetMapping(path = "/patients/devalider")
+    public void devaliderPaiement(@RequestParam Long idPatient){
+        gestionService.devaliderPaiement(idPatient);
+    }
+
+    @PutMapping(path = "/patients/valider-all")
+    public void validerAllPaiement(@RequestBody final List<PatientDto> dtos){
+        gestionService.validerAllPaiement(dtos);
+    }
+
     @PutMapping(path = "/patients/prestation")
     public void deletePrestation(@RequestBody final PrestationDto prestationDto){
         gestionService.deletePrestation(prestationDto);
@@ -114,7 +149,7 @@ public class GestionControlleur {
     @PutMapping("/dossier-clients/by-periode")
     public ResponseEntity<List<DossierClientDto>> findDossierClientsByPeriode(@RequestBody final SearchDto searchDto) {
         System.out.println(searchDto);
-           return  new ResponseEntity<>(gestionService.findDossierClientsByPeriode(searchDto.getDatD(),searchDto.getDatF()), HttpStatus.CREATED);
+           return  new ResponseEntity<>(gestionService.findDossierClientsByPeriode(searchDto.getDateD(),searchDto.getDateF()), HttpStatus.CREATED);
     }
 
 

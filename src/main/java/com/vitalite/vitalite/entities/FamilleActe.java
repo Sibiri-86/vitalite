@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "familleActe")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class FamilleActe  implements Serializable  {
+public class FamilleActe   implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id

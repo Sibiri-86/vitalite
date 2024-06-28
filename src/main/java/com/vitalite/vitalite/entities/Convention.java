@@ -29,7 +29,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "convention")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Convention  implements Serializable  {
+public class Convention   implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id

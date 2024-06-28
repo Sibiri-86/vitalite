@@ -40,6 +40,7 @@ import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.model.report.Caisse;
 import com.vitalite.vitalite.model.report.CaisseList;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.repository.ActeRepository;
@@ -248,6 +249,70 @@ public class GestionImp {
      }
      
 
+     public List<PatientDto> findPatientsByAssureurAndPeriode(Long assureurId, LocalDate dateD, LocalDate dateF) {
+      return patientRepository.findByDeletedFalseAndAssureurIdAndDateSaissieBetween(assureurId, dateD.plusDays(-1), dateF.plusDays(1)).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+     }
+
+     public List<PatientDto> findPatientsByPeriode( LocalDate dateD, LocalDate dateF) {
+
+      return patientRepository.findByDeletedFalseAndDateSaissieBetween(dateD.plusDays(-1), dateF.plusDays(1)).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+     
+   }
+
+
+   public ArreteDto findArreteByPeriode( LocalDate dateD, LocalDate dateF) {
+      BigDecimal totalCaisseJour = BigDecimal.ZERO;
+      List<PatientDto> patientDtos = patientRepository.findByDeletedFalseAndDateSaissieBetween(dateD.plusDays(-1), dateF.plusDays(1)).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+      if(!patientDtos.isEmpty()) {
+         
+         for(PatientDto patient: patientDtos) {
+            List<Prestation> prestations = prestationRepository.findByPatientIdAndDeletedFalse(patient.getId());
+            if(!prestations.isEmpty()) {
+               for(Prestation p: prestations) {
+                  totalCaisseJour = totalCaisseJour.add(p.getMontantPaye());
+               }
+            }
+
+            
+         }
+      }
+
+     
+
+      return new ArreteDto(totalCaisseJour, patientDtos);
+     
+   }
+
+
+   public ArreteDto findFactureByPeriode(Long assureurId, LocalDate dateD, LocalDate dateF) {
+      BigDecimal totalCaisseJour = BigDecimal.ZERO;
+      List<PatientDto> patientDtos = patientRepository.findByDeletedFalseAndAssureurIdAndDateSaissieBetween(assureurId, dateD.plusDays(-1), dateF.plusDays(1)).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+      if(!patientDtos.isEmpty()) {
+         
+         for(PatientDto patient: patientDtos) {
+            List<Prestation> prestations = prestationRepository.findByPatientIdAndDeletedFalse(patient.getId());
+            if(!prestations.isEmpty()) {
+               for(Prestation p: prestations) {
+                  totalCaisseJour = totalCaisseJour.add(p.getMontantAssureur());
+               }
+            }
+
+            
+         }
+      }
+
+     
+
+      return new ArreteDto(totalCaisseJour, patientDtos);
+     
+   }
+
+
+
      public List<PatientDto> findPatients() {
       return patientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, PatientDto.class)).collect(Collectors.toList());
    }
@@ -286,7 +351,7 @@ public class GestionImp {
         return dossierClientRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
      }
      public List<DossierClientDto> findDossierClientsByPeriode(LocalDate dateD, LocalDate dateF) {
-    System.out.println("=============================="+dateD+"==========="+dateF);
+   // System.out.println("=============================="+dateD+"==========="+dateF);
       return dossierClientRepository.findByAndDateSaissieBetweenAndDeletedFalse(dateD.plusDays(-1L), dateF.plusDays(1L)).stream().map(ass->mapper.map(ass, DossierClientDto.class)).collect(Collectors.toList());
    }
 
@@ -303,6 +368,39 @@ public class GestionImp {
       }
      
 
+   }
+
+
+   public void validerPaiement(Long idPatient) {
+      Optional<Patient> dt = patientRepository.findById(idPatient);
+      if(dt.isPresent()) {
+         dt.get().setIsValide(Boolean.TRUE);
+         patientRepository.save(dt.get());
+       
+      }
+     
+
+   }
+
+   public void devaliderPaiement(Long idPatient) {
+      Optional<Patient> dt = patientRepository.findById(idPatient);
+      if(dt.isPresent()) {
+         dt.get().setIsValide(Boolean.FALSE);
+         patientRepository.save(dt.get());
+       
+      }
+     
+
+   }
+
+
+   public void validerAllPaiement(List<PatientDto> patientDtos) {
+      if(!patientDtos.isEmpty()) {
+         patientDtos.stream().map(patient->mapper.map(patient, Patient.class)).peek(pat->{
+            pat.setIsValide(Boolean.TRUE);
+            patientRepository.save(pat);
+         }).collect(Collectors.toList());
+      }
    }
 
 
@@ -516,7 +614,7 @@ public class GestionImp {
 
 
         
-         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite_with_subreport.jasper");
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/resultat_examen_vitalite_with_subreport.jrxml");
         //convert DTO into the JsonDatasource
         InputStream jsonFile = this.convertDtoToInputStream(dto);
         System.out.println("le jsonFile"+jsonFile);
@@ -642,7 +740,7 @@ public class GestionImp {
         HashMap<String, ? super Object> parameterMap = new HashMap<>();
         //CaisseList prestation = new CaisseList(findCaisseToPrint(patientId));
         CaisseList prestation = findResultatExamenToPrint(patientId);
-        System.out.println("le taille des données 1111111111111==>"+prestation.getCaisses().size());
+        System.out.println("la taille des données 1111111111111==>"+prestation.getCaisses().size());
                  //parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
                  prestation.getCaisses().size();
                  // parameterMap.put("lienSecondaire", "src\\main\\resources\\reports\\resultat_examen_vitalite.jrxml");
@@ -652,13 +750,15 @@ public class GestionImp {
                  //parameterMap.put("montantLettre", convertMontantChiffreToLettre(prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal()));
                  Optional<Patient> p = patientRepository.findById(patientId);
                  if (p.isPresent()) {
+                  System.out.println("la taille des données 2 ==>"+prestation.getCaisses().size());
                   parameterMap.put("patient", p.get().getNom()+" "+p.get().getPrenom());
                   parameterMap.put("numero_recu", p.get().getNumDossier());
                  } else {
+                  System.out.println("la taille des données 3 ==>"+prestation.getCaisses().size());
                   parameterMap.put("patient", "Non renseigné");
                   parameterMap.put("numero_recu", "-");
                  }
-                return buildReportResultatExamen( prestation, parameterMap,false);
+                return buildReportResultatExamen( prestation, parameterMap,true);
             
         
     }

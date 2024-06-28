@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,7 @@ import com.vitalite.vitalite.entities.Patient;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findByDeletedFalse();
     List<Patient> findByIsLaboFalseAndDeletedFalse();
+    List<Patient> findByDeletedFalseAndAssureurIdAndDateSaissieBetween(Long assureurId, LocalDate dateD, LocalDate dateF);
+    List<Patient> findByDeletedFalseAndDateSaissieBetween(LocalDate dateD, LocalDate dateF);
+
 }

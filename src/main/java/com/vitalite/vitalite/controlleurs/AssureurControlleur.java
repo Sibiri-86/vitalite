@@ -97,6 +97,11 @@ public class AssureurControlleur {
            return  new ResponseEntity<>(parametrageService.finActes(), HttpStatus.CREATED);
     }
 
+    @PutMapping("/actes/delete")
+    public ResponseEntity<ActeDto> deleteActe(@RequestBody final ActeDto dto) { 
+
+        return new ResponseEntity<>(parametrageService.deleteActe(dto), HttpStatus.CREATED);
+    }
     @GetMapping("actes/by-famille-acte")
     public ResponseEntity<List<ActeDto>> findActesByFamilleActe(@RequestParam Long famillleActeId) {
            return  new ResponseEntity<>(parametrageService.findActesByFamilleActe(famillleActeId), HttpStatus.CREATED);

@@ -28,7 +28,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "sousActe")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class SousActe  implements Serializable  {
+public class SousActe   implements Serializable  {
     private static final long serialVersionUID = 1L;
 
     @Id
