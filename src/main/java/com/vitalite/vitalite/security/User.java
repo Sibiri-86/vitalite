@@ -69,7 +69,7 @@ public class User  implements UserDetails {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<Profil> profils = new HashSet<>();
-
+   
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -81,6 +81,7 @@ public class User  implements UserDetails {
         
         return email;
     }
+
     public Set<Authority> getAuthoritiesList() {
         return authorities;
     }

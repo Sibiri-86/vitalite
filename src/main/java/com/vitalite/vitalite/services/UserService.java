@@ -174,6 +174,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        user.setRole(Role.USER);
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -206,7 +207,9 @@ public class UserService {
                 user.setLastname(lastName);
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
+                user.setRole(Role.USER);
                 this.clearUserCaches(user);
+
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -247,10 +250,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-       // return null;
-         return userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> new UserDTO());
+    System.out.println("=================oui========="+userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> 
+    new UserDTO()).toList());
+         return userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> 
+            new UserDTO());
+            
     }
 
+
+  
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findByEmail(login);

@@ -63,6 +63,7 @@ public class UserDTO {
 
     private Boolean passChange;
     private Role role; 
+    private String username;
 
    
 }
