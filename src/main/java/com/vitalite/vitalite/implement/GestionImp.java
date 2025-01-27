@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.Mapper;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.vitalite.vitalite.entities.Acte;
+import com.vitalite.vitalite.entities.Assureur;
 import com.vitalite.vitalite.entities.Convention;
 import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
@@ -30,29 +32,36 @@ import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
+import com.vitalite.vitalite.entities.Souscripteur;
 import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
+import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
 import com.vitalite.vitalite.model.report.Caisse;
 import com.vitalite.vitalite.model.report.CaisseList;
+import com.vitalite.vitalite.model.report.Search;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.repository.ActeRepository;
+import com.vitalite.vitalite.repository.AssureurRepository;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
 import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.DossierClientRepository;
+import com.vitalite.vitalite.repository.FamilleActeRepository;
 import com.vitalite.vitalite.repository.LaboratoireRepository;
 import com.vitalite.vitalite.repository.PatientRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
 import com.vitalite.vitalite.repository.SousActeRepository;
+import com.vitalite.vitalite.repository.SouscripteurRepository;
 import com.vitalite.vitalite.repository.TauxRepository;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -90,6 +99,15 @@ public class GestionImp {
 
      @Autowired
      private SousActeRepository sousActeRepository;
+
+     @Autowired
+     private SouscripteurRepository souscripteurRepository;
+
+     @Autowired
+     private AssureurRepository assureurRepository;
+
+     @Autowired
+     private FamilleActeRepository familleActeRepository;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -158,8 +176,16 @@ public class GestionImp {
      
       
       patientDto.setNumDossier(generateNumero(String.valueOf(patientRepository.findAll().size())));
+      if(patientDto.getSouscripteurId() == null || patientDto.getSouscripteurId() == 0) {
+         if(patientDto.getNewSouscripteur() != null ) {
+            Souscripteur sous = new Souscripteur();
+            sous.setLibelle(patientDto.getNewSouscripteur());
+            sous.setDeleted(Boolean.FALSE);
+            Souscripteur sousFinal = souscripteurRepository.save(sous);
+            patientDto.setSouscripteurId(sousFinal.getId());
+         }
+      }
       Patient dt = mapper.map(patientDto, Patient.class);
-
       Patient patient=  patientRepository.save(dt);
       if(!patientDto.getPrestations().isEmpty()) {
          int  i = 0;
@@ -173,7 +199,7 @@ public class GestionImp {
                      taux.setTauxPourcentage(prestationDto.getTauxNew());
                      Taux tauxF = tauxRepository.save(taux);
                     
-                     prestationDto.setTauxId(tauxF.getId());;
+                     prestationDto.setTauxId(tauxF.getId());
                      
                   }
                   
@@ -623,6 +649,38 @@ public class GestionImp {
              byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
         return reportFile;
     }
+
+    private byte[] buildReportFacture(
+           final Object dto,
+            final HashMap<String, ? super Object> parameterMap, Boolean source) throws IOException, JRException {
+
+
+        
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/facture_vitalite.jrxml");
+        //convert DTO into the JsonDatasource
+        InputStream jsonFile = this.convertDtoToInputStream(dto);
+        System.out.println("le jsonFile"+jsonFile);
+        JRDataSource jsonDataSource = new JsonDataSource(jsonFile);
+         System.out.println("le fileInputStream"+fileInputStream);
+             byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
+        return reportFile;
+    }
+
+    private byte[] buildReportFactureAllPrestataire(
+           final Object dto,
+            final HashMap<String, ? super Object> parameterMap, Boolean source) throws IOException, JRException {
+
+
+        
+         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("reports/facture_vitalite_all_prestataire.jrxml");
+        //convert DTO into the JsonDatasource
+        InputStream jsonFile = this.convertDtoToInputStream(dto);
+        System.out.println("le jsonFile"+jsonFile);
+        JRDataSource jsonDataSource = new JsonDataSource(jsonFile);
+         System.out.println("le fileInputStream"+fileInputStream);
+             byte[] reportFile = generatorService.genererRapport(fileInputStream, parameterMap, jsonDataSource,source);
+        return reportFile;
+    }
      
      private InputStream convertDtoToInputStream(final Object dto) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -699,6 +757,82 @@ public class GestionImp {
 
       return new CaisseList(caisses);
     }
+
+
+    public CaisseList findFactureByPrestataire(SearchDto search) {
+      System.out.println("id de souscripteur non null 111111111 ====> "+search.getSouscripteurId());
+      List<Caisse> caisses = new ArrayList<>();
+      List<PatientDto> patientDtos = new ArrayList<>();
+      BigDecimal totalMontantDu = BigDecimal.ZERO;
+      BigDecimal totalMontantDemander = BigDecimal.ZERO;
+      if(search.getSouscripteurId() != null && search.getSouscripteurId() != 0) {
+         System.out.println("id de souscripteur non null ====> "+search.getSouscripteurId());
+         List<PatientDto> patientDtos1 = patientRepository.findByDeletedFalseAndAssureurIdAndDateSaissieBetweenAndSouscripteurId
+         (search.getAssureurId(), search.getDateD().plusDays(-1), search.getDateF().plusDays(1), search.getSouscripteurId()).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+      System.out.println("id de souscripteur non null ====> "+patientDtos1.size());
+      patientDtos.addAll(patientDtos1);
+      } else {
+         List<PatientDto> patientDtos1 = patientRepository.findByDeletedFalseAndAssureurIdAndDateSaissieBetween(search.getAssureurId(), search.getDateD().plusDays(-1), search.getDateF().plusDays(1)).stream()
+      .map(pat->mapper.map(pat, PatientDto.class)).collect(Collectors.toList());
+      patientDtos.addAll(patientDtos1);
+      System.out.println("id de souscripteur null ====> "+patientDtos1.size());
+      }
+      
+      if(!patientDtos.isEmpty()) {
+         
+         for(PatientDto patient: patientDtos) {
+            List<PrestationDto> prestations = prestationRepository.findByPatientIdAndDeletedFalse(patient.getId()).stream()
+            .map(ass->mapper.map(ass, PrestationDto.class)).collect(Collectors.toList());
+            if(!prestations.isEmpty()) {
+               for(PrestationDto pr: prestations) {
+                  //totalCaisseJour = totalCaisseJour.add(p.getMontantAssureur());
+                  Caisse c = new Caisse();
+                  /* if(pr.getNumeroBon() != null) {
+                     c.setNumeroBon(pr.getNumeroBon());
+                  } else {
+                     c.setNumeroBon("-");
+                  } */
+                  
+                  if(patient.getSouscripteurId() != null) {
+                     Optional<Souscripteur> s = souscripteurRepository.findById(patient.getSouscripteurId());
+                     if(s.isPresent()) {
+                        c.setSociete(s.get().getLibelle());
+                     }
+                  } else {
+                     c.setSociete("-");
+                  }
+                  c.setBeneficiaire(patient.getNom()+" "+patient.getPrenom());
+                  c.setMontant(pr.getMontantAssureur());
+                  c.setMontantDemander(pr.getMontant());
+                  c.setNumeroMatricule(patient.getMatricule());
+                  c.setFamille_acte_id(patient.getSouscripteurId());
+                  c.setDateSoins(pr.getDateSaisie().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                  totalMontantDu = totalMontantDu.add(pr.getMontantAssureur());
+                  totalMontantDemander = totalMontantDemander.add(pr.getMontant());
+                  c.setMontantTotalDemander(totalMontantDemander);
+                  c.setMontantTotalDu(totalMontantDu);
+                  if(pr.getTauxId() != null) {
+                     c.setTpec(tauxRepository.findById(pr.getTauxId()).get().getTauxPourcentage());
+                  }
+                  if(pr.getActeId() != null) {
+                     c.setActe(acteRepository.findById(pr.getActeId()).get().getLibelle());
+                     c.setActe(familleActeRepository.findById(acteRepository.findById(pr.getActeId()).get().getFamilleActe().getId()).get().getLibelle());
+                  }
+                  c.setMontantNonremb(pr.getMontant().subtract(pr.getMontantAssureur()));
+                  caisses.add(c);
+
+               }
+            }
+
+            
+         }
+      }
+
+      return new CaisseList(caisses);
+    }
+
+
     public String convertMontantChiffreToLettre(BigDecimal bd) { 
  
 		//BigDecimal num = new BigDecimal(2718.28);
@@ -762,5 +896,85 @@ public class GestionImp {
             
         
     }
+
+
+    public byte[] generateReportFacture(SearchDto search) throws IOException, JRException {
+      System.out.println("le bon id ==>"+search);
+        HashMap<String, ? super Object> parameterMap = new HashMap<>();
+        //CaisseList prestation = new CaisseList(findCaisseToPrint(patientId));
+        CaisseList prestation = findFactureByPrestataire(search);
+        System.out.println("la taille des données 1111111111111==>"+prestation.getCaisses().size());
+                 //parameterMap.put("somme", prestation.getCaisses().get(prestation.getCaisses().size()-1).getMontantTotal());
+                 prestation.getCaisses().size();
+                 if(search.getSouscripteurId() != null && search.getSouscripteurId() != 0) {
+                  parameterMap.put("lienSecondaire", "reports/facture_subreport.jasper");
+                 } else {
+                  parameterMap.put("lienSecondaire", "reports/facture_subreport_all_prestataire.jasper");
+                 }
+                 
+                 parameterMap.put("jourDelivre", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+                 parameterMap.put("copyright", "Print by Vitalité, All rights reserved");
+                 parameterMap.put("montantTotalDemander", prestation.getCaisses().get(prestation.getCaisses().size() -1).getMontantTotalDemander());
+                 parameterMap.put("montantTotalDu", prestation.getCaisses().get(prestation.getCaisses().size() -1).getMontantTotalDu());
+                 //parameterMap.put("numero_recu", p.get().getNumDossier());
+                 if(search.getAssureurId() != null) {
+                  Optional <Assureur> assureur = assureurRepository.findById(search.getAssureurId());
+                  if(assureur.isPresent()) {
+                     parameterMap.put("client", assureur.get().getLibelle());
+                     parameterMap.put("numero_facture", assureur.get().getId()+" / "+assureur.get().getCode()+" / "+
+                     search.getDateD().getMonthValue()+" / "+search.getDateD().getYear());
+                  }
+                 }
+                 parameterMap.put("periode","Du "+ search.getDateD().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                 +" au "+search.getDateF().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                 if(search.getSouscripteurId() != null && search.getSouscripteurId() != 0) {
+                  return buildReportFacture( prestation, parameterMap,true);
+                  
+                 } else {
+                  return buildReportFactureAllPrestataire( prestation, parameterMap,true);
+                 }
+                
+            
+        
+    }
+
+    public List<SouscripteurDto> findSouscripteurByAssureurId(SearchDto search) {
+      System.out.println("======search======> "+ search);
+      List<SouscripteurDto> souscripteurFinal = new ArrayList<>();
+      List<SouscripteurDto> souscripteurIdentique = new ArrayList<>();
+      List<Patient> patients = patientRepository.findByDeletedFalseAndAssureurIdAndDateSaissieBetweenAndSouscripteurIdIsNotNull
+      (search.getAssureurId(), search.getDateD().plusDays(-1), search.getDateF().plusDays(1));
+      System.out.println("======patients======> "+ patients.size());
+      if(!patients.isEmpty()) {
+         for(Patient p :patients) {
+            System.out.println("======souscripteurFinal1111======> "+ souscripteurRepository.findById(p.getSouscripteur().getId()).get().getCode());
+            SouscripteurDto s = mapper.map(souscripteurRepository.findById(p.getSouscripteur().getId()).get(), SouscripteurDto.class);
+            System.out.println("======souscripteurFinal1111======> "+ s.getCode());  
+            souscripteurFinal.add(s);
+         }
+         System.out.println("======souscripteurFinal======> "+ souscripteurFinal.size());
+         System.out.println("======souscripteurFinal======> "+ souscripteurFinal);
+         if(!souscripteurFinal.isEmpty()) {
+            souscripteurIdentique.add(souscripteurFinal.get(0));
+            souscripteurFinal.forEach(s-> {
+               AtomicInteger ai = new AtomicInteger(0);
+               souscripteurIdentique.forEach(s1 -> {
+                  if(s.getId() == s1.getId()) {
+                     ai.getAndIncrement();
+                  }
+               });
+               System.out.println("======aiiiiiiiii======> "+ ai.get());
+               if (ai.get() == 0) {
+                  souscripteurIdentique.add(s);
+              }
+            });
+         }
+      }
+      return souscripteurIdentique;
+    }
+
+    public List<PatientDto> findPatientsBetweenDate(LocalDate dateDebut, LocalDate dateFin) {
+      return patientRepository.findByDeletedFalseAndDateSaissieBetween(dateDebut, dateFin).stream().map(ass->mapper.map(ass, PatientDto.class)).collect(Collectors.toList());
+   }
 }
  

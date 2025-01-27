@@ -14,5 +14,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findByIsLaboFalseAndDeletedFalse();
     List<Patient> findByDeletedFalseAndAssureurIdAndDateSaissieBetween(Long assureurId, LocalDate dateD, LocalDate dateF);
     List<Patient> findByDeletedFalseAndDateSaissieBetween(LocalDate dateD, LocalDate dateF);
-
+    List<Patient> findByDeletedFalseAndAssureurIdAndDateSaissieBetweenAndSouscripteurIdIsNotNull(Long assureurId, LocalDate dateD, LocalDate dateF);
+    List<Patient> findByDeletedFalseAndAssureurIdAndDateSaissieBetweenAndSouscripteurId(Long assureurId, LocalDate dateD, LocalDate dateF, Long souscripteurId);
 }

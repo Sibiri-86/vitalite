@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
@@ -229,5 +229,27 @@ public class AssureurControlleur {
     @GetMapping("sousActes/by-montantConvention")
     public ResponseEntity<BigDecimal> findMontantConvention(@RequestParam Long assureurId, @RequestParam Long sousActeId) {
         return new ResponseEntity<>(parametrageService.findMontantConvention(assureurId, sousActeId),  HttpStatus.CREATED);
+    }
+
+    @PostMapping("/souscripteurs")
+    public ResponseEntity<SouscripteurDto> createSouscripteur(@RequestBody final SouscripteurDto souscripteurDto) { 
+
+        return new ResponseEntity<>(parametrageService.creaSouscripteur(souscripteurDto), HttpStatus.CREATED);
+    }
+    
+    @PutMapping("/souscripteurs")
+    public ResponseEntity<SouscripteurDto> updateSouscripteur(@RequestBody final SouscripteurDto souscripteurDto) {   
+        return new ResponseEntity<>(parametrageService.updateSouscripteur(souscripteurDto), HttpStatus.CREATED);
+    }
+
+     @PutMapping("/souscripteurs/delete/{id}")
+    public ResponseEntity<SouscripteurDto> deleteSouscripteur(@RequestBody final SouscripteurDto souscripteurDto, @PathVariable String id) {
+        System.out.println("gggggggggggggg" + souscripteurDto); 
+        return new ResponseEntity<>(parametrageService.deleteSouscripteur(souscripteurDto), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("souscripteurs")
+    public ResponseEntity<List<SouscripteurDto>> getAllSouscripteur() {
+           return  new ResponseEntity<>(parametrageService.finSouscripteur(), HttpStatus.CREATED);
     }
 }

@@ -22,6 +22,10 @@ public class PatientDto {
     private String police;
     private Boolean isLabo;
     private Boolean isValide;
+    private Long souscripteurId;
+    private String souscripteur;
+    private String souscripteurCode;
+    private String newSouscripteur;
 
 
     public Long getId() {
@@ -109,6 +113,31 @@ public class PatientDto {
     public void setIsValide(Boolean isValide) {
         this.isValide = isValide;
     }
+    public Long getSouscripteurId() {
+        return souscripteurId;
+    }
+    public void setSouscripteurId(Long souscripteurId) {
+        this.souscripteurId = souscripteurId;
+    }
+    public String getSouscripteur() {
+        return souscripteur;
+    }
+    public void setSouscripteur(String souscripteur) {
+        this.souscripteur = souscripteur;
+    }
+    public String getSouscripteurCode() {
+        return souscripteurCode;
+    }
+    public void setSouscripteurCode(String souscripteurCode) {
+        this.souscripteurCode = souscripteurCode;
+    }
+    public String getNewSouscripteur() {
+        return newSouscripteur;
+    }
+    public void setNewSouscripteur(String newSouscripteur) {
+        this.newSouscripteur = newSouscripteur;
+    }
+    
     
 
     }

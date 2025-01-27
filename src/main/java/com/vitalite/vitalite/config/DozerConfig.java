@@ -19,7 +19,11 @@ import com.vitalite.vitalite.entities.Patient;
 import com.vitalite.vitalite.entities.Prestation;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
+import com.vitalite.vitalite.entities.Souscripteur;
+import com.vitalite.vitalite.entities.SouscripteurAssureur;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurAssureurDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
@@ -77,10 +81,20 @@ public class DozerConfig {
 
                 mapping(PatientDto.class, Patient.class, TypeMappingOptions.mapNull(false))
                 .fields("assureurId","assureur.id")
-                .fields("assureur","assureur.libelle");
+                .fields("assureur","assureur.libelle")
+                .fields("souscripteurId","souscripteur.id")
+                .fields("souscripteur","souscripteur.libelle")
+                .fields("souscripteurCode","souscripteur.code");
 
                 mapping(LaboratoireDto.class, Laboratoire.class, TypeMappingOptions.mapNull(false))
                 .fields("patientId","patient.id");
+
+                /* mapping(SouscripteurAssureurDto.class, SouscripteurAssureur.class, TypeMappingOptions.mapNull(false))
+                .fields("assureurId","assureur.id")
+                .fields("assureur","assureur.libelle")
+                .fields("souscripteurId","souscripteur.id")
+                .fields("souscripteur","souscripteur.libelle")
+                .fields("souscripteurCode","souscripteur.code"); */
                 
                
             

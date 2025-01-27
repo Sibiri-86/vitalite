@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.GestionImp;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
@@ -17,8 +18,10 @@ import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
 import com.vitalite.vitalite.model.PrestationDto;
+import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
 import com.vitalite.vitalite.model.TauxDto;
+import com.vitalite.vitalite.model.report.Search;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -171,5 +174,16 @@ public class GestionService {
 
 public byte[] generateReportExamen(Long patientId) throws IOException, JRException{
     return gestionImp.generateReportExamen(patientId);
+}
+
+public byte[] generateReportFacture(SearchDto search) throws IOException, JRException{
+    return gestionImp.generateReportFacture(search);
+}
+public List<SouscripteurDto> findSouscripteurByAssureurId(SearchDto search) {
+    return gestionImp.findSouscripteurByAssureurId(search);
+}
+
+public List<PatientDto> findPatientsBetweenDate(LocalDate dateD, LocalDate dateF) {
+    return gestionImp.findPatientsBetweenDate(dateD, dateF);
 }
 }

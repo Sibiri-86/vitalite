@@ -39,11 +39,14 @@ public class UserJWTController {
 
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginVM.getEmail(), loginVM.getPassword());
+            System.out.println("======accountDto=2 =====>" + authenticationToken);
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        System.out.println("======accountDto=3 =====>" + authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
        
        String jwtToken = jwtService.createToken(authentication, true);
+       System.out.println("======accountDto=4 =====>" + jwtToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
       //  System.out.println("============================"+httpHeaders);

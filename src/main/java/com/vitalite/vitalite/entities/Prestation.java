@@ -78,6 +78,7 @@ public class Prestation  implements Serializable  {
     private BigDecimal montantAssureur;
     private BigDecimal montantPaye;
     private LocalDate dateSaisie;
+    private String numeroBon;
     private Boolean deleted = Boolean.FALSE;
 
     
@@ -193,6 +194,16 @@ public class Prestation  implements Serializable  {
 
     public void setSoin(Soin soin) {
         this.soin = soin;
+    }
+
+    
+
+    public String getNumeroBon() {
+        return numeroBon;
+    }
+
+    public void setNumeroBon(String numeroBon) {
+        this.numeroBon = numeroBon;
     }
 
     @Override

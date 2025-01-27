@@ -6,6 +6,7 @@ public class SearchDto {
     LocalDate dateD;
     LocalDate dateF;
     Long assureurId;
+    Long souscripteurId;
 
     
    
@@ -27,6 +28,18 @@ public class SearchDto {
     }
     public void setAssureurId(Long assureurId) {
         this.assureurId = assureurId;
+    }
+
+    public Long getSouscripteurId() {
+        return souscripteurId;
+    }
+    public void setSouscripteurId(Long souscripteurId) {
+        this.souscripteurId = souscripteurId;
+    }
+    @Override
+    public String toString() {
+        return "SearchDto [dateD=" + dateD + ", dateF=" + dateF + ", assureurId=" + assureurId + ", souscripteurId="
+                + souscripteurId + "]";
     }
 
     

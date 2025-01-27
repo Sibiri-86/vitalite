@@ -19,7 +19,9 @@ import com.vitalite.vitalite.entities.FamilleActe;
 import com.vitalite.vitalite.entities.Produit;
 import com.vitalite.vitalite.entities.Societe;
 import com.vitalite.vitalite.entities.SousActe;
+import com.vitalite.vitalite.entities.Souscripteur;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
@@ -33,17 +35,19 @@ import com.vitalite.vitalite.repository.AssureurRepository;
 import com.vitalite.vitalite.repository.CategorieRepository;
 import com.vitalite.vitalite.repository.ChambreRepository;
 import com.vitalite.vitalite.repository.ConventionActeRepository;
-import com.vitalite.vitalite.repository.ConventionRepository;
 import com.vitalite.vitalite.repository.ExamenRepository;
 import com.vitalite.vitalite.repository.FamilleActeRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SocieteRepository;
 import com.vitalite.vitalite.repository.SousActeRepository;
+import com.vitalite.vitalite.repository.SouscripteurRepository;
 
 @Component
 public class ParametrageImp {
     @Autowired
      private AssureurRepository assureurRepository;
+     @Autowired
+     private SouscripteurRepository souscripteurRepository;
      @Autowired
      private Mapper mapper;
      @Autowired
@@ -92,6 +96,34 @@ public class ParametrageImp {
 
       return assureurRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, AssureurDto.class)).collect(Collectors.toList());
    }
+
+
+   public SouscripteurDto createSouscripteur(SouscripteurDto souscripteurDto){
+      Souscripteur dt = mapper.map(souscripteurDto, Souscripteur.class);
+      souscripteurRepository.save(dt);
+       
+       return souscripteurDto;
+   }
+   
+   public SouscripteurDto updateSouscripteur(SouscripteurDto souscripteurDto){
+      Souscripteur dt = mapper.map(souscripteurDto, Souscripteur.class);
+      souscripteurRepository.save(dt);
+       
+       return souscripteurDto;
+   }
+
+   public SouscripteurDto deleteSouscripteur(SouscripteurDto souscripteurDto) {
+      Souscripteur dt = mapper.map(souscripteurDto, Souscripteur.class);
+    dt.setDeleted(true);
+    souscripteurRepository.save(dt);
+     
+     return souscripteurDto;
+   }
+
+   public List<SouscripteurDto> findSouscripteurs() {
+
+    return souscripteurRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SouscripteurDto.class)).collect(Collectors.toList());
+ }
 
      public FamilleActeDto createFamilleActe(FamilleActeDto familleActeDto){
       FamilleActe dt = mapper.map(familleActeDto, FamilleActe.class);

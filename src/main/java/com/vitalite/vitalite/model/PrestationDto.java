@@ -24,6 +24,7 @@ public class PrestationDto {
     private Long patientId;
     private SousActeDto sousActe;
     private String valeur;
+    private String numeroBon;
 
     
 
@@ -139,6 +140,12 @@ public class PrestationDto {
     }
     public void setValeur(String valeur) {
         this.valeur = valeur;
+    }
+    public String getNumeroBon() {
+        return numeroBon;
+    }
+    public void setNumeroBon(String numeroBon) {
+        this.numeroBon = numeroBon;
     }
     
     

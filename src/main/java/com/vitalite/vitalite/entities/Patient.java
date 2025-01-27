@@ -18,6 +18,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -45,6 +46,10 @@ public class Patient  implements Serializable  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("patients")
     private Assureur assureur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "souscripteur_id",referencedColumnName="id",insertable=true,updatable=true)
+    private Souscripteur souscripteur;
    
     private LocalDate dateNaissance;
     private LocalDate dateSaissie;
@@ -160,9 +165,16 @@ public class Patient  implements Serializable  {
     public void setAssureur(Assureur assureur) {
         this.assureur = assureur;
     }
+    
+    
+    public Souscripteur getSouscripteur() {
+        return souscripteur;
+    }
 
-    
-    
+    public void setSouscripteur(Souscripteur souscripteur) {
+        this.souscripteur = souscripteur;
+    }
+
     @Override
     public String toString() {
         return "DossierClient [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", matricule=" + matricule

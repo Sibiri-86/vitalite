@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.vitalite.vitalite.implement.ParametrageImp;
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
@@ -166,6 +167,23 @@ public class ParametrageService {
  
     public BigDecimal findMontantConvention(Long assureurId,Long sousActeId) {
         return parametrageCLientImp.findMontantConvention(assureurId, sousActeId);
+    }
+
+    public SouscripteurDto creaSouscripteur(SouscripteurDto souscripteurDto) {
+        return parametrageCLientImp.createSouscripteur(souscripteurDto);
+    }
+
+    public SouscripteurDto updateSouscripteur(SouscripteurDto souscripteurDto) {
+        return parametrageCLientImp.updateSouscripteur(souscripteurDto);
+    }
+
+    public SouscripteurDto deleteSouscripteur(SouscripteurDto souscripteurDto) {
+        return parametrageCLientImp.deleteSouscripteur(souscripteurDto);
+    }
+
+
+    public List<SouscripteurDto> finSouscripteur() {
+        return parametrageCLientImp.findSouscripteurs();
     }
 
 }

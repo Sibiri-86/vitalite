@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recu_vitalite" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="1ce45327-d009-4480-b2d8-1ff3f468a3fe">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<subDataset name="caisses" uuid="18c4839d-08a6-49df-875b-214a3b77883e">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="caisses"/>
+		<queryString language="json">
+			<![CDATA[]]>
+		</queryString>
+		<field name="famille_acte_id" class="java.lang.Long"/>
+		<field name="numeroBon" class="java.lang.String"/>
+		<field name="numeroMatricule" class="java.lang.String"/>
+		<field name="beneficiaire" class="java.lang.String"/>
+		<field name="montant" class="java.math.BigDecimal"/>
+		<field name="montantDemander" class="java.math.BigDecimal"/>
+		<field name="societe" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="jourDelivre" class="java.lang.String"/>
+	<parameter name="patient" class="java.lang.String"/>
+	<parameter name="numero_facture" class="java.lang.String"/>
+	<parameter name="somme" class="java.math.BigDecimal"/>
+	<parameter name="montantLettre" class="java.lang.String"/>
+	<parameter name="copyright" class="java.lang.String"/>
+	<parameter name="nom" class="java.lang.String"/>
+	<parameter name="prenom" class="java.lang.String"/>
+	<parameter name="acte" class="java.lang.String"/>
+	<parameter name="lienSecondaire" class="java.lang.String"/>
+	<parameter name="client" class="java.lang.String"/>
+	<parameter name="periode" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="famille_acte_id" class="java.lang.Long"/>
+	<field name="numeroBon" class="java.lang.String"/>
+	<field name="numeroMatricule" class="java.lang.String"/>
+	<field name="beneficiaire" class="java.lang.String"/>
+	<field name="montant" class="java.math.BigDecimal"/>
+	<field name="montantDemander" class="java.math.BigDecimal"/>
+	<field name="societe" class="java.lang.String"/>
+	<field name="dateSoins" class="java.lang.String"/>
+	<field name="acte" class="java.lang.String"/>
+	<field name="tpec" class="java.lang.String"/>
+	<field name="montantNonRemb" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<image hAlign="Left">
+				<reportElement x="33" y="0" width="511" height="110" uuid="c73b26d3-0152-46a4-8f0f-b6d2c8594046"/>
+				<imageExpression><![CDATA["src/main/java/com/vitalite/vitalite/images/vitalite.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="117" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="42" width="430" height="44" uuid="08cf0f99-b35a-4625-989d-a2da3d6db7f7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="44" width="75" height="18" uuid="809ec5c1-39e2-464d-a8a0-ea0291b9362f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ASSUREUR :]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="219" y="12" width="341" height="20" backcolor="#E8E8E8" uuid="81b0cd62-abe8-4554-a18d-c9ddaa6f81a6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Facture N° : "+$P{numero_facture}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="84" y="44" width="319" height="18" backcolor="#FFFFFF" uuid="71b83e10-7721-4276-be96-d6dcf6903334">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{client}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="6" y="60" width="75" height="1" uuid="3274140f-f659-4ffc-9b77-250045a73c35">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement mode="Opaque" x="302" y="92" width="238" height="18" backcolor="#FFFFFF" uuid="3f6ed8a1-2efc-47ff-a216-d65428a84506">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{periode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="70" y="66" width="333" height="18" backcolor="#FFFFFF" uuid="b27f8795-f224-4f3a-94fc-f36ae61fd08b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{client}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="7" y="82" width="60" height="1" uuid="5a59f225-e4f8-480b-ac63-e746da2953e3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="7" y="66" width="60" height="18" uuid="8f6bc772-f588-4062-9a52-173c889a736e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[SOCIETE :]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="649" y="0" width="75" height="28" backcolor="#E8E8E8" uuid="617a3aca-af69-455d-a297-7be5bc2eb1fa">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MONTANT DE L'ASSURE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="724" y="0" width="76" height="28" backcolor="#E8E8E8" uuid="ef89173a-bdee-4044-8e72-8f475fbc361e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MONTANT DE L'ASSUREUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="-1" y="0" width="61" height="28" backcolor="#E8E8E8" uuid="29f97b9d-333a-4f89-bb73-26be2cc0e260">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[DATE DE SOINS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="120" y="0" width="222" height="28" backcolor="#E8E8E8" uuid="9a998a0a-65f2-464c-a757-9f80050660ce">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NOM ET PRENOM(S) DU PATIENT (BENEFICIAIRES)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="0" width="60" height="28" backcolor="#E8E8E8" uuid="92eab498-b6d8-47aa-90f6-ac1a11d94253">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NUMERO MATRICULE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="599" y="0" width="50" height="28" backcolor="#E8E8E8" uuid="ec9b1e79-941c-4c32-9393-0c6c137aa18c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TAUX DE PEC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="524" y="0" width="75" height="28" backcolor="#E8E8E8" uuid="0be19d30-7a39-4ce5-b8c5-85519fccea72">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MONTANT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="342" y="0" width="182" height="28" backcolor="#E8E8E8" uuid="03a56d3a-0dfa-43a7-9b31-44ac43916ecd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ACTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="2" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<subreport>
+				<reportElement x="-21" y="-19" width="547" height="20" uuid="fc907536-8df2-4645-9881-c8676cffa8c8"/>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("caisses")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{lienSecondaire}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="76" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="61" width="260" height="15" uuid="4dc3ed21-46df-4104-820c-42ac76b46e40">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{copyright}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="785" y="61" width="10" height="15" uuid="0875e180-7433-4f3c-8fb5-a6a3c21efb83">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="61" width="240" height="15" uuid="99cc9683-969a-4a60-a7fe-265950a0ef4a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" Imprimé le: "+$P{jourDelivre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="243" y="49" width="288" height="12" uuid="add8d63b-bb30-4f31-b162-0674f8cdca58">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Arrêté ministériel N°2022-088/MSHP/CAB ECOBANK : 171032407001]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="37" width="293" height="12" uuid="09ffb960-de74-46ee-a19e-459807d7ee48"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[04 BP 632 Ouagadougou 04 - Régime simplifié d'imposition de plein droit]]></text>
+			</staticText>
+			<line>
+				<reportElement x="285" y="36" width="133" height="1" uuid="19269743-d00e-42ed-a7a0-556acb0d7817">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="284" y="24" width="133" height="12" uuid="a8015e94-9d58-48ab-8a1f-2264e9ac8b22">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[cliniquevitaliteouaga@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="24" width="152" height="12" uuid="5d28d0b8-e1cb-4d19-9842-1bcf0e8fa201">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- Tel (+226) 61 52 61 61 / 58 09 79 79]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="24" width="86" height="12" uuid="5d748856-9d0e-4e53-99d1-184af7e65285">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Secteur 06 - /Email : cliniquevitaliteouaga@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="12" width="409" height="12" uuid="3bb06eec-4629-44ac-a124-e8d0ff02e859">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Entreprise individuelle - RCCM N° BFOUA2021A3862-IFU N° 00155855Y Lot : 20 Section : 53 (HX)]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

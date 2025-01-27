@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vitalite.vitalite.model.SousActeDto;
+import com.vitalite.vitalite.model.SouscripteurDto;
 import com.vitalite.vitalite.model.ArreteDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
@@ -222,5 +221,20 @@ public class GestionControlleur {
     @PutMapping(path = "/patients/report_examen")
     public ResponseEntity<byte[]> generateReportExamen(@RequestBody final PatientDto patient) throws IOException, JRException {
         return new ResponseEntity<>(gestionService.generateReportExamen(patient.getId()), HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/patients/report_facture")
+    public ResponseEntity<byte[]> generateReportFacture(@RequestBody final SearchDto search) throws IOException, JRException {
+        return new ResponseEntity<>(gestionService.generateReportFacture(search), HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/patients/findSouscripteurByAssureurId")
+    public ResponseEntity<List<SouscripteurDto>> findSouscripteurByAssureurId(@RequestBody final SearchDto search) {
+        return new ResponseEntity<>(gestionService.findSouscripteurByAssureurId(search), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/patients/find-Patients-Between-two-Date")
+    public ResponseEntity<List<PatientDto>> findPatientsBetweenDate(@RequestBody final SearchDto dto) { 
+        return new ResponseEntity<>(gestionService.findPatientsBetweenDate(dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
     }
 }
