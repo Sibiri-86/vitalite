@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.SouscripteurDto;
@@ -251,5 +252,19 @@ public class AssureurControlleur {
     @GetMapping("souscripteurs")
     public ResponseEntity<List<SouscripteurDto>> getAllSouscripteur() {
            return  new ResponseEntity<>(parametrageService.finSouscripteur(), HttpStatus.CREATED);
+    }
+    @PostMapping(path = "/familleActes/upload")
+    public ResponseEntity<Boolean> uploadTypeGarantie(@RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(parametrageService.uploadTypeGarantie(file), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/actes/upload")
+    public ResponseEntity<Boolean> uploadExcelToActe(@RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(parametrageService.uploadExcelToActe(file), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/sousActes/upload")
+    public ResponseEntity<Boolean> uploadexcelToSousActe(@RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(parametrageService.uploadexcelToSousActe(file), HttpStatus.CREATED);
     }
 }

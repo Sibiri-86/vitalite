@@ -13,6 +13,7 @@ public class SousActeDto {
     private String libelleActe;
     private String valeurNormal;
     private Long familleActeId;
+    private String acteCode;
 
     
     public Long getId() {
@@ -74,6 +75,12 @@ public class SousActeDto {
     }
     public void setFamilleActeId(Long familleActeId) {
         this.familleActeId = familleActeId;
+    }
+    public String getActeCode() {
+        return acteCode;
+    }
+    public void setActeCode(String acteCode) {
+        this.acteCode = acteCode;
     }
     
 

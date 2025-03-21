@@ -40,6 +40,7 @@ public class Acte extends AbstractAuditingEntity implements Serializable  {
     @ManyToOne
     @JsonIgnoreProperties("actes")
     private FamilleActe familleActe;
+    private String familleActeCode;
     private Boolean isExamen;
     
 
@@ -93,11 +94,22 @@ public class Acte extends AbstractAuditingEntity implements Serializable  {
         this.code = code;
     }
 
+
+    public String getFamilleActeCode() {
+        return familleActeCode;
+    }
+
+    public void setFamilleActeCode(String familleActeCode) {
+        this.familleActeCode = familleActeCode;
+    }
+
     @Override
     public String toString() {
         return "Acte [id=" + id + ", code=" + code + ", libelle=" + libelle + ", deleted=" + deleted + ", familleActe="
-                + familleActe + ", isExamen=" + isExamen + "]";
+                + familleActe + ", familleActeCode=" + familleActeCode + ", isExamen=" + isExamen + "]";
     }
+
+    
 
     
 

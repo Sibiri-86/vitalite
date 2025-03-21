@@ -12,4 +12,5 @@ import com.vitalite.vitalite.entities.SousActe;
 public interface SousActeRepository extends JpaRepository<SousActe, Long> {
     List<SousActe> findByDeletedFalse();
     List<SousActe> findByActeIdAndDeletedFalse(Long acteId);
+    List<SousActe> findByActeCodeAndDeletedFalse(String acteCode);
 }

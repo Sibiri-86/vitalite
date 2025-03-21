@@ -70,6 +70,7 @@ public class ProfilResource {
     @GetMapping("/profils")
     public List<Profil> getAllProfils(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Profils");
+        System.out.println("profil getting 1 ====> "+ profilService.findAll());
         return profilService.findAll();
     }
 

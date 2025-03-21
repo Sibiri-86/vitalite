@@ -41,6 +41,8 @@ Optional<User> findOneByActivationKey(String activationKey);
     @EntityGraph(attributePaths = "authorities")
     List<User> findAllWithProfilsByEmailNot(String login);
 
+    Page<User> findAll(Pageable pageable);
+
 
 
 }

@@ -1,12 +1,17 @@
 package com.vitalite.vitalite.implement;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.github.dozermapper.core.Mapper;
 import com.vitalite.vitalite.entities.Acte;
@@ -41,6 +46,7 @@ import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SocieteRepository;
 import com.vitalite.vitalite.repository.SousActeRepository;
 import com.vitalite.vitalite.repository.SouscripteurRepository;
+import com.vitalite.vitalite.utilitaire.ExcelAdherentHelper;
 
 @Component
 public class ParametrageImp {
@@ -174,14 +180,19 @@ public class ParametrageImp {
        
        return familleActeDto;
    }
-     public List<ActeDto> findActes() {
+   public List<ActeDto> findActes() {
 
-        return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
-     }
+      return acteRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
+   }
 
-     public List<ActeDto> findActeByFamilleId(Long familleId) {
+   public List<ActeDto> findActeByFamilleId(Long familleId) {
+      List<ActeDto> acte = new ArrayList<>();
+   Optional<FamilleActe> fa = familleActeRepository.findById(familleId);
+   if (fa.isPresent()) {
+     acte =  acteRepository.findByFamilleActeCodeAndDeletedFalse(fa.get().getCode()).stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
+   }
 
-      return acteRepository.findByFamilleActeIdAndDeletedFalse(familleId).stream().map(ass->mapper.map(ass, ActeDto.class)).collect(Collectors.toList());
+   return acte;
    }
 
      public SousActeDto createSousActe(SousActeDto acteDto){
@@ -193,6 +204,14 @@ public class ParametrageImp {
    
    public SousActeDto updateSousActe(SousActeDto acteDto){
       SousActe dt = mapper.map(acteDto, SousActe.class);
+      Optional<Acte> aaa = acteRepository.findByCodeAndDeletedFalse(acteDto.getActeCode());
+            if(aaa.isPresent()) {
+               dt.setActe(acteRepository.findByCodeAndDeletedFalse(acteDto.getActeCode()).get());
+               dt.setFamilleActe(familleActeRepository.findByCodeAndDeletedFalse(acteRepository.findByCodeAndDeletedFalse(acteDto.getActeCode()).get().getFamilleActeCode()).get());
+               if(aaa.get().getIsExamen()) {
+                  dt.setIsExamen(Boolean.TRUE);
+               }
+            }
       sousActeRepository.save(dt);
        
        return acteDto;
@@ -212,8 +231,12 @@ public class ParametrageImp {
    }
 
    public List<SousActeDto> findSousActesByActId(Long acteId) {
-
-      return sousActeRepository.findByActeIdAndDeletedFalse(acteId).stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+      List<SousActeDto> sa = new ArrayList<>();
+      Optional<Acte> a = acteRepository.findById(acteId);
+      if(a.isPresent()) {
+         sa = sousActeRepository.findByActeCodeAndDeletedFalse(a.get().getCode()).stream().map(ass->mapper.map(ass, SousActeDto.class)).collect(Collectors.toList());
+      }
+      return sa;
    }
 
    public BigDecimal findMontantPrefinancement(Long sousActeId) {
@@ -335,5 +358,70 @@ public class ParametrageImp {
 
       return societeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SocieteDto.class)).collect(Collectors.toList());
    }
+
+   public Boolean uploadTypeGarantie(MultipartFile file){
+     if(!ExcelAdherentHelper.hasExcelFormat(file)){
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
+     }
+     try {
+      List<FamilleActeDto> dtoList = ExcelAdherentHelper.excelToFamilleActe(file.getInputStream());
+      for(FamilleActeDto a: dtoList) {
+         FamilleActe acte = mapper.map(a, FamilleActe.class);
+         //if(acte.getCode())
+         familleActeRepository.save(acte);
+       }
+      //familleActeRepository.saveAll(dtoList.stream().map(c->mapper.map(c, FamilleActe.class)).collect(Collectors.toList()));
+     } catch (IOException e) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT, "fail to store excel data: " + e.getMessage());
+     }
+      return Boolean.TRUE;
+     }
+
+     public Boolean uploadExcelToActe(MultipartFile file){
+      if(!ExcelAdherentHelper.hasExcelFormat(file)){
+       throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
+      }
+      try {
+       List<ActeDto> dtoList = ExcelAdherentHelper.excelToActe(file.getInputStream());
+       for(ActeDto a: dtoList) {
+         Acte acte = mapper.map(a, Acte.class);
+         System.out.println("lllllllllllllllllllllllllll "+ familleActeRepository.findByCodeAndDeletedFalse(a.getFamilleActeCode()).get().getCode());
+         acte.setFamilleActe(familleActeRepository.findByCodeAndDeletedFalse(a.getFamilleActeCode()).get());
+         acteRepository.save(acte);
+       }
+       //acteRepository.saveAll(dtoList.stream().map(c->mapper.map(c, Acte.class)).collect(Collectors.toList()));
+      } catch (IOException e) {
+       throw new ResponseStatusException(HttpStatus.CONFLICT, "fail to store excel data: " + e.getMessage());
+      }
+       return Boolean.TRUE;
+      }
+
+      public Boolean uploadexcelToSousActe(MultipartFile file){
+         if(!ExcelAdherentHelper.hasExcelFormat(file)){
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
+         }
+         try {
+          List<SousActeDto> dtoList = ExcelAdherentHelper.excelToSousActe(file.getInputStream());
+          for(SousActeDto a: dtoList) {
+            SousActe sousActe = mapper.map(a, SousActe.class);
+            //System.out.println("lllllllllllllllllllllllllll "+acteRepository.findByCodeAndDeletedFalse(a.getActeCode()).get().getCode());
+            Optional<Acte> aaa = acteRepository.findByCodeAndDeletedFalse(a.getActeCode());
+            if(aaa.isPresent()) {
+               sousActe.setActe(acteRepository.findByCodeAndDeletedFalse(a.getActeCode()).get());
+               sousActe.setFamilleActe(familleActeRepository.findByCodeAndDeletedFalse(acteRepository.findByCodeAndDeletedFalse(a.getActeCode()).get().getFamilleActeCode()).get());
+               if(aaa.get().getIsExamen()) {
+                  sousActe.setIsExamen(Boolean.TRUE);
+               }
+            }
+            System.out.println("lllllllllllllllllllllllllll "+sousActe.getIsExamen());
+            sousActeRepository.save(sousActe);
+          }
+          //sousActeRepository.saveAll(dtoList.stream().map(c->mapper.map(c, SousActe.class)).collect(Collectors.toList()));
+         } catch (IOException e) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "fail to store excel data: " + e.getMessage());
+         }
+          return Boolean.TRUE;
+         }
+   
 
 }

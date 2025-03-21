@@ -96,8 +96,8 @@ public class UserResource {
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByEmail(userDTO.getLogin().toLowerCase()).isPresent()) {
-            throw new LoginAlreadyUsedException();
+        /* } else if (userRepository.findOneByEmail(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException(); */
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
@@ -138,10 +138,11 @@ public class UserResource {
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
-     */
+     */ 
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+        System.out.println("page ====> "+ page);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

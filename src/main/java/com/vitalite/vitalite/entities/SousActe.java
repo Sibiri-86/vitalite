@@ -46,6 +46,8 @@ public class SousActe   implements Serializable  {
     @ManyToOne
     @JsonIgnoreProperties("sousActes")
     private FamilleActe familleActe;
+    private String acteCode;
+    private Boolean isExamen = Boolean.FALSE;
 
     
     public FamilleActe getFamilleActe() {
@@ -111,6 +113,22 @@ public class SousActe   implements Serializable  {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getActeCode() {
+        return acteCode;
+    }
+
+    public void setActeCode(String acteCode) {
+        this.acteCode = acteCode;
+    }
+
+    public Boolean getIsExamen() {
+        return isExamen;
+    }
+
+    public void setIsExamen(Boolean isExamen) {
+        this.isExamen = isExamen;
     }
 
     

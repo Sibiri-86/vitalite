@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vitalite.vitalite.implement.ParametrageImp;
 import com.vitalite.vitalite.model.SousActeDto;
@@ -185,5 +186,18 @@ public class ParametrageService {
     public List<SouscripteurDto> finSouscripteur() {
         return parametrageCLientImp.findSouscripteurs();
     }
+
+    public Boolean uploadTypeGarantie(MultipartFile file) {
+       return parametrageCLientImp.uploadTypeGarantie(file);
+    }
+
+    public Boolean uploadExcelToActe(MultipartFile file) {
+        return parametrageCLientImp.uploadExcelToActe(file);
+     }
+
+     public Boolean uploadexcelToSousActe(MultipartFile file) {
+        return parametrageCLientImp.uploadexcelToSousActe(file);
+     }
+
 
 }

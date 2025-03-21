@@ -5,6 +5,7 @@ public class ActeDto {
     private Long id;
     private String code;
     private String libelle;
+    private String familleActeCode;
     private Long familleActeId;
     private String libelleFamilleActe;
     private Boolean isExamen;
@@ -49,6 +50,12 @@ public class ActeDto {
     }
     public void setIsExamen(Boolean isExamen) {
         this.isExamen = isExamen;
+    }
+    public String getFamilleActeCode() {
+        return familleActeCode;
+    }
+    public void setFamilleActeCode(String familleActeCode) {
+        this.familleActeCode = familleActeCode;
     }
     
     

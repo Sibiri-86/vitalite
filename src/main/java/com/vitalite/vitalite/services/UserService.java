@@ -5,16 +5,16 @@ package com.vitalite.vitalite.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
 import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.MapperAware;
 import com.vitalite.vitalite.entities.Authority;
 import com.vitalite.vitalite.entities.Profil;
+import com.vitalite.vitalite.model.ProfileDTO;
 import com.vitalite.vitalite.model.UserDTO;
 import com.vitalite.vitalite.repository.AuthorityRepository;
 import com.vitalite.vitalite.repository.ProfilRepository;
@@ -63,6 +63,7 @@ public class UserService {
         this.profilRepository = profilRepository;
         this.mapper = mapper;
     }
+    
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -169,7 +170,8 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        //String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        String encryptedPassword = passwordEncoder.encode("admin1234");
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -250,10 +252,10 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-    System.out.println("=================oui========="+userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> 
+    System.out.println("=================oui========="+userRepository.findAll(pageable).map(t-> 
     new UserDTO()).toList());
-         return userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(t-> 
-            new UserDTO());
+         return userRepository.findAll(pageable).map(t-> 
+            mapper.map(t, UserDTO.class));
             
     }
 
@@ -320,4 +322,6 @@ public class UserService {
        // Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getEmail());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
     } 
+
+    
 }
