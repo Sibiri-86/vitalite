@@ -46,11 +46,12 @@ public class DroitProfileResource {
      */
     @PostMapping("/droitProfiles")
     public ResponseEntity<DroitProfileDTO> createDroitProfile(@RequestBody DroitProfileDTO droitProfileDTO) throws URISyntaxException {
+        System.out.println("=====================droitProfileDTO====11===="+droitProfileDTO);
         log.debug("REST request to save Agent : {}", droitProfileDTO);
        
         DroitProfileDTO result = droitProfileService.save(droitProfileDTO);
         return ResponseEntity.created(new URI("/api/droitProfiles/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, null))
             .body(result);
     }
 
@@ -65,6 +66,7 @@ public class DroitProfileResource {
      */
     @PutMapping("/droitProfiles")
     public ResponseEntity<DroitProfileDTO> updateDroitProfile(@RequestBody DroitProfileDTO droitProfileDTO) throws URISyntaxException {
+        System.out.println("=====================droitProfileDTO==2======"+droitProfileDTO);
         log.debug("REST request to update Agent : {}", droitProfileDTO);
         
         DroitProfileDTO result = droitProfileService.save(droitProfileDTO);

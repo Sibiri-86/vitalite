@@ -14,9 +14,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vitalite.vitalite.entities.AbstractAuditingEntity;
 import com.vitalite.vitalite.entities.Authority;
+import com.vitalite.vitalite.entities.Produit;
 import com.vitalite.vitalite.entities.Profil;
+import com.vitalite.vitalite.entities.Profile;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,6 +53,11 @@ public class User  implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("users")
+    private Profile  profile;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -75,6 +83,7 @@ public class User  implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));   
     }
+    
     @Override
     public String getUsername() {
 

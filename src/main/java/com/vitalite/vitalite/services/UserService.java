@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,14 @@ import com.vitalite.vitalite.entities.Profil;
 import com.vitalite.vitalite.model.ProfileDTO;
 import com.vitalite.vitalite.model.UserDTO;
 import com.vitalite.vitalite.repository.AuthorityRepository;
+import com.vitalite.vitalite.repository.DroitProfileRepository;
+import com.vitalite.vitalite.repository.MenuRepository;
 import com.vitalite.vitalite.repository.ProfilRepository;
+import com.vitalite.vitalite.repository.ProfileRepository;
 import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.AuthoritiesConstants;
+import com.vitalite.vitalite.security.DroitProfile;
+import com.vitalite.vitalite.security.Menu;
 import com.vitalite.vitalite.security.Role;
 import com.vitalite.vitalite.security.SecurityUtils;
 import com.vitalite.vitalite.security.User;
@@ -44,17 +50,22 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
     private final  ProfilRepository profilRepository;
 
     private final Mapper mapper;
      private final CacheManager cacheManager;
+     @Autowired
+     ProfileRepository profileRepository;
+     @Autowired
+     DroitProfileRepository droitProfileRepository;
+    
     
 
     
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,CacheManager cacheManager,Mapper mapper,
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,CacheManager cacheManager,Mapper mapper,
       AuthorityRepository authorityRepository, ProfilRepository profilRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -120,8 +131,8 @@ public class UserService {
         // newUser.setLo(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstname(userDTO.getFirstName());
-        newUser.setLastname(userDTO.getLastName());
+        newUser.setFirstname(userDTO.getFirstname());
+        newUser.setLastname(userDTO.getLastname());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
@@ -162,21 +173,28 @@ public class UserService {
 
     public User createUser(UserDTO userDTO) {
         User user = new User();
-        user.setFirstname(userDTO.getFirstName());
-        user.setLastname(userDTO.getLastName());
+        user.setFirstname(userDTO.getFirstname());
+        user.setLastname(userDTO.getLastname());
         user.setEmail(userDTO.getEmail().toLowerCase());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
+        System.out.println("=============parts==========="+userDTO.getEmail());
+        String[] parts = userDTO.getEmail().split("@");
+        System.out.println("==============parts=========="+parts[0]);
+   
         //String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        String encryptedPassword = passwordEncoder.encode("admin1234");
+        String encryptedPassword = passwordEncoder.encode(parts[0]);
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
         user.setRole(Role.USER);
+        if(userDTO.getProfileId() !=null) {
+            user.setProfile(profileRepository.findById(userDTO.getProfileId()).get());
+        }
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -253,8 +271,8 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
     System.out.println("=================oui========="+userRepository.findAll(pageable).map(t-> 
-    new UserDTO()).toList());
-         return userRepository.findAll(pageable).map(t-> 
+    mapper.map(t, UserDTO.class)).toList());
+         return userRepository.findAll(pageable).map(t->  
             mapper.map(t, UserDTO.class));
             
     }
@@ -277,11 +295,17 @@ public class UserService {
         user.ifPresent(user1 -> user1.setAuthorities(new HashSet<>(findUserProfilWithAuthorities(user1.getEmail()))));
        
         UserDTO userDTO = mapper.map(user.get(), UserDTO.class);
-        if(!userDTO.getAuthorities().isEmpty()) {
+        /* if(!userDTO.getAuthorities().isEmpty()) {
             userDTO.getAuthorities().addAll(user.get().getAuthoritiesList().stream().map(Authority::getName).collect(Collectors.toList()));
-          //  System.out.println("===========user1=========1=================="+ userDTO.getAuthorities());
+          List<DroitProfile> droitProfiles= droitProfileRepository.findByProfileIdAndDeletedFalse(userDTO.getProfileId());
+          if(!droitProfiles.isEmpty()) {
+             for(DroitProfile droitProfile: droitProfiles) {
+                userDTO.getAuthorities().add(droitProfile.getMenu().getCode());
+             }
+          }
+          System.out.println("===========user1=========1=================="+ userDTO.getAuthorities());
 
-        }
+        } */
         return Optional.of(userDTO);
         }
 
@@ -292,8 +316,19 @@ public class UserService {
      */
     private List<Authority> findUserProfilWithAuthorities(String email) {
         Optional<User> user = userRepository.findOneByEmail(email);
-         return user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
-             .getAuthorities())).orElse(null);
+        
+        List<Authority> authorities = new ArrayList<>();
+        List<DroitProfile> droitProfiles= droitProfileRepository.findByProfileIdAndDeletedFalse(user.get().getProfile().getId());
+        if(!droitProfiles.isEmpty()) {
+           for(DroitProfile droitProfile: droitProfiles) {
+            Authority authority = new Authority();
+            authority.setName(droitProfile.getMenu().getCode());
+            authorities.add(authority);
+           }
+        }
+        return authorities;
+        /*  return user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
+             .getAuthorities())).orElse(null); */
      }
     /**
      * Not activated users should be automatically deleted after 3 days.

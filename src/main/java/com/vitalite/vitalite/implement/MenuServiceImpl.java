@@ -3,11 +3,14 @@ package com.vitalite.vitalite.implement;
 import com.vitalite.vitalite.services.MenuService;
 import com.vitalite.vitalite.services.ProfileService;
 import com.github.dozermapper.core.Mapper;
+import com.vitalite.vitalite.entities.Authority;
 import com.vitalite.vitalite.model.DroitProfileDTO;
 import com.vitalite.vitalite.model.MenuDTO;
 import com.vitalite.vitalite.repository.MenuRepository;
 import com.vitalite.vitalite.repository.ProfileRepository;
+import com.vitalite.vitalite.repository.UserRepository;
 import com.vitalite.vitalite.security.Menu;
+import com.vitalite.vitalite.security.User;
 
 import org.hibernate.envers.Audited;
 import org.slf4j.Logger;
@@ -18,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,6 +38,8 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     Mapper mapper;
+    /* @Autowired
+    UserRepository userRepository; */
 
     public MenuServiceImpl(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
@@ -63,6 +70,19 @@ public class MenuServiceImpl implements MenuService {
     @Transactional(readOnly = true)
     public Page<MenuDTO> findAll(Pageable pageable) {
         log.debug("Request to get all TailleBalles");
+        /* Optional<User> user = userRepository.findOneByEmail("dambrelaurent82@gmail.com");
+        List<Authority> authorities1= user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
+        .getAuthorities())).orElse(null);
+        if(!authorities1.isEmpty()) {
+            int i =1;
+            for(Authority a: authorities1) {
+                MenuDTO menu = new MenuDTO();
+               
+                menu.setCode(a.getName());
+                menu.setLibelle(a.getName());
+                save(menu);
+            }
+        } */
         return menuRepository.findAllByDeletedFalse(pageable)
             .map(menu->mapper.map(menu,MenuDTO.class));
     }

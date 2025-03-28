@@ -46,11 +46,13 @@ public class DroitProfileServiceImpl implements DroitProfileService {
      */
     @Override
     public DroitProfileDTO save(DroitProfileDTO droitProfileDTO) {
+        
         log.debug("Request to save Agent : {}", droitProfileDTO);
         DroitProfile droitProfile = mapper.map(droitProfileDTO,DroitProfile.class );
+        System.out.println("=====================droitProfile========"+droitProfile);
         
-        droitProfile = droitProfileRepository.save(droitProfile);
-        return mapper.map(droitProfile,DroitProfileDTO.class);
+        droitProfile = droitProfileRepository.save(droitProfile); 
+        return droitProfileDTO;
     }
 
     /**

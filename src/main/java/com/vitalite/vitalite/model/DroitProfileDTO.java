@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * A DTO for the Agent entity.
  */
-public class DroitProfileDTO implements Serializable {
+public class DroitProfileDTO {
 
     private Long id;
 
@@ -56,35 +56,16 @@ public class DroitProfileDTO implements Serializable {
     public void setProfileId(Long profileId) {
         this.profileId = profileId;
     }
-    
-    
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        DroitProfileDTO agentDTO = (DroitProfileDTO) o;
-        if (agentDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), agentDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
 
     @Override
     public String toString() {
-        return "AgentDTO{" +
-            "id=" + getId() +
-           
-            "}";
+        return "DroitProfileDTO [id=" + id + ", profile=" + profile + ", menu=" + menu + ", menuId=" + menuId
+                + ", profileId=" + profileId + "]";
     }
+    
+    
+
+   
+
+   
 }

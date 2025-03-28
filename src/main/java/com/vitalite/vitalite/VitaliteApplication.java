@@ -24,7 +24,7 @@ public class VitaliteApplication {
 				registry.addMapping("/**")
 				.allowedHeaders("Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With", "requestId", "Correlation-Id")
                 .exposedHeaders("Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With", "requestId", "Correlation-Id")
-				.allowedMethods("GET", "HEAD", "OPTIONS", "PUT","PATCH","POST");
+				.allowedMethods("GET", "HEAD", "OPTIONS", "PUT","PATCH","POST","DELETE");
 			}
 		};
 	}

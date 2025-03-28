@@ -24,10 +24,14 @@ import com.vitalite.vitalite.entities.SouscripteurAssureur;
 import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.SouscripteurAssureurDto;
 import com.vitalite.vitalite.model.SouscripteurDto;
+import com.vitalite.vitalite.model.UserDTO;
+import com.vitalite.vitalite.security.DroitProfile;
+import com.vitalite.vitalite.security.User;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.ConventionActeDto;
 import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
+import com.vitalite.vitalite.model.DroitProfileDTO;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
@@ -88,6 +92,13 @@ public class DozerConfig {
 
                 mapping(LaboratoireDto.class, Laboratoire.class, TypeMappingOptions.mapNull(false))
                 .fields("patientId","patient.id");
+                mapping(UserDTO.class, User.class, TypeMappingOptions.mapNull(false))
+                .fields("profileId","Profile.id");
+                mapping(DroitProfileDTO.class, DroitProfile.class, TypeMappingOptions.mapNull(false))
+                .fields("menuId","menu.id")
+                .fields("menu","menu.libelle")
+                .fields("profileId","profile.id")
+                .fields("profile","profile.libelle");
 
                 /* mapping(SouscripteurAssureurDto.class, SouscripteurAssureur.class, TypeMappingOptions.mapNull(false))
                 .fields("assureurId","assureur.id")

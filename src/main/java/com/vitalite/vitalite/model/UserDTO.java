@@ -32,10 +32,10 @@ public class UserDTO {
     private String login;
 
     @Size(max = 50)
-    private String firstName;
+    private String firstname;
 
     @Size(max = 50)
-    private String lastName;
+    private String lastname;
 
     @Email
     @Size(min = 5, max = 254)
