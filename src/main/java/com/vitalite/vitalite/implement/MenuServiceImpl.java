@@ -38,8 +38,8 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     Mapper mapper;
-    /* @Autowired
-    UserRepository userRepository; */
+    @Autowired
+    UserRepository userRepository; 
 
     public MenuServiceImpl(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
@@ -67,22 +67,25 @@ public class MenuServiceImpl implements MenuService {
      * @return the list of entities
      */
     @Override
-    @Transactional(readOnly = true)
+   // @Transactional(readOnly = true)
     public Page<MenuDTO> findAll(Pageable pageable) {
         log.debug("Request to get all TailleBalles");
-        /* Optional<User> user = userRepository.findOneByEmail("dambrelaurent82@gmail.com");
-        List<Authority> authorities1= user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
-        .getAuthorities())).orElse(null);
-        if(!authorities1.isEmpty()) {
-            int i =1;
-            for(Authority a: authorities1) {
-                MenuDTO menu = new MenuDTO();
-               
-                menu.setCode(a.getName());
-                menu.setLibelle(a.getName());
-                save(menu);
-            }
-        } */
+        if(menuRepository.findAllByDeletedFalse(pageable).toList().isEmpty()) {
+            Optional<User> user = userRepository.findOneByEmail("dambrelaurent82@gmail.com");
+            List<Authority> authorities1= user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
+            .getAuthorities())).orElse(null);
+            if(!authorities1.isEmpty()) {
+                int i =1;
+                for(Authority a: authorities1) {
+                    MenuDTO menu = new MenuDTO();
+                   
+                    menu.setCode(a.getName());
+                    menu.setLibelle(a.getName());
+                    save(menu);
+                }
+            } 
+        }
+        
         return menuRepository.findAllByDeletedFalse(pageable)
             .map(menu->mapper.map(menu,MenuDTO.class));
     }
