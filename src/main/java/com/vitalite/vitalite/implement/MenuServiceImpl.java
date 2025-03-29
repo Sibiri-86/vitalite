@@ -75,7 +75,6 @@ public class MenuServiceImpl implements MenuService {
             List<Authority> authorities1= user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
             .getAuthorities())).orElse(null);
             if(!authorities1.isEmpty()) {
-                int i =1;
                 for(Authority a: authorities1) {
                     MenuDTO menu = new MenuDTO();
                    

@@ -292,9 +292,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<UserDTO> getUserWithAuthorities() {
         Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByEmail);
-        user.ifPresent(user1 -> user1.setAuthorities(new HashSet<>(findUserProfilWithAuthorities(user1.getEmail()))));
+        //user.ifPresent(user1 -> user1.setAuthorities(new HashSet<>(findUserProfilWithAuthorities(user1.getEmail()))));
        
         UserDTO userDTO = mapper.map(user.get(), UserDTO.class);
+        if(userDTO.getEmail() !=null) {
+            userDTO.setAuthorities(new HashSet<>(findUserProfilWithAuthorities(userDTO.getEmail())));
+        }
+        System.out.println("===========user1=========1=================="+ userDTO.getAuthorities());
+
         /* if(!userDTO.getAuthorities().isEmpty()) {
             userDTO.getAuthorities().addAll(user.get().getAuthoritiesList().stream().map(Authority::getName).collect(Collectors.toList()));
           List<DroitProfile> droitProfiles= droitProfileRepository.findByProfileIdAndDeletedFalse(userDTO.getProfileId());
@@ -314,18 +319,18 @@ public class UserService {
      * @param email
      * @return List<Authority>
      */
-    private List<Authority> findUserProfilWithAuthorities(String email) {
+    private List<String> findUserProfilWithAuthorities(String email) {
         Optional<User> user = userRepository.findOneByEmail(email);
         
-        List<Authority> authorities = new ArrayList<>();
+        List<String> authorities = new ArrayList<>();
         List<DroitProfile> droitProfiles= droitProfileRepository.findByProfileIdAndDeletedFalse(user.get().getProfile().getId());
         if(!droitProfiles.isEmpty()) {
            for(DroitProfile droitProfile: droitProfiles) {
-            Authority authority = new Authority();
-            authority.setName(droitProfile.getMenu().getCode());
-            authorities.add(authority);
+            
+            authorities.add(droitProfile.getMenu().getCode());
            }
         }
+        System.out.println("====================="+authorities);
         return authorities;
         /*  return user.map(user1 -> new ArrayList<>(user1.getProfils().stream().findFirst().get()
              .getAuthorities())).orElse(null); */

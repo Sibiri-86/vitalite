@@ -45,10 +45,11 @@ public class Patient  implements Serializable  {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("patients")
+    @JoinColumn(name = "assureur_id", nullable = true) 
     private Assureur assureur;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "souscripteur_id",referencedColumnName="id",insertable=true,updatable=true)
+    @JoinColumn(name = "souscripteur_id",referencedColumnName="id",insertable=true,updatable=true, nullable = true)
     private Souscripteur souscripteur;
    
     private LocalDate dateNaissance;
