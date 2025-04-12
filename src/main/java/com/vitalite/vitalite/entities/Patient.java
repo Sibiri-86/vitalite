@@ -43,9 +43,8 @@ public class Patient  implements Serializable  {
     private String numDossier;
     private String target;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("patients")
-    @JoinColumn(name = "assureur_id", nullable = true) 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "assureur_id",insertable=true,updatable=true, nullable = true) 
     private Assureur assureur;
 
     @ManyToOne(fetch = FetchType.LAZY)

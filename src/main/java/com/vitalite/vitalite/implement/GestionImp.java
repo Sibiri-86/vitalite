@@ -186,6 +186,7 @@ public class GestionImp {
          }
       }
       Patient dt = mapper.map(patientDto, Patient.class);
+      System.out.println("=========================="+dt);
       Patient patient=  patientRepository.save(dt);
       if(!patientDto.getPrestations().isEmpty()) {
          int  i = 0;
@@ -704,13 +705,25 @@ public class GestionImp {
             Caisse c = new Caisse();
             c.setSousActe(prest.getSousActe().getLibelle());
             c.setMontant(prest.getMontantPaye());
-            c.setMontantAssurer(prest.getMontantAssureur());
+
+            if(prest.getMontantAssureur() !=null) {
+               c.setMontantAssurer(prest.getMontantAssureur());
+            } else {
+               c.setMontantAssurer(prest.getMontant());
+            }
+           
             c.setPrixUnitaire(prest.getPrixUnitaire());
             c.setQuantite(prest.getQuantite());
             //c.setMontantTotalAssurer(prest.getMontant().subtract(prest.getMontantPaye()));
             c.setMontantTotal(prest.getMontantPaye());
             System.out.println("MontantTotal ==> "+c.getMontantTotal());
-            c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+
+            if(prest.getMontantAssureur() !=null) {
+               c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
+            } else {
+               c.setMontantTotalAssurer(prest.getMontant().add(prest.getMontant()));
+            }
+          
             //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));
             caisses.add(c);
          }

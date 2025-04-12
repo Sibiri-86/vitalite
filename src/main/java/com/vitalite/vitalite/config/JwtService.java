@@ -73,7 +73,7 @@ public class JwtService {
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(getSignInbKey(), SignatureAlgorithm.HS512)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 720))
             .compact();
 
        
