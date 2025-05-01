@@ -19,12 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.SouscripteurDto;
+import com.vitalite.vitalite.entities.Pharmacie;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.AssureurDto;
 import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.FamilleActeDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.ProduitDto;
 import com.vitalite.vitalite.model.SocieteDto;
 import com.vitalite.vitalite.services.ParametrageService;
@@ -80,6 +82,28 @@ public class AssureurControlleur {
     @GetMapping("familleActes")
     public ResponseEntity<List<FamilleActeDto>> getAllFamilleActe() {
            return  new ResponseEntity<>(parametrageService.finFamilleActes(), HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/pharmacies")
+    public ResponseEntity<PharmacieDto> createPharmacie(@RequestBody final PharmacieDto acteDto) { 
+
+        return new ResponseEntity<>(parametrageService.createPharmacie(acteDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/pharmacies")
+    public ResponseEntity<PharmacieDto> updatePharmacie(@RequestBody final PharmacieDto acteDto) { 
+        return new ResponseEntity<>(parametrageService.updatePharmacie(acteDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/pharmacies/delete")
+    public ResponseEntity<PharmacieDto> deletePharmacie(@RequestBody final PharmacieDto acteDto) { 
+        return new ResponseEntity<>(parametrageService.deletePharmacie(acteDto), HttpStatus.CREATED);
+    }
+    
+    @GetMapping("pharmacies")
+    public ResponseEntity<List<PharmacieDto>> getAllPharmacie() {
+           return  new ResponseEntity<>(parametrageService.finPharmacies(), HttpStatus.CREATED);
     }
 
     @PostMapping("/actes")
@@ -258,6 +282,10 @@ public class AssureurControlleur {
         return new ResponseEntity<>(parametrageService.uploadTypeGarantie(file), HttpStatus.CREATED);
     }
 
+    @PostMapping(path = "/pharmacies/upload")
+    public ResponseEntity<Boolean> uploadPharmacie(@RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(parametrageService.uploadPharmacie(file), HttpStatus.CREATED);
+    }
     @PostMapping(path = "/actes/upload")
     public ResponseEntity<Boolean> uploadExcelToActe(@RequestParam("file") MultipartFile file){
         return new ResponseEntity<>(parametrageService.uploadExcelToActe(file), HttpStatus.CREATED);

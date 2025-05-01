@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vitalite.vitalite.entities.Pharmacie;
 import com.vitalite.vitalite.implement.ParametrageImp;
 import com.vitalite.vitalite.model.SousActeDto;
 import com.vitalite.vitalite.model.SouscripteurDto;
@@ -16,6 +17,7 @@ import com.vitalite.vitalite.model.CategorieDto;
 import com.vitalite.vitalite.model.ChambreDto;
 import com.vitalite.vitalite.model.ExamenDto;
 import com.vitalite.vitalite.model.FamilleActeDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.ProduitDto;
 import com.vitalite.vitalite.model.SocieteDto;
 
@@ -56,6 +58,22 @@ public class ParametrageService {
 
     public List<FamilleActeDto> finFamilleActes() {
         return parametrageCLientImp.findFamilleActes();
+    }
+
+    public PharmacieDto createPharmacie(PharmacieDto pharmacieDto) {
+        return parametrageCLientImp.createPharmacie(pharmacieDto);
+    }
+
+    public PharmacieDto updatePharmacie(PharmacieDto pharmacieDto) {
+        return parametrageCLientImp.updatePharmacie(pharmacieDto);
+    }
+
+    public PharmacieDto deletePharmacie(PharmacieDto pharmacieDto) {
+        return parametrageCLientImp.deletePharmacie(pharmacieDto);
+    }
+
+    public List<PharmacieDto> finPharmacies() {
+        return parametrageCLientImp.findPharmacies();
     }
 
     public ActeDto createActe(ActeDto acteDto) {
@@ -186,6 +204,9 @@ public class ParametrageService {
     public List<SouscripteurDto> finSouscripteur() {
         return parametrageCLientImp.findSouscripteurs();
     }
+    public Boolean uploadPharmacie(MultipartFile file) {
+        return parametrageCLientImp.uploadPharmacie(file);
+     }
 
     public Boolean uploadTypeGarantie(MultipartFile file) {
        return parametrageCLientImp.uploadTypeGarantie(file);

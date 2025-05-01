@@ -44,11 +44,11 @@ public class Patient  implements Serializable  {
     private String target;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "assureur_id",insertable=true,updatable=true, nullable = true) 
+    @JoinColumn(name = "assureur_id", nullable = true) 
     private Assureur assureur;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "souscripteur_id",referencedColumnName="id",insertable=true,updatable=true, nullable = true)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "souscripteur_id", nullable = true)
     private Souscripteur souscripteur;
    
     private LocalDate dateNaissance;

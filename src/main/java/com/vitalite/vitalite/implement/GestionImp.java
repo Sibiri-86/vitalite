@@ -183,9 +183,18 @@ public class GestionImp {
             sous.setDeleted(Boolean.FALSE);
             Souscripteur sousFinal = souscripteurRepository.save(sous);
             patientDto.setSouscripteurId(sousFinal.getId());
-         }
+         } 
       }
+
+     
+
       Patient dt = mapper.map(patientDto, Patient.class);
+      if(patientDto.getAssureurId() == null || patientDto.getAssureurId() == 0) {
+         dt.setAssureur(null);
+      }
+      if(patientDto.getSouscripteurId() == null || patientDto.getSouscripteurId() == 0) {
+         dt.setSouscripteur(null);
+      }
       System.out.println("=========================="+dt);
       Patient patient=  patientRepository.save(dt);
       if(!patientDto.getPrestations().isEmpty()) {
@@ -721,7 +730,7 @@ public class GestionImp {
             if(prest.getMontantAssureur() !=null) {
                c.setMontantTotalAssurer(prest.getMontantAssureur().add(prest.getMontantAssureur()));
             } else {
-               c.setMontantTotalAssurer(prest.getMontant().add(prest.getMontant()));
+               c.setMontantTotalAssurer(new BigDecimal(0));
             }
           
             //c.setMontantTotalAssureur(prest.getMontantAssureur().add(prest.getMontantAssureur()));

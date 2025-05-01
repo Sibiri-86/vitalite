@@ -1,8 +1,10 @@
 package com.vitalite.vitalite.utilitaire;
 
 
+import com.vitalite.vitalite.entities.Pharmacie;
 import com.vitalite.vitalite.model.ActeDto;
 import com.vitalite.vitalite.model.FamilleActeDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.SousActeDto;
 
 import org.apache.commons.compress.archivers.dump.DumpArchiveEntry.TYPE;
@@ -35,6 +37,57 @@ public class ExcelAdherentHelper {
     }
       return true;
   }
+
+  public static List<PharmacieDto> excelToPharmacie(InputStream is) {
+    try {      
+      Workbook workbook = new XSSFWorkbook(is);
+      Sheet sheet = workbook.getSheet("Produits pharmaceutiques");
+      Iterator<Row> rows = sheet.iterator();
+      List<PharmacieDto> dtoList = new ArrayList<>();
+      int rowNumber = 0;
+      while (rows.hasNext()) {
+        Row currentRow = rows.next();
+        // skip header
+        if (rowNumber == 0) {
+          rowNumber++;
+          continue;
+        }
+        Iterator<Cell> cellsInRow = currentRow.iterator();
+        PharmacieDto dto = new PharmacieDto();
+        int cellIdx = 0;
+        while (cellsInRow.hasNext()) {
+          Cell currentCell = cellsInRow.next();
+          switch (cellIdx) {
+          case 0:
+            dto.setCode(currentCell.getStringCellValue());
+            break;
+
+          case 1:
+            dto.setLibelle(currentCell.getStringCellValue());
+            break;
+
+            case 2:
+            dto.setPharmaCode(currentCell.getStringCellValue());
+            break;
+
+          case 3:
+            dto.setSousActeCode(currentCell.getStringCellValue());
+            break;
+
+          default:
+            break;
+          }
+          cellIdx++;
+        }
+        dtoList.add(dto);
+      }
+      workbook.close();
+      return dtoList;
+    } catch (IOException e) {
+      throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
+    }
+  }
+
 
     public static List<FamilleActeDto> excelToFamilleActe(InputStream is) {
         try {      
