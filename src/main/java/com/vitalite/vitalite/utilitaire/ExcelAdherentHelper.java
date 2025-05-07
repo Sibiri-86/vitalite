@@ -89,6 +89,53 @@ public class ExcelAdherentHelper {
   }
 
 
+  public static List<PharmacieDto> excelToConsommable(InputStream is) {
+    try {      
+      Workbook workbook = new XSSFWorkbook(is);
+      Sheet sheet = workbook.getSheet("Consommables pharmaceutiques");
+      Iterator<Row> rows = sheet.iterator();
+      List<PharmacieDto> dtoList = new ArrayList<>();
+      int rowNumber = 0;
+      while (rows.hasNext()) {
+        Row currentRow = rows.next();
+        // skip header
+        if (rowNumber == 0) {
+          rowNumber++;
+          continue;
+        }
+        Iterator<Cell> cellsInRow = currentRow.iterator();
+        PharmacieDto dto = new PharmacieDto();
+        int cellIdx = 0;
+        while (cellsInRow.hasNext()) {
+          Cell currentCell = cellsInRow.next();
+          switch (cellIdx) {
+          case 0:
+            dto.setCode(currentCell.getStringCellValue());
+            break;
+
+          case 1:
+            dto.setLibelle(currentCell.getStringCellValue());
+            break;
+
+          case 2:
+            dto.setSousActeCode(currentCell.getStringCellValue());
+            break;
+
+          default:
+            break;
+          }
+          cellIdx++;
+        }
+        dtoList.add(dto);
+      }
+      workbook.close();
+      return dtoList;
+    } catch (IOException e) {
+      throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
+    }
+  }
+
+
     public static List<FamilleActeDto> excelToFamilleActe(InputStream is) {
         try {      
           Workbook workbook = new XSSFWorkbook(is);

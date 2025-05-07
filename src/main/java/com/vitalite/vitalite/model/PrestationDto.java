@@ -2,6 +2,7 @@ package com.vitalite.vitalite.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 
 
@@ -25,6 +26,7 @@ public class PrestationDto {
     private SousActeDto sousActe;
     private String valeur;
     private String numeroBon;
+    private List<PharmacieDto> pharmacieFormArray;
 
     
 
@@ -146,6 +148,12 @@ public class PrestationDto {
     }
     public void setNumeroBon(String numeroBon) {
         this.numeroBon = numeroBon;
+    }
+    public List<PharmacieDto> getPharmacieFormArray() {
+        return pharmacieFormArray;
+    }
+    public void setPharmacieFormArray(List<PharmacieDto> pharmacieFormArray) {
+        this.pharmacieFormArray = pharmacieFormArray;
     }
     
     

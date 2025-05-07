@@ -17,6 +17,7 @@ import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -46,12 +47,21 @@ public class GestionService {
     public PatientDto createPatient(PatientDto patientDto) {
         return gestionImp.createPatient(patientDto);
     }
+
+    public List<PharmacieDto> findByPrestationAndPharmacie(Long prestationId, Long idSousActe) {
+        return gestionImp.findByPrestationAndPharmacie(prestationId, idSousActe);
+    }
+
     public PatientDto updatePatient(PatientDto patientDto) {
         return gestionImp.updatePatient(patientDto);
     }
 
     public void deletePatient(Long idPatient) {
         gestionImp.deletePatient(idPatient);
+    }
+
+    public void deleteProduitPrestation(Long idPreP) {
+        gestionImp.deleteProduitPrestation(idPreP);
     }
 
     public void validerPaiement(Long idPatient) {

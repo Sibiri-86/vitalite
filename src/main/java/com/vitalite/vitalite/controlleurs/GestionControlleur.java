@@ -23,6 +23,7 @@ import com.vitalite.vitalite.model.ConventionDto;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -121,7 +122,10 @@ public class GestionControlleur {
     public void devaliderPaiement(@RequestParam Long idPatient){
         gestionService.devaliderPaiement(idPatient);
     }
-
+    @GetMapping(path = "/patients/find-produit-pharmacetique")
+    public ResponseEntity<List<PharmacieDto>> findByPrestationAndPharmacie(@RequestParam Long prestationId, @RequestParam Long idSousActe) {
+        return new ResponseEntity<>(gestionService.findByPrestationAndPharmacie(prestationId, idSousActe), HttpStatus.CREATED);
+    }
     @PutMapping(path = "/patients/valider-all")
     public void validerAllPaiement(@RequestBody final List<PatientDto> dtos){
         gestionService.validerAllPaiement(dtos);
@@ -236,5 +240,10 @@ public class GestionControlleur {
     @PutMapping("/patients/find-Patients-Between-two-Date")
     public ResponseEntity<List<PatientDto>> findPatientsBetweenDate(@RequestBody final SearchDto dto) { 
         return new ResponseEntity<>(gestionService.findPatientsBetweenDate(dto.getDateD(), dto.getDateF()), HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/patients/delete-prestation-existe")
+    public void deleteProduitPrestation(@RequestParam Long idPrestationProduit){
+        gestionService.deleteProduitPrestation(idPrestationProduit);
     }
 }

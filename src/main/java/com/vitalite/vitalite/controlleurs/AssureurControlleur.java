@@ -106,6 +106,17 @@ public class AssureurControlleur {
            return  new ResponseEntity<>(parametrageService.finPharmacies(), HttpStatus.CREATED);
     }
 
+
+    @GetMapping("pharmacies/by-sous-acte/{sousActeId}")
+    public ResponseEntity<List<PharmacieDto>> findPharmaciesBySousActe(@PathVariable Long sousActeId) {
+           return  new ResponseEntity<>(parametrageService.findPharmaciesBySousActe(sousActeId), HttpStatus.CREATED);
+    }
+
+    @GetMapping("pharmacies/by-sous-acte-code/{sousActeCode}")
+    public ResponseEntity<List<PharmacieDto>> findPharmaciesBySousActeCode(@PathVariable String sousActeCode) {
+           return  new ResponseEntity<>(parametrageService.findPharmaciesBySousActeCode(sousActeCode), HttpStatus.CREATED);
+    }
+
     @PostMapping("/actes")
     public ResponseEntity<ActeDto> createActe(@RequestBody final ActeDto acteDto) { 
 
@@ -285,6 +296,11 @@ public class AssureurControlleur {
     @PostMapping(path = "/pharmacies/upload")
     public ResponseEntity<Boolean> uploadPharmacie(@RequestParam("file") MultipartFile file){
         return new ResponseEntity<>(parametrageService.uploadPharmacie(file), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/pharmacies/consommable/upload")
+    public ResponseEntity<Boolean> uploadConsommable(@RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(parametrageService.uploadConsommable(file), HttpStatus.CREATED);
     }
     @PostMapping(path = "/actes/upload")
     public ResponseEntity<Boolean> uploadExcelToActe(@RequestParam("file") MultipartFile file){

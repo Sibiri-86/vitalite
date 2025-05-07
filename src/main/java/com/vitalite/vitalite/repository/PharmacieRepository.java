@@ -13,4 +13,6 @@ import com.vitalite.vitalite.entities.Pharmacie;
 public interface PharmacieRepository extends JpaRepository<Pharmacie, Long> {
     List<Pharmacie> findByDeletedFalse();
     Optional<Pharmacie> findByCodeAndDeletedFalse(String code);
+    List<Pharmacie> findBySousActeIdAndDeletedFalse(Long sousActeId);
+    List<Pharmacie> findBySousActeCodeAndDeletedFalse(String sousActeCode);
 }

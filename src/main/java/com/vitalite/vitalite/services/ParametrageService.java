@@ -76,6 +76,14 @@ public class ParametrageService {
         return parametrageCLientImp.findPharmacies();
     }
 
+    public List<PharmacieDto> findPharmaciesBySousActe(Long sousActeId) {
+        return parametrageCLientImp.findPharmaciesBySousActe(sousActeId);
+    }
+
+    public List<PharmacieDto> findPharmaciesBySousActeCode(String sousActeCode) {
+        return parametrageCLientImp.findPharmaciesBySousActeCode(sousActeCode);
+    }
+
     public ActeDto createActe(ActeDto acteDto) {
         return parametrageCLientImp.createActe(acteDto);
     }
@@ -206,6 +214,10 @@ public class ParametrageService {
     }
     public Boolean uploadPharmacie(MultipartFile file) {
         return parametrageCLientImp.uploadPharmacie(file);
+     }
+
+     public Boolean uploadConsommable(MultipartFile file) {
+        return parametrageCLientImp.uploadConsommable(file);
      }
 
     public Boolean uploadTypeGarantie(MultipartFile file) {

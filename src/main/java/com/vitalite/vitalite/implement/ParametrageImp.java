@@ -191,6 +191,14 @@ public class ParametrageImp {
         return pharmacieRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, PharmacieDto.class)).collect(Collectors.toList());
      }
 
+     public List<PharmacieDto> findPharmaciesBySousActe(Long sousActeId) {
+      return pharmacieRepository.findBySousActeIdAndDeletedFalse(sousActeId).stream().map(ass->mapper.map(ass, PharmacieDto.class)).collect(Collectors.toList());
+   }
+
+   public List<PharmacieDto> findPharmaciesBySousActeCode(String sousActeCode) {
+      return pharmacieRepository.findBySousActeCodeAndDeletedFalse(sousActeCode).stream().map(ass->mapper.map(ass, PharmacieDto.class)).collect(Collectors.toList());
+   }
+
      public ActeDto createActe(ActeDto acteDto){
         Acte dt = mapper.map(acteDto, Acte.class);
         acteRepository.save(dt);
@@ -392,7 +400,28 @@ public class ParametrageImp {
       return societeRepository.findByDeletedFalse().stream().map(ass->mapper.map(ass, SocieteDto.class)).collect(Collectors.toList());
    }
 
-
+   
+   public Boolean uploadConsommable(MultipartFile file){
+      if(!ExcelAdherentHelper.hasExcelFormat(file)){
+       throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
+      }
+      try {
+       List<PharmacieDto> dtoList = ExcelAdherentHelper.excelToConsommable(file.getInputStream());
+       for(PharmacieDto a: dtoList) {
+          Pharmacie acte = mapper.map(a, Pharmacie.class);
+          Optional<SousActe> aaa = sousActeRepository.findByCodeAndDeletedFalse(a.getSousActeCode());
+          if(aaa.isPresent()) {
+             acte.setSousActe(aaa.get());
+             
+          }
+          pharmacieRepository.save(acte);
+        }
+       //familleActeRepository.saveAll(dtoList.stream().map(c->mapper.map(c, FamilleActe.class)).collect(Collectors.toList()));
+      } catch (IOException e) {
+       throw new ResponseStatusException(HttpStatus.CONFLICT, "fail to store excel data: " + e.getMessage());
+      }
+       return Boolean.TRUE;
+      }
    public Boolean uploadPharmacie(MultipartFile file){
       if(!ExcelAdherentHelper.hasExcelFormat(file)){
        throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
@@ -419,15 +448,11 @@ public class ParametrageImp {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "veillez charger un fichier excell");
      }
      try {
-      List<PharmacieDto> dtoList = ExcelAdherentHelper.excelToPharmacie(file.getInputStream());
-      for(PharmacieDto a: dtoList) {
-         Pharmacie acte = mapper.map(a, Pharmacie.class);
-         Optional<SousActe> aaa = sousActeRepository.findByCodeAndDeletedFalse(a.getSousActeCode());
-         if(aaa.isPresent()) {
-            acte.setSousActe(aaa.get());
-            
-         }
-         pharmacieRepository.save(acte);
+      List<FamilleActeDto> dtoList = ExcelAdherentHelper.excelToFamilleActe(file.getInputStream());
+      for(FamilleActeDto a: dtoList) {
+         FamilleActe acte = mapper.map(a, FamilleActe.class);
+        
+         familleActeRepository.save(acte);
        }
      } catch (IOException e) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "fail to store excel data: " + e.getMessage());

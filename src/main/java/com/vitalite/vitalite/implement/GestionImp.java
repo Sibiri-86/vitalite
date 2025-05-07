@@ -29,7 +29,9 @@ import com.vitalite.vitalite.entities.ConventionActe;
 import com.vitalite.vitalite.entities.DossierClient;
 import com.vitalite.vitalite.entities.Laboratoire;
 import com.vitalite.vitalite.entities.Patient;
+import com.vitalite.vitalite.entities.Pharmacie;
 import com.vitalite.vitalite.entities.Prestation;
+import com.vitalite.vitalite.entities.PrestationPharmacie;
 import com.vitalite.vitalite.entities.Soin;
 import com.vitalite.vitalite.entities.SousActe;
 import com.vitalite.vitalite.entities.Souscripteur;
@@ -37,6 +39,7 @@ import com.vitalite.vitalite.entities.Taux;
 import com.vitalite.vitalite.model.DossierClientDto;
 import com.vitalite.vitalite.model.LaboratoireDto;
 import com.vitalite.vitalite.model.PatientDto;
+import com.vitalite.vitalite.model.PharmacieDto;
 import com.vitalite.vitalite.model.PrestationDto;
 import com.vitalite.vitalite.model.SearchDto;
 import com.vitalite.vitalite.model.SoinDto;
@@ -57,6 +60,7 @@ import com.vitalite.vitalite.repository.DossierClientRepository;
 import com.vitalite.vitalite.repository.FamilleActeRepository;
 import com.vitalite.vitalite.repository.LaboratoireRepository;
 import com.vitalite.vitalite.repository.PatientRepository;
+import com.vitalite.vitalite.repository.PrestationPharmacieRepository;
 import com.vitalite.vitalite.repository.PrestationRepository;
 import com.vitalite.vitalite.repository.ProduitRepository;
 import com.vitalite.vitalite.repository.SoinRepository;
@@ -108,6 +112,8 @@ public class GestionImp {
 
      @Autowired
      private FamilleActeRepository familleActeRepository;
+     @Autowired
+     private PrestationPharmacieRepository prestationPharmacieRepository;
 
      public DossierClientDto createDossierClient(DossierClientDto dossierClientDto){
      
@@ -232,7 +238,22 @@ public class GestionImp {
             }
             
 
-            prestationRepository.save(prestation);
+            Prestation prestation2 =prestationRepository.save(prestation);
+            if(!prestationDto.getPharmacieFormArray().isEmpty()) {
+               for(PharmacieDto pharmacie: prestationDto.getPharmacieFormArray()) {
+ 
+                  PrestationPharmacie prestationPharmacie = new PrestationPharmacie();
+                  prestationPharmacie.setDateSaisie(LocalDate.now());
+                  prestationPharmacie.setPharmacie(mapper.map(pharmacie, Pharmacie.class));
+                  prestationPharmacie.setMontant(pharmacie.getMontant());
+                  prestationPharmacie.setMontantPaye(pharmacie.getMontantPaye());
+                  prestationPharmacie.setMontantTotal(pharmacie.getMontantTotal());
+                  prestationPharmacie.setPrestation(prestation2);
+                  prestationPharmacie.setQuantite(pharmacie.getQuantite());
+                  prestationPharmacie.setSousActe(prestation.getSousActe());
+                  prestationPharmacieRepository.save(prestationPharmacie);
+               }
+            }
          }
       }
       
@@ -242,9 +263,31 @@ public class GestionImp {
      }
      
 
+     public List<PharmacieDto> findByPrestationAndPharmacie(Long prestationId, Long idSousActe) {
+      System.out.println("======111=========================="+prestationId+ " ==== "+idSousActe);
+
+         List<PharmacieDto> dtos = new ArrayList<>();
+         List<PrestationPharmacie> list= prestationPharmacieRepository.findByPrestationIdAndSousActeIdAndDeletedFalse(prestationId, idSousActe);
+         if(!list.isEmpty()) {
+            for(PrestationPharmacie preP: list) {
+               PharmacieDto dto = mapper.map(preP.getPharmacie(), PharmacieDto.class);
+               dto.setMontant(preP.getMontant());
+               dto.setMontantPaye(preP.getMontantPaye());
+               dto.setMontantTotal(preP.getMontantTotal());
+               dto.setQuantite(preP.getQuantite());
+               dto.setPrestationId(preP.getId());;
+               dtos.add(dto);
+
+            }
+         }
+         return dtos;
+     
+   }
+
+
      public PatientDto updatePatient(PatientDto patientDto){
      
-      if(patientDto.getAssureurId() == 0L) {
+      if(patientDto.getAssureurId() !=null && patientDto.getAssureurId() == 0L) {
          patientDto.setAssureurId(null);
       }
       
@@ -254,7 +297,7 @@ public class GestionImp {
       if(!patientDto.getPrestations().isEmpty()) {
          int  i = 0;
          for(PrestationDto prestationDto: patientDto.getPrestations()) {
-            if(prestationDto.getTauxId() == 0) {
+            if(prestationDto.getTauxId() !=null && prestationDto.getTauxId() == 0) {
                prestationDto.setTauxId(null);
             }
             Prestation prestation = mapper.map(prestationDto, Prestation.class);
@@ -279,7 +322,50 @@ public class GestionImp {
             }
 
 
-            prestationRepository.save(prestation);
+            Prestation prestation2 = prestationRepository.save(prestation);
+            List<PrestationPharmacie> prePhs = prestationPharmacieRepository.findByPrestationIdAndDeletedFalse(prestation2.getId());
+            if(!prePhs.isEmpty()) {
+               if(!prestationDto.getPharmacieFormArray().isEmpty()) {
+                  for(PharmacieDto pharmacie: prestationDto.getPharmacieFormArray()) {
+    
+                    
+                     PrestationPharmacie prestationPharmacie = new PrestationPharmacie();
+                     prestationPharmacie.setId(pharmacie.getPrestationId());
+                     prestationPharmacie.setDateSaisie(LocalDate.now());
+                     prestationPharmacie.setPharmacie(mapper.map(pharmacie, Pharmacie.class));
+                     prestationPharmacie.setMontant(pharmacie.getMontant());
+                     prestationPharmacie.setMontantPaye(pharmacie.getMontantPaye());
+                     prestationPharmacie.setMontantTotal(pharmacie.getMontantTotal());
+                     prestationPharmacie.setPrestation(prestation2);
+                     prestationPharmacie.setQuantite(pharmacie.getQuantite());
+                     prestationPharmacie.setSousActe(prestation.getSousActe());
+                     prestationPharmacieRepository.save(prestationPharmacie);
+                  }
+               } else {
+                  prestationPharmacieRepository.saveAll(prePhs.stream().peek(prh->{
+                     prh.setDeleted(true);
+                  }).collect(Collectors.toList()));
+               }
+            } else {
+               if(!prestationDto.getPharmacieFormArray().isEmpty()) {
+                  for(PharmacieDto pharmacie: prestationDto.getPharmacieFormArray()) {
+    
+                    
+                     PrestationPharmacie prestationPharmacie = new PrestationPharmacie();
+                     prestationPharmacie.setDateSaisie(LocalDate.now());
+                     prestationPharmacie.setPharmacie(mapper.map(pharmacie, Pharmacie.class));
+                     prestationPharmacie.setMontant(pharmacie.getMontant());
+                     prestationPharmacie.setMontantPaye(pharmacie.getMontantPaye());
+                     prestationPharmacie.setMontantTotal(pharmacie.getMontantTotal());
+                     prestationPharmacie.setPrestation(prestation2);
+                     prestationPharmacie.setQuantite(pharmacie.getQuantite());
+                     prestationPharmacie.setSousActe(prestation.getSousActe());
+                     prestationPharmacieRepository.save(prestationPharmacie);
+                  }
+               }
+            } 
+
+            
          }
       }
       
@@ -409,7 +495,13 @@ public class GestionImp {
      
 
    }
-
+   public void deleteProduitPrestation(Long idPreP) {
+      Optional<PrestationPharmacie> optional =prestationPharmacieRepository.findById(idPreP);
+      if(optional.isPresent()) {
+         optional.get().setDeleted(Boolean.TRUE);
+         prestationPharmacieRepository.save(optional.get());
+      }
+   }
 
    public void validerPaiement(Long idPatient) {
       Optional<Patient> dt = patientRepository.findById(idPatient);

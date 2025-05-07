@@ -1,5 +1,6 @@
 package com.vitalite.vitalite.model;
 
+import java.math.BigDecimal;
 
 public class PharmacieDto {
     private Long id;
@@ -8,10 +9,39 @@ public class PharmacieDto {
     private String sousActeCode;
     private String pharmaCode;
     private Long sousActeId;
+    private BigDecimal quantite;
+    private BigDecimal montant;
+    private BigDecimal montantTotal;
+    private BigDecimal montantPaye;
+    private Long prestationId;
     
     
 
     
+    public BigDecimal getQuantite() {
+        return quantite;
+    }
+    public void setQuantite(BigDecimal quantite) {
+        this.quantite = quantite;
+    }
+    public BigDecimal getMontant() {
+        return montant;
+    }
+    public void setMontant(BigDecimal montant) {
+        this.montant = montant;
+    }
+    public BigDecimal getMontantTotal() {
+        return montantTotal;
+    }
+    public void setMontantTotal(BigDecimal montantTotal) {
+        this.montantTotal = montantTotal;
+    }
+    public BigDecimal getMontantPaye() {
+        return montantPaye;
+    }
+    public void setMontantPaye(BigDecimal montantPaye) {
+        this.montantPaye = montantPaye;
+    }
     public String getSousActeCode() {
         return sousActeCode;
     }
@@ -48,6 +78,13 @@ public class PharmacieDto {
     public void setPharmaCode(String pharmaCode) {
         this.pharmaCode = pharmaCode;
     }
+    public Long getPrestationId() {
+        return prestationId;
+    }
+    public void setPrestationId(Long prestationId) {
+        this.prestationId = prestationId;
+    }
+    
     
     
 
